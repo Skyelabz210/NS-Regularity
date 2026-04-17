@@ -1,10 +1,10 @@
+import NSRegularity.Shift.Defs
+
 /-!
 # Kill113/Ops — operator definitions for Kill #113
 
 Definitions only. No theorems. Downstream files import this.
 -/
-
-import NSRegularity.Shift.Defs
 
 namespace NSRegularity.Kill113
 

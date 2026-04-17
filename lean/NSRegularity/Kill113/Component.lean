@@ -1,9 +1,9 @@
+import NSRegularity.Kill113.Ops
+import NSRegularity.Kill113.SBP
+
 /-!
 # Kill113/Component — single-component energy residual (L1.8)
 -/
-
-import NSRegularity.Kill113.Ops
-import NSRegularity.Kill113.SBP
 
 namespace NSRegularity.Kill113
 

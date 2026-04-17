@@ -6,8 +6,8 @@ Plain definitions only. No theorems. All downstream leaves import this.
 
 namespace NSRegularity
 
-/-- Lattice size of the discrete 3-torus. -/
-def N : Nat := 8
+/-- Lattice size of the discrete 3-torus. `abbrev` so `decide`/`simp` can reduce it. -/
+abbrev N : Nat := 8
 
 instance : NeZero N := ⟨by decide⟩
 

@@ -7,47 +7,61 @@
     "size_cap_lines": 60,
     "protocol": "Leaves get statements only. Agents close them. Unclosed leaves go to pending_decomposition queue for further splitting."
   },
-
   "macros": [
     {
       "id": "M1",
-      "name": "Kill #113 — Skew-Symmetric Advection Energy Neutrality",
+      "name": "Kill #113 \u2014 Skew-Symmetric Advection Energy Neutrality",
       "proof_step": 1,
       "status": "decomposed",
       "source_rust": "crates/ns_v5/src/ns3d_energy.rs:67-94",
-      "leaves": ["L1.1", "L1.2", "L1.3", "L1.4", "L1.5", "L1.6", "L1.7", "L1.8", "L1.9"],
+      "leaves": [
+        "L1.1",
+        "L1.2",
+        "L1.3",
+        "L1.4",
+        "L1.5",
+        "L1.6",
+        "L1.7",
+        "L1.8",
+        "L1.9"
+      ],
       "composes_to": "NSRegularity.Kill113.kill_113",
       "composition_file": "NSRegularity/Kill113.lean"
     },
     {
       "id": "M2",
-      "name": "DKAM L∞ Non-Increasing (discrete maximum principle + stretching)",
+      "name": "DKAM L\u221e Non-Increasing (discrete maximum principle + stretching)",
       "proof_step": 2,
       "status": "pending_decomposition",
       "source_rust": "crates/ns_v5/src/ns3d.rs (diffusion), ns3d_sobolev.rs (stretching)",
       "sub_claims": [
-        "(a) diffusion stencil is convex combination → max-preserving",
+        "(a) diffusion stencil is convex combination \u2192 max-preserving",
         "(b) skew-symmetric advection: uses M1",
-        "(c) stretching is DKAM-subcritical (deg 2 < ρ 3)",
-        "(d) winding monotonicity + energy ⇒ L∞ bound (D-030)",
+        "(c) stretching is DKAM-subcritical (deg 2 < \u03c1 3)",
+        "(d) winding monotonicity + energy \u21d2 L\u221e bound (D-030)",
         "(e) DKAM persistence at all N"
       ],
       "composes_to": "NSRegularity.DKAM.l_inf_non_increasing",
-      "depends_on": ["M1"]
+      "depends_on": [
+        "M1"
+      ]
     },
     {
       "id": "M3",
-      "name": "Uniform H² Bound via Sharp Discrete Sobolev Embedding",
+      "name": "Uniform H\u00b2 Bound via Sharp Discrete Sobolev Embedding",
       "proof_step": 3,
       "status": "pending_decomposition",
       "source_rust": "crates/ns_v5/src/ns3d_sobolev.rs",
       "sub_claims": [
         "sharp constant C_emb = 51979095679759/546264947916800 (exact rational)",
-        "‖ω‖²_∞ × N³ ≤ C_emb × ‖ω‖²_{H²}",
-        "H² monotone non-increasing combining M1 + M2"
+        "\u2016\u03c9\u2016\u00b2_\u221e \u00d7 N\u00b3 \u2264 C_emb \u00d7 \u2016\u03c9\u2016\u00b2_{H\u00b2}",
+        "H\u00b2 monotone non-increasing combining M1 + M2"
       ],
       "composes_to": "NSRegularity.HSquared.uniform_bound",
-      "depends_on": ["M1", "M2"]
+      "depends_on": [
+        "M1",
+        "M2"
+      ]
     },
     {
       "id": "M4",
@@ -56,41 +70,49 @@
       "status": "pending_decomposition",
       "source_rust": "crates/ns_v5/src/ns3d_energy.rs (Aubin-Lions section)",
       "sub_claims": [
-        "(i) L²(0,T; H¹) uniform bound from M1",
-        "(ii) ∂_t ω_N bounded in L²(0,T; H⁻¹)",
-        "compact embedding H¹ ⊂⊂ L² on the torus",
-        "subsequence extraction → strong L² convergence"
+        "(i) L\u00b2(0,T; H\u00b9) uniform bound from M1",
+        "(ii) \u2202_t \u03c9_N bounded in L\u00b2(0,T; H\u207b\u00b9)",
+        "compact embedding H\u00b9 \u2282\u2282 L\u00b2 on the torus",
+        "subsequence extraction \u2192 strong L\u00b2 convergence"
       ],
       "composes_to": "NSRegularity.AubinLions.strong_L2_convergence",
-      "depends_on": ["M1"]
+      "depends_on": [
+        "M1"
+      ]
     },
     {
       "id": "M5",
-      "name": "Adelic Identification (CRT torus = non-Archimedean projection of 𝔸)",
+      "name": "Adelic Identification (CRT torus = non-Archimedean projection of \ud835\udd38)",
       "proof_step": 5,
       "status": "pending_decomposition",
       "sub_claims": [
-        "exact sequence 0 → ẑ → 𝔸 → ℝ → 0",
-        "NS evolution commutes with ℤ_p → ℤ/pℤ projections",
-        "Pontryagin duals agree on ℤ³",
-        "adelic product formula + strong approximation ⇒ global bound"
+        "exact sequence 0 \u2192 \u1e91 \u2192 \ud835\udd38 \u2192 \u211d \u2192 0",
+        "NS evolution commutes with \u2124_p \u2192 \u2124/p\u2124 projections",
+        "Pontryagin duals agree on \u2124\u00b3",
+        "adelic product formula + strong approximation \u21d2 global bound"
       ],
       "composes_to": "NSRegularity.Adelic.global_bound",
-      "depends_on": ["M1", "M2"]
+      "depends_on": [
+        "M1",
+        "M2"
+      ]
     },
     {
       "id": "M6",
-      "name": "L∞ Passes to Continuum via Piecewise-Constant Interpolation",
+      "name": "L\u221e Passes to Continuum via Piecewise-Constant Interpolation",
       "proof_step": 6,
       "status": "pending_decomposition",
       "sub_claims": [
-        "piecewise-constant interpolation has zero L∞ overshoot",
-        "Banach-Alaoglu: bounded L∞ sequence has weak-* convergent subsequence",
-        "weak-* limit = strong L² limit from M4 (uniqueness)",
-        "liminf gives ‖ω(t)‖_{L∞} ≤ ‖ω₀‖_∞"
+        "piecewise-constant interpolation has zero L\u221e overshoot",
+        "Banach-Alaoglu: bounded L\u221e sequence has weak-* convergent subsequence",
+        "weak-* limit = strong L\u00b2 limit from M4 (uniqueness)",
+        "liminf gives \u2016\u03c9(t)\u2016_{L\u221e} \u2264 \u2016\u03c9\u2080\u2016_\u221e"
       ],
       "composes_to": "NSRegularity.Continuum.l_inf_passage",
-      "depends_on": ["M2", "M4"]
+      "depends_on": [
+        "M2",
+        "M4"
+      ]
     },
     {
       "id": "M7",
@@ -98,18 +120,22 @@
       "proof_step": 7,
       "status": "pending_decomposition",
       "sub_claims": [
-        "B1: ω_N bounded in L²(0,T; H¹) from M1",
-        "B2: ω_N bounded in L∞(0,T; L∞) from M2",
-        "B3: ∂_t ω_N bounded in L²(0,T; H⁻¹) from NS structure + B1 + B2",
-        "Biot-Savart L² → H¹ boundedness; u_N → u strongly in L²(L⁶)",
-        "bilinear term convergence via (u_N − u)·∇ω_N + u·∇(ω_N − ω) decomposition",
-        "Hölder estimate on each piece, taking N→∞",
+        "B1: \u03c9_N bounded in L\u00b2(0,T; H\u00b9) from M1",
+        "B2: \u03c9_N bounded in L\u221e(0,T; L\u221e) from M2",
+        "B3: \u2202_t \u03c9_N bounded in L\u00b2(0,T; H\u207b\u00b9) from NS structure + B1 + B2",
+        "Biot-Savart L\u00b2 \u2192 H\u00b9 boundedness; u_N \u2192 u strongly in L\u00b2(L\u2076)",
+        "bilinear term convergence via (u_N \u2212 u)\u00b7\u2207\u03c9_N + u\u00b7\u2207(\u03c9_N \u2212 \u03c9) decomposition",
+        "H\u00f6lder estimate on each piece, taking N\u2192\u221e",
         "stretching term by symmetric argument",
-        "diffusion via weak H¹ convergence",
-        "conclusion: ω satisfies NS equation in distributions"
+        "diffusion via weak H\u00b9 convergence",
+        "conclusion: \u03c9 satisfies NS equation in distributions"
       ],
       "composes_to": "NSRegularity.NonlinearPassage.distributional_NS",
-      "depends_on": ["M1", "M2", "M4"]
+      "depends_on": [
+        "M1",
+        "M2",
+        "M4"
+      ]
     },
     {
       "id": "M8",
@@ -117,14 +143,17 @@
       "proof_step": 8,
       "status": "pending_decomposition",
       "sub_claims": [
-        "∫₀ᵀ ‖ω‖_∞ dt ≤ T · ‖ω₀‖_∞ < ∞ (from M6)",
-        "BKM criterion: finite integral ⇒ C^∞ regularity",
-        "Prodi-Serrin uniqueness from ω ∈ L∞(L∞)",
-        "Calderon-Zygmund: u ∈ L∞(W^{1,p}) for p < ∞",
-        "Osgood: log-Lipschitz velocity ⇒ unique trajectories"
+        "\u222b\u2080\u1d40 \u2016\u03c9\u2016_\u221e dt \u2264 T \u00b7 \u2016\u03c9\u2080\u2016_\u221e < \u221e (from M6)",
+        "BKM criterion: finite integral \u21d2 C^\u221e regularity",
+        "Prodi-Serrin uniqueness from \u03c9 \u2208 L\u221e(L\u221e)",
+        "Calderon-Zygmund: u \u2208 L\u221e(W^{1,p}) for p < \u221e",
+        "Osgood: log-Lipschitz velocity \u21d2 unique trajectories"
       ],
       "composes_to": "NSRegularity.BKM.global_regularity",
-      "depends_on": ["M6", "M7"]
+      "depends_on": [
+        "M6",
+        "M7"
+      ]
     },
     {
       "id": "M9",
@@ -134,22 +163,25 @@
       "source_rust": "nsgrid3d/cram_hasse_bridge.rs",
       "sub_claims": [
         "p-adic non-expansion from ultrametric inequality",
-        "product formula |ω| = smooth × coprime",
-        "coprime bounded in L² from M1 + non-expansion"
+        "product formula |\u03c9| = smooth \u00d7 coprime",
+        "coprime bounded in L\u00b2 from M1 + non-expansion"
       ],
       "composes_to": "NSRegularity.ThreeStream.coprime_bounded",
-      "depends_on": ["M1"]
+      "depends_on": [
+        "M1"
+      ]
     }
   ],
-
   "leaves": [
     {
       "id": "L1.1",
       "macro": "M1",
       "name": "shift.sp_sn",
-      "file": "NSRegularity/Shift.lean",
+      "file": "NSRegularity/Shift/SpSn.lean",
       "lean_target": "theorem sp_sn (i : Fin 8) : sp (sn i) = i",
-      "imports": ["NSRegularity.Shift.Defs"],
+      "imports": [
+        "NSRegularity.Shift.Defs"
+      ],
       "size": "XS",
       "status": "pending",
       "hypotheses": "none (pure finite-type identity)",
@@ -159,9 +191,11 @@
       "id": "L1.2",
       "macro": "M1",
       "name": "shift.sn_sp",
-      "file": "NSRegularity/Shift.lean",
+      "file": "NSRegularity/Shift/SnSp.lean",
       "lean_target": "theorem sn_sp (i : Fin 8) : sn (sp i) = i",
-      "imports": ["NSRegularity.Shift.Defs"],
+      "imports": [
+        "NSRegularity.Shift.Defs"
+      ],
       "size": "XS",
       "status": "pending",
       "hypotheses": "none",
@@ -171,9 +205,13 @@
       "id": "L1.3",
       "macro": "M1",
       "name": "shift.sum_sp",
-      "file": "NSRegularity/Shift.lean",
-      "lean_target": "theorem sum_sp (f : Fin 8 → Int) : (List.finRange 8).foldl (fun a i => a + f (sp i)) 0 = (List.finRange 8).foldl (fun a i => a + f i) 0",
-      "imports": ["NSRegularity.Shift.Defs", "L1.1", "L1.2"],
+      "file": "NSRegularity/Shift/SumSp.lean",
+      "lean_target": "theorem sum_sp (f : Fin 8 \u2192 Int) : (List.finRange 8).foldl (fun a i => a + f (sp i)) 0 = (List.finRange 8).foldl (fun a i => a + f i) 0",
+      "imports": [
+        "NSRegularity.Shift.Defs",
+        "L1.1",
+        "L1.2"
+      ],
       "size": "S",
       "status": "pending",
       "hypotheses": "L1.1, L1.2 closed",
@@ -183,9 +221,13 @@
       "id": "L1.4",
       "macro": "M1",
       "name": "shift.sum_sn",
-      "file": "NSRegularity/Shift.lean",
-      "lean_target": "theorem sum_sn (f : Fin 8 → Int) : (List.finRange 8).foldl (fun a i => a + f (sn i)) 0 = (List.finRange 8).foldl (fun a i => a + f i) 0",
-      "imports": ["NSRegularity.Shift.Defs", "L1.1", "L1.2"],
+      "file": "NSRegularity/Shift/SumSn.lean",
+      "lean_target": "theorem sum_sn (f : Fin 8 \u2192 Int) : (List.finRange 8).foldl (fun a i => a + f (sn i)) 0 = (List.finRange 8).foldl (fun a i => a + f i) 0",
+      "imports": [
+        "NSRegularity.Shift.Defs",
+        "L1.1",
+        "L1.2"
+      ],
       "size": "S",
       "status": "pending",
       "hypotheses": "L1.1, L1.2 closed",
@@ -195,9 +237,13 @@
       "id": "L1.5",
       "macro": "M1",
       "name": "sbp.x_1d",
-      "file": "NSRegularity/Kill113/SBP.lean",
-      "lean_target": "theorem sbp_x_1d (u ω : Fin 8 → Int) : (Σ i, ω i * (u i * (ω (sp i) - ω (sn i)) + (u (sp i) * ω (sp i) - u (sn i) * ω (sn i)))) = 0",
-      "imports": ["NSRegularity.Shift", "L1.3", "L1.4"],
+      "file": "NSRegularity/Kill113/SBP/X.lean",
+      "lean_target": "theorem sbp_x_1d (u \u03c9 : Fin 8 \u2192 Int) : (\u03a3 i, \u03c9 i * (u i * (\u03c9 (sp i) - \u03c9 (sn i)) + (u (sp i) * \u03c9 (sp i) - u (sn i) * \u03c9 (sn i)))) = 0",
+      "imports": [
+        "NSRegularity.Shift",
+        "L1.3",
+        "L1.4"
+      ],
       "size": "M",
       "status": "pending",
       "hypotheses": "L1.3, L1.4 closed",
@@ -207,9 +253,13 @@
       "id": "L1.6",
       "macro": "M1",
       "name": "sbp.y_1d",
-      "file": "NSRegularity/Kill113/SBP.lean",
+      "file": "NSRegularity/Kill113/SBP/Y.lean",
       "lean_target": "theorem sbp_y_1d : (same as L1.5 but in y-direction, on a 2D slice)",
-      "imports": ["NSRegularity.Shift", "L1.3", "L1.4"],
+      "imports": [
+        "NSRegularity.Shift",
+        "L1.3",
+        "L1.4"
+      ],
       "size": "M",
       "status": "pending",
       "description_for_agent": "Symmetric to L1.5 in the y-direction. Agent may use L1.5 as a lemma after index swap."
@@ -218,9 +268,13 @@
       "id": "L1.7",
       "macro": "M1",
       "name": "sbp.z_1d",
-      "file": "NSRegularity/Kill113/SBP.lean",
+      "file": "NSRegularity/Kill113/SBP/Z.lean",
       "lean_target": "theorem sbp_z_1d : (same as L1.5 but in z-direction)",
-      "imports": ["NSRegularity.Shift", "L1.3", "L1.4"],
+      "imports": [
+        "NSRegularity.Shift",
+        "L1.3",
+        "L1.4"
+      ],
       "size": "M",
       "status": "pending",
       "description_for_agent": "Symmetric to L1.5 in z."
@@ -230,8 +284,13 @@
       "macro": "M1",
       "name": "sbp.component_zero",
       "file": "NSRegularity/Kill113/Component.lean",
-      "lean_target": "theorem component_residual_zero (u : VField) (ωc : Grid) : sumGrid (fun i j k => ωc i j k * (advective u ωc i j k + conservative u ωc i j k)) = 0",
-      "imports": ["NSRegularity.Kill113.SBP", "L1.5", "L1.6", "L1.7"],
+      "lean_target": "theorem component_residual_zero (u : VField) (\u03c9c : Grid) : sumGrid (fun i j k => \u03c9c i j k * (advective u \u03c9c i j k + conservative u \u03c9c i j k)) = 0",
+      "imports": [
+        "NSRegularity.Kill113.SBP",
+        "L1.5",
+        "L1.6",
+        "L1.7"
+      ],
       "size": "M",
       "status": "pending",
       "description_for_agent": "For a single vorticity component, the 3D energy residual is zero. Decompose the 3D sum into three 1D sums (one per direction). Apply L1.5, L1.6, L1.7."
@@ -241,16 +300,26 @@
       "macro": "M1",
       "name": "kill_113",
       "file": "NSRegularity/Kill113.lean",
-      "lean_target": "theorem kill_113 (u ω : VField) : residual u ω = 0",
-      "imports": ["NSRegularity.Kill113.Component", "L1.8"],
+      "lean_target": "theorem kill_113 (u \u03c9 : VField) : residual u \u03c9 = 0",
+      "imports": [
+        "NSRegularity.Kill113.Component",
+        "L1.8"
+      ],
       "size": "XS",
       "status": "pending",
       "description_for_agent": "Sum three zeros (one per vorticity component x/y/z) using L1.8. Pure composition, no fresh math."
     }
   ],
-
-  "pending_decomposition": ["M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9"],
-
+  "pending_decomposition": [
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "M8",
+    "M9"
+  ],
   "stats": {
     "macros_total": 9,
     "macros_decomposed": 1,
