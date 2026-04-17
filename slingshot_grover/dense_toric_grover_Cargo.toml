@@ -1,0 +1,21 @@
+[package]
+name = "dense_toric_grover"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description = """
+Dense Toric Grover — exact quantum amplitude dynamics on F_p².
+
+Tracks ALL N amplitudes explicitly as elements of F_p² = F_p[x]/(x²+1).
+Diffusion: new[i] = 2·mean − old[i] with exact modular inverse.
+Produces the exact quantum Grover trajectory on classical hardware:
+  iter 1: 47.27%, iter 2: 90.84%, iter 3: 96.13% (N=16, k=1).
+
+Zero floats. Zero decoherence. Exact integer arithmetic throughout.
+
+Reconstructed April 17, 2026 from session 28768603 (Feb 7, 2026).
+"""
+
+[dependencies]
+
+[dev-dependencies]

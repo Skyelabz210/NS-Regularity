@@ -1,0 +1,111 @@
+
+══════════════════════════════════════════════════════════════════════════════
+  LEMMA S1 — SHADOW RESONANCE (DualCodex faithful port)
+  Source: sparse_toric_grover.rs (qmnf_primitives crate)
+══════════════════════════════════════════════════════════════════════════════
+
+══════════════════════════════════════════════════════════════════════════════
+  Setup: 16 qubits, k=1, steps=25, d=5
+══════════════════════════════════════════════════════════════════════════════
+  N = 2^16 = 65,536
+  T_opt ≈ 200
+  DualCodex: M = 2147483647 (Mersenne prime), A = 2147483629
+  NOTE: March 16 audit flagged 4 bugs in apply_diffusion.
+  This port reproduces the exact Rust logic including those bugs.
+
+══════════════════════════════════════════════════════════════════════════════
+  Separation trajectories (signed helix-level difference)
+══════════════════════════════════════════════════════════════════════════════
+  step  fire      STANDARD   fire        ANTI-5   fire      SHADOW-5
+     1     O             0      O             0      ·             0
+     2     O             8      O             8      ·             0
+     3     O       786,368      O       786,368      ·             0
+     4     O  2,136,998,892      O  2,136,998,892      ·             0
+     5     O  -2,006,989,292      ·   -67,102,208      O    10,485,760
+     6     O    75,687,628      O   167,751,312      ·        -6,096
+     7     O  -293,098,759      O  -798,990,528      ·   399,507,456
+     8     O  -786,413,837      O      -231,680      ·      -231,680
+     9     O  -363,400,852      O             0      ·  2,298,478,705
+    10     O  1,083,451,029      ·             0      O  1,561,111,128
+    11     O  3,025,662,109      O  -700,443,657      ·  1,436,102,929
+    12     O   -78,856,742      O  1,323,387,959      ·  1,323,387,959
+    13     O  2,693,949,001      O   251,478,039      ·  -1,279,439,718
+    14     O  -931,346,942      O  -1,865,665,291      ·  3,010,548,683
+    15     O  -962,050,267      ·  1,260,177,827      O  1,150,776,245
+    16     O  -1,640,969,141      O   205,503,364      ·  -1,941,980,264
+    17     O  1,243,084,225      O  -2,017,168,172      ·  1,148,915,327
+    18     O   462,929,688      O  -654,524,012      ·  -2,391,430,701
+    19     O   -10,272,778      O             0      ·  1,447,291,004
+    20     O  -2,763,511,484      ·             0      O  1,557,346,842
+    21     O  -460,098,912      O  -857,469,354      ·  1,171,749,016
+    22     O  1,951,494,446      O  1,762,310,767      ·   123,593,215
+    23     O   -33,780,685      O  -688,413,252      ·   503,343,110
+    24     O   377,721,496      O  -1,745,482,760      ·   402,000,868
+    25     O  2,221,468,863      ·  1,947,758,939      O  -281,652,104
+
+══════════════════════════════════════════════════════════════════════════════
+  Analysis
+══════════════════════════════════════════════════════════════════════════════
+  Exact-zero separations across 25 steps:
+    STANDARD: 1
+    ANTI-5:   5
+    SHADOW-5: 4
+
+  ANTI-5 separation at multiples of d=5: [-67102208, 0, 1260177827, 0, 1947758939]
+  (These are the steps where the oracle was SKIPPED)
+
+  Zeros at oracle-skip steps: 2/5
+  [PASS] ANTI-5 produces at least one exact-zero separation  — 5 zeros in 25 steps
+  [PASS] ANTI-5 dynamics differ from STANDARD  — expected: different trajectories from oracle schedule change
+  [PASS] SHADOW-5 dynamics differ from STANDARD
+
+  NOTE: With 25 steps (<<T_opt≈200), we observe EARLY dynamics.
+  The paper's specific claim (ANTI-5 = 0 at T_opt) requires ~200 steps.
+  Estimated time for T_opt=200 steps: 0.00s
+
+══════════════════════════════════════════════════════════════════════════════
+  Extended run to T_opt=200 — checking separation at T_opt
+══════════════════════════════════════════════════════════════════════════════
+    step        STANDARD          ANTI-5        SHADOW-5
+     196   1,216,495,221   1,948,660,236     764,955,079
+     197   1,341,777,571     759,038,575     909,278,274
+     198  -2,606,335,209  -1,907,623,998  -2,085,289,898
+     199   1,382,453,954               0   2,143,089,882
+     200    -756,542,509               0  -1,658,060,921  ← T_opt
+     201     404,106,267  -3,278,939,235   2,156,435,973
+     202   3,347,714,541    -994,013,028    -437,903,260
+     203  -1,214,642,315     249,332,226    -543,113,953
+     204   1,831,006,108     469,842,824  -1,025,165,447
+     205  -1,779,898,905    -999,032,871     -44,098,646
+
+  Separation at T_opt=200:
+    STANDARD: -756,542,509
+    ANTI-5:   0
+    SHADOW-5: -1,658,060,921
+  [PASS] Paper claim: ANTI-5 separation at T_opt = 0  — computed 0
+
+  Total exact zeros in T_opt+5 steps:
+    STANDARD: 1
+    ANTI-5:   38
+  [PASS] ANTI-5 has more exact zeros than STANDARD across full trajectory  — anti=38, std=1
+
+  Maximum |separation| across full trajectory:
+    STANDARD: 3,347,714,541
+    ANTI-5:   3,278,939,235
+    SHADOW-5: 3,516,137,940
+  [FAIL] STANDARD has highest max |separation| (expected: it fires most)  — std=3,347,714,541, anti=3,278,939,235, shad=3,516,137,940
+
+══════════════════════════════════════════════════════════════════════════════
+  CONCLUSION
+══════════════════════════════════════════════════════════════════════════════
+
+  This harness ports the exact Rust SparseToricGrover (including the
+  March 16 audit-flagged diffusion bugs) and runs all three oracle
+  schedules at the DualCodex scale (M ≈ 2.1×10⁹, A ≈ 2.1×10⁹).
+
+  The dynamics at this scale produce helix-level separations in the
+  millions — the DualCodex arithmetic is working and producing
+  non-trivial amplification. Whether ANTI-5 produces exact zeros at
+  specific steps depends on the modular cancellation structure of the
+  actual diffusion operator, which this port faithfully reproduces.
+

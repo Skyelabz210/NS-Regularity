@@ -1,0 +1,155 @@
+
+══════════════════════════════════════════════════════════════════════════════
+  T1 · Factorization claims
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T1  260 = 2² · 5 · 13 (Tzolk'in)  — got 2^2 · 5 · 13
+  [PASS]   T1  365 = 5 · 73 (Haab)  — got 5 · 73
+  [PASS]   T1  18,980 = 2² · 5 · 13 · 73 (Calendar Round)  — got 2^2 · 5 · 13 · 73
+  [PASS]   T1  780 = 2² · 3 · 5 · 13  — got 2^2 · 3 · 5 · 13
+  [PASS]   T1  584 = 2³ · 73 (Venus)  — got 2^3 · 73
+  [PASS]   T1  399 = 3 · 7 · 19 (Jupiter)  — got 3 · 7 · 19
+  [PASS]   T1  378 = 2 · 3³ · 7 (Saturn)  — got 2 · 3^3 · 7
+  [PASS]   T1  819 = 3² · 7 · 13  — got 3^2 · 7 · 13
+  [PASS]   T1  11,960 = 2³ · 5 · 13 · 23 (eclipse)  — got 2^3 · 5 · 13 · 23
+  [PASS]   T1  93 = 3 · 31 (eclipse sub-cycle)  — got 3 · 31
+  [PASS]   T1  Safe Basis product = 30,030  — ∏[2, 3, 5, 7, 11, 13] = 30030
+  [PASS]   T1  30,030 = 2 · 3 · 5 · 7 · 11 · 13  — got 2 · 3 · 5 · 7 · 11 · 13
+
+══════════════════════════════════════════════════════════════════════════════
+  T2 · gcd / lcm claims
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T2  lcm(260, 365) = 18,980  — computed 18980
+  [PASS]   T2  gcd(11,960, 93) = 1 (K-Elim lift valid)  — gcd = 1
+  [PASS]   T2  Safe Basis pairwise coprime
+
+══════════════════════════════════════════════════════════════════════════════
+  T3 · CRT fingerprint for n=15 on (7, 11, 13)
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T3  n=15 residues = (1, 4, 2)  — got (1, 4, 2)
+  [PASS]   T3  n=15 windings = (2, 1, 1)  — got (2, 1, 1)
+  [PASS]   T3  Residue tuple (1,4,2) unique in [0, 1001)  — found 0 collisions in Z/1001Z
+
+══════════════════════════════════════════════════════════════════════════════
+  T4 · Page 8 jaguar arithmetic
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T4  13 + 8 = 21
+  [PASS]   T4  21 mod 7 = 0
+  [PASS]   T4  inv(6) mod 7 = 6  — computed 6; check 6·6 mod 7 = 1
+  [PASS]   T4  inv(7) mod 13 exists  — inv(7) mod 13 = 2, check 7·2 mod 13 = 1
+  [PASS]   T4  21 mod 13 = 8  — computed 8
+  [PASS]   T4  inv(21) mod 13 computed  — inv(21) mod 13 = 5; verify: 21·5 mod 13 = 1
+  [FLAG]   T4  ESSAY: 21^(-1) mod 13 = 7  — plain-reading is FALSE. True value: inv(21) mod 13 = 5. Essay appears to have transcribed a value inconsistent with the formula. Note: 7·2 mod 13 = 1 → 7 is inv(2) mod 13 = inv(21 mod 13 − 6); possible transcription source but not the stated operation.
+  [PASS]   T4  If 7 is taken as given: 12 · 7 mod 13 = 6  — computed 6
+  [FLAG]   T4  Reviewer-corrected κ = 12 · inv(21) mod 13  — using inv(21) mod 13 = 5 gives κ = 12 · 5 mod 13 = 8 (not 6)
+
+  Candidate operations yielding 7 (probing transcription origin):
+    21 mod 13                                = 8
+    21² mod 13                               = 12
+    21³ mod 13                               = 5
+    inv(21) mod 13                           = 5
+    inv(21²) mod 13                          = 12
+    inv(3) mod 13                            = 9
+    inv(2) mod 13                            = 7  ←
+    21 − 14 (mod 13)                         = 7  ←
+    14 mod 13                                = 1
+    (21 mod 7) − (8 mod 13)                  = -8
+    (21 · 2) mod 13                          = 3
+    21 − 8 (= 13, mod 13)                    = 0
+    8 − 1 (difference of residues on 13-lane) = 7  ←
+
+══════════════════════════════════════════════════════════════════════════════
+  T5 · K-Elimination operator on a known case
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T5  X=500, residues (r_7, r_11, r_13)  — got (3, 5, 6)
+  [PASS]   T5  K-Elim: q mod 11 = 5  — computed 5
+  [PASS]   T5  K-Elim: q mod 13 = 6  — computed 6
+  [PASS]   T5  K-Elim CRT reconstruction: q = 71  — computed 71
+  [PASS]   T5  Round-trip: q·7 + r = X  — 71·7 + 3 = 500
+
+══════════════════════════════════════════════════════════════════════════════
+  T6 · Winding monotonicity under n → n+1
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T6  Winding is monotone non-decreasing in n, all Safe Basis primes, n∈[0,10000)  — violations: 0
+  [PASS]   T6  Δw_p(n→n+1) ∈ {0, 1}, exactly 1 at wrap
+
+══════════════════════════════════════════════════════════════════════════════
+  T7 · Adelic product formula  |x|_∞ · ∏_p |x|_p = 1
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T7  x = 15/1 in lowest terms: no prime divides both num & den  — reduced to 15/1
+  [PASS]   T7  x = 100/7 in lowest terms: no prime divides both num & den  — reduced to 100/7
+  [PASS]   T7  x = 12/35 in lowest terms: no prime divides both num & den  — reduced to 12/35
+  [PASS]   T7  x = 1/30030 in lowest terms: no prime divides both num & den  — reduced to 1/30030
+  [PASS]   T7  x = 30030/1 in lowest terms: no prime divides both num & den  — reduced to 30030/1
+  [PASS]   T7  x = -21/13 in lowest terms: no prime divides both num & den  — reduced to -21/13
+  [PASS]   T7  Integer identity: |30030| = ∏ p^v_p(30030)  — got 30030
+
+══════════════════════════════════════════════════════════════════════════════
+  T8 · Every major Maya cycle shares a factor with 780
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T8  gcd(780, Tzolk'in 260 = 260) > 1  — gcd = 260
+  [PASS]   T8  gcd(780, Haab 365 = 365) > 1  — gcd = 5
+  [PASS]   T8  gcd(780, Calendar Round = 18980) > 1  — gcd = 260
+  [PASS]   T8  gcd(780, Venus 584 = 584) > 1  — gcd = 4
+  [PASS]   T8  gcd(780, Mars 780 = 780) > 1  — gcd = 780
+  [PASS]   T8  gcd(780, Jupiter 399 = 399) > 1  — gcd = 3
+  [PASS]   T8  gcd(780, Saturn 378 = 378) > 1  — gcd = 6
+  [PASS]   T8  gcd(780, 819-day = 819) > 1  — gcd = 39
+  [PASS]   T8  gcd(780, Eclipse 11,960 = 11960) > 1  — gcd = 260
+  [PASS]   T8  ALL Maya cycles share a factor with 780
+  [PASS]   T8  780 = lcm(4, 3, 5, 13)  — computed 780
+
+══════════════════════════════════════════════════════════════════════════════
+  T9 · Prime 11 absence from base Maya periods
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]   T9  11 does NOT divide any base Maya period  — checked 260, 365, 18980, 584, 780, 399, 378, 819, 11960
+  [PASS]   T9  Saturn displacement candidate = 2·11² = 242  — structural claim: 11 surfaces as square
+  [PASS]   T9  v_11(242) = 2 (the square emergence)
+
+══════════════════════════════════════════════════════════════════════════════
+  T10 · DKAM ρ-window structure
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]  T10  Safe Basis primes partitioned by ρ-windows  — union = [2, 3, 5, 7, 11, 13]
+  [PASS]  T10  Each Safe Basis prime assigned to exactly one ρ-window
+  [PASS]  T10  ρ(Safe Basis) = 3 (smallest odd prime in B)
+  [PASS]  T10  DKAM subcriticality: deg(stretching)=2 < ρ=3
+  [PASS]  T10  11 ≡ 3 (mod 4) — Ramanujan prime class
+
+══════════════════════════════════════════════════════════════════════════════
+  T11 · 780 as fundamental domain
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]  T11  Smallest d with gcd(d, T) > 1 for all Maya T = ?  — found d = 30; divides 780? True
+  [PASS]  T11  Every Maya cycle divisible by at least one of {4,3,5,13}
+
+  Per-cycle coprime-core hit map:
+    Tzolk'in 260         (   260): hits [4, 5, 13]
+    Haab 365             (   365): hits [5]
+    Calendar Round       ( 18980): hits [4, 5, 13]
+    Venus 584            (   584): hits [4]
+    Mars 780             (   780): hits [4, 3, 5, 13]
+    Jupiter 399          (   399): hits [3]
+    Saturn 378           (   378): hits [3]
+    819-day              (   819): hits [3, 13]
+    Eclipse 11,960       ( 11960): hits [4, 5, 13]
+
+══════════════════════════════════════════════════════════════════════════════
+  T12 · Cylinder picture: n = 15 decomposed at p = 7
+══════════════════════════════════════════════════════════════════════════════
+  [PASS]  T12  15 = 7·2 + 1  — residue 1, winding 2
+  [PASS]  T12  n = residue + p · winding
+  [PASS]  T12  1, 8, 15, 22, 29, 36 all have residue 1 mod 7
+  [PASS]  T12  their windings are 0, 1, 2, 3, 4, 5 (strictly ascending)  — got [0, 1, 2, 3, 4, 5]
+
+══════════════════════════════════════════════════════════════════════════════
+  FINAL REPORT
+══════════════════════════════════════════════════════════════════════════════
+  Total tests: 66
+  PASS: 64
+  FAIL: 0
+  FLAG: 2
+
+  FLAGS (arithmetic inconsistencies surfaced; not necessarily refutations):
+    [T4] ESSAY: 21^(-1) mod 13 = 7
+           plain-reading is FALSE. True value: inv(21) mod 13 = 5. Essay appears to have transcribed a value inconsistent with the formula. Note: 7·2 mod 13 = 1 → 7 is inv(2) mod 13 = inv(21 mod 13 − 6); possible transcription source but not the stated operation.
+    [T4] Reviewer-corrected κ = 12 · inv(21) mod 13
+           using inv(21) mod 13 = 5 gives κ = 12 · 5 mod 13 = 8 (not 6)
+
