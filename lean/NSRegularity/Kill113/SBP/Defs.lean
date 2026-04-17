@@ -8,8 +8,8 @@ namespace NSRegularity.Kill113.SBP
 
 open NSRegularity
 
-/-- 1D sum helper. -/
+/-- 1D sum helper, via `Finset.sum`. -/
 def sum1 (g : Fin N → Int) : Int :=
-  (List.finRange N).foldl (fun a i => a + g i) 0
+  ∑ i : Fin N, g i
 
 end NSRegularity.Kill113.SBP

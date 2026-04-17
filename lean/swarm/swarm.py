@@ -150,13 +150,31 @@ def lake_build(target=None):
 
 
 def count_sorries(text):
-    return len(re.findall(r"\bsorry\b", text))
+    """Only count tactic-position `sorry`. Strips docstring/comment mentions."""
+    # Remove /-! ... -/ docstrings and /- ... -/ block comments and -- line comments
+    stripped = re.sub(r"/-!.*?-/", "", text, flags=re.DOTALL)
+    stripped = re.sub(r"/-.*?-/", "", stripped, flags=re.DOTALL)
+    stripped = re.sub(r"--.*$", "", stripped, flags=re.MULTILINE)
+    return len(re.findall(r"\bsorry\b", stripped))
+
+
+def lake_sorry_count(target_file_abs):
+    """Ground truth: does `lake build` emit a 'uses sorry' warning for this file?"""
+    b = lake_build()
+    rel = str(target_file_abs.relative_to(LEAN_ROOT))
+    return len(re.findall(rf"{re.escape(rel)}:\d+:\d+:.*uses `sorry`", b.stdout + b.stderr))
+
+
+def file_to_module(file_rel):
+    """Convert 'NSRegularity/Shift/SumSp.lean' -> 'NSRegularity.Shift.SumSp'."""
+    return file_rel.replace("/", ".").rstrip(".lean").rsplit(".lean", 1)[0].removesuffix(".lean")
 
 
 def dispatch_leaf(leaf, providers):
     leaf_id = leaf["id"]
     file_rel = leaf["file"]
     file_abs = LEAN_ROOT / file_rel
+    target_mod = file_to_module(file_rel)
     if not file_abs.exists():
         return {"leaf": leaf_id, "status": "missing_file", "file": file_rel}
 
@@ -191,16 +209,22 @@ def dispatch_leaf(leaf, providers):
             log.write("rejected: agent did not reduce sorry count\n")
             continue
 
-        # Write candidate, try to build, revert if fails.
+        # Write candidate, try to build (target module only), revert if fails.
         file_abs.write_text(candidate)
-        build = lake_build()
-        log.write(f"build rc={build.returncode}\n")
+        build = lake_build(target_mod)
+        log.write(f"build rc={build.returncode} target={target_mod}\n")
         log.write(build.stdout[-2000:] + "\n--STDERR--\n" + build.stderr[-2000:] + "\n")
         if build.returncode == 0:
             log.close()
             return {"leaf": leaf_id, "status": "closed", "provider": prov,
                     "candidate": str(cand_path), "log": str(logf)}
-        # revert and try next provider
+        # Before reverting: re-read disk state; if sorry count went DOWN since
+        # capture (user edited mid-dispatch to close the leaf), preserve that.
+        current = file_abs.read_text()
+        if count_sorries(current) < orig_sorries and count_sorries(current) < count_sorries(candidate):
+            log.write("preserved live disk state (closed outside swarm); not reverting\n")
+            log.close()
+            return {"leaf": leaf_id, "status": "closed_external", "log": str(logf)}
         file_abs.write_text(original)
         log.write("reverted to original; trying next provider\n")
 
@@ -219,6 +243,60 @@ def cmd_status(args):
         live = count_sorries(f.read_text()) if f.exists() else -1
         marker = "[CLOSED]" if live == 0 and leaf["status"] == "closed" else f"[{leaf['status']}]"
         print(f"  {leaf['id']:<8} {marker:<28} {leaf['file']}  live_sorries={live}")
+
+
+def cmd_report(args):
+    """Re-sync blueprint with live lake build, print macro+leaf progress."""
+    bp = load_blueprint()
+    b = lake_build()
+    sorry_files = set()
+    for line in (b.stdout + b.stderr).splitlines():
+        m = re.match(r".*warning: (NSRegularity/\S+\.lean):.*uses `sorry`", line)
+        if m:
+            sorry_files.add(m.group(1))
+
+    # Sync leaf statuses.
+    for leaf in bp["leaves"]:
+        leaf["status"] = "closed" if leaf["file"] not in sorry_files else "pending"
+    bp["stats"]["leaves_closed"] = sum(1 for lf in bp["leaves"] if lf["status"] == "closed")
+    bp["stats"]["leaves_pending"] = sum(1 for lf in bp["leaves"] if lf["status"] == "pending")
+    save_blueprint(bp)
+
+    print(f"=== Blueprint: {bp['meta']['root_theorem']} ===")
+    print(f"lake build: {'PASS' if b.returncode == 0 else 'FAIL'}")
+    print(f"leaves: {bp['stats']['leaves_closed']}/{bp['stats']['leaves_total']} closed")
+    print(f"macros: {bp['stats']['macros_decomposed']}/{bp['stats']['macros_total']} decomposed")
+    print()
+
+    leaf_status = {lf["id"]: lf["status"] for lf in bp["leaves"]}
+    leaves_by_macro = {}
+    for lf in bp["leaves"]:
+        leaves_by_macro.setdefault(lf["macro"], []).append(lf)
+
+    for m in bp["macros"]:
+        mid = m["id"]
+        lvs = leaves_by_macro.get(mid, [])
+        if m["status"] == "pending_decomposition":
+            print(f"  {mid}: [PENDING DECOMP] {m['name']}")
+            continue
+        closed = sum(1 for lf in lvs if lf["status"] == "closed")
+        total = len(lvs)
+        state = "✓ FULLY PROVED" if closed == total else f"{closed}/{total}"
+        print(f"  {mid}: [{state:<15}] {m['name']}")
+        for lf in lvs:
+            mark = "✓" if lf["status"] == "closed" else "·"
+            print(f"       {mark} {lf['id']:<5} {lf['name']:<30} {lf['file']}")
+
+    print()
+    pending = [lf["id"] for lf in bp["leaves"] if lf["status"] == "pending"]
+    if pending:
+        print(f"pending leaves for next dispatch: {' '.join(pending)}")
+    else:
+        all_m_done = all(m.get("status") == "decomposed"
+                         and all(leaf_status.get(lfid) == "closed" for lfid in m.get("leaves", []))
+                         for m in bp["macros"])
+        if all_m_done:
+            print("ALL DECOMPOSED MACROS PROVED. Next: decompose pending_decomposition queue.")
 
 
 def cmd_dispatch(args):
@@ -264,6 +342,9 @@ def main():
 
     s = sub.add_parser("status")
     s.set_defaults(func=cmd_status)
+
+    r = sub.add_parser("report", help="re-sync blueprint with lake build + print macro progress")
+    r.set_defaults(func=cmd_report)
 
     d = sub.add_parser("dispatch")
     d.add_argument("--leaf", help="single leaf id, e.g. L1.1")

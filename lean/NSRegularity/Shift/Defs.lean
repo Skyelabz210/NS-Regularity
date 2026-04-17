@@ -1,7 +1,11 @@
+import Mathlib
+
 /-!
 # Shift/Defs — periodic torus primitives (shared by all macros)
 
 Plain definitions only. No theorems. All downstream leaves import this.
+Mathlib is imported here so all downstream leaves have access to its tactics
+and lemmas (Finset.sum, List.Perm, etc.).
 -/
 
 namespace NSRegularity
@@ -26,10 +30,9 @@ structure VField where
   y : Grid
   z : Grid
 
-/-- Triple sum over the 3-torus. -/
+/-- Triple sum over the 3-torus, using mathlib's `Finset.sum`. This form
+    makes reindexing by bijections trivial via `Finset.sum_equiv`. -/
 def sumGrid (f : Fin N → Fin N → Fin N → Int) : Int :=
-  (List.finRange N).foldl (fun a i =>
-    a + (List.finRange N).foldl (fun b j =>
-      b + (List.finRange N).foldl (fun c k => c + f i j k) 0) 0) 0
+  ∑ i : Fin N, ∑ j : Fin N, ∑ k : Fin N, f i j k
 
 end NSRegularity

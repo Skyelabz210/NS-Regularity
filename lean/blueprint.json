@@ -183,9 +183,10 @@
         "NSRegularity.Shift.Defs"
       ],
       "size": "XS",
-      "status": "pending",
+      "status": "closed",
       "hypotheses": "none (pure finite-type identity)",
-      "description_for_agent": "sp i = i + 1, sn i = i + (N-1) in Fin N with N=8. Prove sp (sn i) = i for all i."
+      "description_for_agent": "sp i = i + 1, sn i = i + (N-1) in Fin N with N=8. Prove sp (sn i) = i for all i.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.2",
@@ -197,9 +198,10 @@
         "NSRegularity.Shift.Defs"
       ],
       "size": "XS",
-      "status": "pending",
+      "status": "closed",
       "hypotheses": "none",
-      "description_for_agent": "Symmetric to L1.1."
+      "description_for_agent": "Symmetric to L1.1.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.3",
@@ -213,9 +215,10 @@
         "L1.2"
       ],
       "size": "S",
-      "status": "pending",
+      "status": "closed",
       "hypotheses": "L1.1, L1.2 closed",
-      "description_for_agent": "The sum over Fin 8 of f(sp i) equals the sum of f(i). This is shift-invariance under periodic reindex."
+      "description_for_agent": "The sum over Fin 8 of f(sp i) equals the sum of f(i). This is shift-invariance under periodic reindex.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.4",
@@ -229,9 +232,10 @@
         "L1.2"
       ],
       "size": "S",
-      "status": "pending",
+      "status": "closed",
       "hypotheses": "L1.1, L1.2 closed",
-      "description_for_agent": "Symmetric to L1.3."
+      "description_for_agent": "Symmetric to L1.3.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.5",
@@ -245,9 +249,10 @@
         "L1.4"
       ],
       "size": "M",
-      "status": "pending",
+      "status": "closed",
       "hypotheses": "L1.3, L1.4 closed",
-      "description_for_agent": "1D summation-by-parts. Expand the sum; apply sum_sp and sum_sn to reindex the 'conservative' part; pointwise cancellation with the 'advective' part yields 0."
+      "description_for_agent": "1D summation-by-parts. Expand the sum; apply sum_sp and sum_sn to reindex the 'conservative' part; pointwise cancellation with the 'advective' part yields 0.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.6",
@@ -261,8 +266,9 @@
         "L1.4"
       ],
       "size": "M",
-      "status": "pending",
-      "description_for_agent": "Symmetric to L1.5 in the y-direction. Agent may use L1.5 as a lemma after index swap."
+      "status": "closed",
+      "description_for_agent": "Symmetric to L1.5 in the y-direction. Agent may use L1.5 as a lemma after index swap.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.7",
@@ -276,8 +282,9 @@
         "L1.4"
       ],
       "size": "M",
-      "status": "pending",
-      "description_for_agent": "Symmetric to L1.5 in z."
+      "status": "closed",
+      "description_for_agent": "Symmetric to L1.5 in z.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.8",
@@ -293,7 +300,8 @@
       ],
       "size": "M",
       "status": "pending",
-      "description_for_agent": "For a single vorticity component, the 3D energy residual is zero. Decompose the 3D sum into three 1D sums (one per direction). Apply L1.5, L1.6, L1.7."
+      "description_for_agent": "For a single vorticity component, the 3D energy residual is zero. Decompose the 3D sum into three 1D sums (one per direction). Apply L1.5, L1.6, L1.7.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     },
     {
       "id": "L1.9",
@@ -306,8 +314,9 @@
         "L1.8"
       ],
       "size": "XS",
-      "status": "pending",
-      "description_for_agent": "Sum three zeros (one per vorticity component x/y/z) using L1.8. Pure composition, no fresh math."
+      "status": "closed",
+      "description_for_agent": "Sum three zeros (one per vorticity component x/y/z) using L1.8. Pure composition, no fresh math.",
+      "closed_note": "swarm: agent proof accepted via lake build"
     }
   ],
   "pending_decomposition": [
@@ -324,7 +333,7 @@
     "macros_total": 9,
     "macros_decomposed": 1,
     "leaves_total": 9,
-    "leaves_pending": 9,
-    "leaves_closed": 0
+    "leaves_pending": 1,
+    "leaves_closed": 8
   }
 }

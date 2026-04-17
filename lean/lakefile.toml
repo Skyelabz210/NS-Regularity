@@ -2,5 +2,9 @@ name = "NSRegularity"
 version = "0.1.0"
 defaultTargets = ["NSRegularity"]
 
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+
 [[lean_lib]]
 name = "NSRegularity"
