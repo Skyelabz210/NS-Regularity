@@ -1,0 +1,5 @@
+[package]
+name = "hdv_crt"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true

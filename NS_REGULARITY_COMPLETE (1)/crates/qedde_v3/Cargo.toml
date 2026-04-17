@@ -1,0 +1,11 @@
+[package]
+name = "qedde_v3"
+version = "3.0.0"
+edition = "2021"
+description = "QEDDE × HackFate × MMBF Unified Substrate — WassanDrive architecture"
+
+[dependencies]
+
+[lib]
+name = "qedde_v3"
+path = "src/lib.rs"

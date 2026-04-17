@@ -1,0 +1,9 @@
+[package]
+name = "maa_dh"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description = "W3.5 MAA-DH: Dual-strand verification with Descartes invariant"
+
+[dependencies]
+qmnf_primitives = { path = "../qmnf_primitives" }

@@ -1,0 +1,13 @@
+[package]
+name = "nsgrid3d"
+version = "0.1.0"
+edition = "2021"
+description = "3D Navier-Stokes on exact integer substrate with discrete Biot-Savart — closes Theorem 2(b')"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+opt-level = 3
+
+[dev-dependencies]
+svd_engine = { path = "../svd_engine" }

@@ -1,0 +1,4 @@
+[package]
+name = "landau_siegel_chimera"
+version = "0.1.0"
+edition = "2021"

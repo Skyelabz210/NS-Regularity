@@ -1,0 +1,5 @@
+[package]
+name = "plmg_validator"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true

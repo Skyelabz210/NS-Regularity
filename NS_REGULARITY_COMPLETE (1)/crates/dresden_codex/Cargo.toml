@@ -1,0 +1,8 @@
+[package]
+name = "dresden_codex"
+version = "0.1.0"
+edition = "2021"
+authors = ["Acid"]
+
+[dependencies]
+qmnf_primitives = { path = "../qmnf_primitives" }

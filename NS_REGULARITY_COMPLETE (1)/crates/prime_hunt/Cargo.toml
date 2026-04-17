@@ -1,0 +1,7 @@
+[package]
+name = "prime_hunt"
+version = "3.0.0"
+edition = "2021"
+description = "Prime family analysis, coprime lattice mapping, multi-head Hydra sieve"
+
+[dependencies]

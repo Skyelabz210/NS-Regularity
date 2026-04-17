@@ -1,0 +1,5 @@
+[package]
+name = "loki_engine"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true

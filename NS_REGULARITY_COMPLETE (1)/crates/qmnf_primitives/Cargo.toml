@@ -1,0 +1,6 @@
+[package]
+name = "qmnf_primitives"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description = "QMNF shared primitives: modular arithmetic, NTT, K-Elimination, Garner"

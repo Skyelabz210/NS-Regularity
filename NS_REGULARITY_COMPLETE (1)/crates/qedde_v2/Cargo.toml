@@ -1,0 +1,12 @@
+[package]
+name = "qedde_v2"
+version = "2.0.0"
+edition = "2021"
+authors = ["Acid (Anthony Diaz) / HackFate", "Claude (Anthropic)"]
+description = "QEDDE-D2 Core: Interchangeable CRAM Schema Cell Architecture"
+
+[dependencies]
+
+[lib]
+name = "qedde_v2"
+path = "src/lib.rs"

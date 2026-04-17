@@ -1,0 +1,5 @@
+[package]
+name = "wassan_holographic"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true

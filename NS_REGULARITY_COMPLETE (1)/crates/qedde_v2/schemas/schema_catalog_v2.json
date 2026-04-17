@@ -1,0 +1,125 @@
+{
+  "package": "QEDDE Schema Army v2",
+  "version": "2.0.0",
+  "architecture": "Cell-based hot-swappable CRAM schemas with CompositeSchema chaining",
+  "schemas": [
+    {
+      "name": "CRAM_NS",
+      "file": "CRAM_NS.md",
+      "class": "NavierStokes",
+      "description": "Core NS: divergence/boundary sieve, momentum residual, exact stencils"
+    },
+    {
+      "name": "CRAM_NS_TURBULENCE",
+      "file": "CRAM_NS_TURBULENCE.md",
+      "class": "NSTurbulence",
+      "description": "Multi-scale energy cascade, Kolmogorov spectrum, band-decomposed advection"
+    },
+    {
+      "name": "CRAM_NS_VORTEX",
+      "file": "CRAM_NS_VORTEX.md",
+      "class": "NSVortex",
+      "description": "Vortex identification/tracking, circulation conservation, Biot-Savart in CRT"
+    },
+    {
+      "name": "CRAM_NS_MULTISCALE",
+      "file": "CRAM_NS_MULTISCALE.md",
+      "class": "NSMultiScale",
+      "description": "Hierarchical refinement via Infinite Scaffold, restriction/prolongation, AMR"
+    },
+    {
+      "name": "CRAM_NS_REGULARITY",
+      "file": "CRAM_NS_REGULARITY.md",
+      "class": "NSRegularity",
+      "description": "BKM criterion, beta certificate, discrete max principle, 2D proof / 3D probe"
+    },
+    {
+      "name": "CRAM_YUKAWA",
+      "file": "CRAM_YUKAWA.md",
+      "class": "Yukawa",
+      "description": "Topological sieve, fusion rules, triple intersection, modular q-expansion"
+    },
+    {
+      "name": "CRAM_KAHLER",
+      "file": "CRAM_KAHLER.md",
+      "class": "Kahler",
+      "description": "Picard-Fuchs ODE, Frobenius series, Sp(4,Z) monodromy, Weil-Petersson metric"
+    },
+    {
+      "name": "CRAM_GAP",
+      "file": "CRAM_GAP.md",
+      "class": "Gap",
+      "description": "Prime gap sieving, Hydra architecture, CRAM lane transforms"
+    },
+    {
+      "name": "CRAM_SPECTRAL",
+      "file": "CRAM_SPECTRAL.md",
+      "class": "Spectral",
+      "description": "PSPI/WASSAN, phase-lock, attractor basin, sector projection"
+    },
+    {
+      "name": "CRAM_E8",
+      "file": "CRAM_E8.md",
+      "class": "E8Lattice",
+      "description": "Root proximity, winding stability, shell occupancy, lattice embedding"
+    },
+    {
+      "name": "CRAM_CRYPTO",
+      "file": "CRAM_CRYPTO.md",
+      "class": "Crypto",
+      "description": "Key schedule validation, syndrome/error-locator, side-channel safety"
+    },
+    {
+      "name": "CRAM_DSP",
+      "file": "CRAM_DSP.md",
+      "class": "DSP",
+      "description": "Signal processing, NTT band operations, spectral filtering"
+    },
+    {
+      "name": "CRAM_OPTIM",
+      "file": "CRAM_OPTIM.md",
+      "class": "Optimization",
+      "description": "Constrained optimization, feasibility sieve, objective scoring"
+    },
+    {
+      "name": "CRAM_GEOM",
+      "file": "CRAM_GEOM.md",
+      "class": "Geometry",
+      "description": "Apollonian packing, Descartes identity, lattice geometry"
+    },
+    {
+      "name": "CRAM_BIO",
+      "file": "CRAM_BIO.md",
+      "class": "Biology",
+      "description": "Codon residue tests, genetic code redundancy, sequence alignment"
+    },
+    {
+      "name": "CRAM_ML",
+      "file": "CRAM_ML.md",
+      "class": "MachineLearning",
+      "description": "Tropical ReLU geometry, exact gradient, weight quantization"
+    }
+  ],
+  "composite_pipelines": [
+    {
+      "name": "NS_FULL_PIPELINE",
+      "stages": ["CRAM_NS_VORTEX", "CRAM_NS_REGULARITY"],
+      "description": "Vortex tracking then regularity certification"
+    },
+    {
+      "name": "NS_TURBULENCE_PIPELINE",
+      "stages": ["CRAM_NS_MULTISCALE", "CRAM_NS_TURBULENCE", "CRAM_NS_REGULARITY"],
+      "description": "Multi-scale decomposition, turbulence analysis, regularity check"
+    },
+    {
+      "name": "YUKAWA_KAHLER_PIPELINE",
+      "stages": ["CRAM_YUKAWA", "CRAM_KAHLER"],
+      "description": "Topological sieve + holomorphic Yukawa, then Picard-Fuchs normalization"
+    },
+    {
+      "name": "STRING_LANDSCAPE_SIEVE",
+      "stages": ["CRAM_GAP", "CRAM_YUKAWA", "CRAM_KAHLER", "CRAM_E8"],
+      "description": "Full landscape: sieve topology, compute couplings, normalize, verify lattice"
+    }
+  ]
+}

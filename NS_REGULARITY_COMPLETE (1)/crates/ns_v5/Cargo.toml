@@ -1,0 +1,14 @@
+[package]
+name = "ns_regularity"
+version = "2.0.0"
+edition = "2021"
+authors = ["Anthony Diaz (Acid) <acid@hackfate.us>"]
+description = """
+Exact-Integer Navier-Stokes Regularity via CRT Contraction.
+SHUTDOWN BUILD — Zero float. All 24 closure items addressed.
+CRTBigInt v3.1 substrate, exact rational contraction bound,
+CRTBigInt-backed recumbent lanes, structural WASSAN.
+"""
+
+[dependencies]
+qmnf_crtbigint = { path = "qmnf_crtbigint" }

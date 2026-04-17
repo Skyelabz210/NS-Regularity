@@ -1,0 +1,7 @@
+[package]
+name = "cram_explorer"
+version = "1.0.0"
+edition = "2021"
+description = "CRAM exploration tools: apollonian packing, holodrive, shadow ladder"
+
+[dependencies]

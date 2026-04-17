@@ -1,0 +1,5 @@
+[package]
+name = "svd_engine"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true

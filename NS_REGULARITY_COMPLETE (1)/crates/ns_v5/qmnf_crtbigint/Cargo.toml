@@ -1,0 +1,13 @@
+[package]
+name = "qmnf_crtbigint"
+version = "3.1.0"
+edition = "2021"
+authors = ["Anthony Diaz (Acid) <acid@hackfate.us>"]
+description = """
+CRTBigInt v3.1 — Zero-Float Exact CRT Arithmetic.
+8×63-bit lanes (~504-bit capacity), Montgomery, K-Elimination.
+All auxiliary layers (PLMG, DoubleHelix, Scaffold) purged of f64/f32.
+"""
+
+[dependencies]
+lazy_static = "1"

@@ -1,0 +1,15 @@
+[package]
+name = "hackfate_runtime"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+wassan_engine = { path = "../wassan_engine" }
+time_crystal = { path = "../time_crystal" }
+hdv_crt = { path = "../hdv_crt" }
+svd_engine = { path = "../svd_engine" }
+cdhs_telemetry = { path = "../cdhs_telemetry" }
+loki_engine = { path = "../loki_engine" }
+asve_engine = { path = "../asve_engine" }
+maa_dh = { path = "../maa_dh" }
