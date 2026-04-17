@@ -1,0 +1,1425 @@
+{
+  "timestamp": "2026-04-13T18:43:47",
+  "total_generators": 10,
+  "basis": [
+    3,
+    5,
+    7,
+    11,
+    13
+  ],
+  "M": 15015,
+  "n_spins": 200,
+  "results": [
+    {
+      "generator_name": "LCG (Simple)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "YES",
+        "confidence": 1.0,
+        "fully_commutative_lanes": 5,
+        "total_lanes": 5,
+        "avg_consistency": 1.0,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 0,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": true,
+            "a_recovered": 6,
+            "c_recovered": 5,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 0,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": true,
+            "a_recovered": 9,
+            "c_recovered": 8,
+            "consistency": 1.0
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "GF2_LINEAR",
+        "confidence": 0.875,
+        "linear_bits": 14,
+        "total_bits": 16,
+        "avg_lfsr_length": 27.1
+      },
+      "head_c": {
+        "verdict": "QR_STRUCTURED",
+        "confidence": 0.6043,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 1.0,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.3333
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.6,
+            "expected_qr_density": 0.6,
+            "deviation": 0.0
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 1.0,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.4286
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.0,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.5455
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.335,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.2035
+          }
+        ],
+        "avg_deviation": 0.3022
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          0.0,
+          0.0,
+          -0.8,
+          0.0,
+          -0.4834
+        ],
+        "avg_correlation_magnitude": 0.2567,
+        "correlation_range": [
+          -0.8,
+          0.0
+        ],
+        "observation": "Wide spread (-0.80 to 0.00): possible composition or masking"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.1399,
+        "avg_winding_stability": 0.1399,
+        "pair_stabilities": [
+          0.197,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.202,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "LCG-class",
+      "consensus_reason": "Head A confirms full linearity (1.00)"
+    },
+    {
+      "generator_name": "LCG (Full Period / Hull-Dobell)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "YES",
+        "confidence": 1.0,
+        "fully_commutative_lanes": 5,
+        "total_lanes": 5,
+        "avg_consistency": 1.0,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency": 1.0
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "WEAK_GF2",
+        "confidence": 0.625,
+        "linear_bits": 10,
+        "total_bits": 16,
+        "avg_lfsr_length": 13.7
+      },
+      "head_c": {
+        "verdict": "QR_SPARSE",
+        "confidence": 0.0068,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.665,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.0017
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.6,
+            "expected_qr_density": 0.6,
+            "deviation": 0.0
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.57,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.0014
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.54,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.0055
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.53,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0085
+          }
+        ],
+        "avg_deviation": 0.0034
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          -0.4981,
+          0.0,
+          0.2431,
+          0.5004,
+          0.5723
+        ],
+        "avg_correlation_magnitude": 0.3628,
+        "correlation_range": [
+          -0.4981,
+          0.5723
+        ],
+        "observation": "Wide spread (-0.50 to 0.57): possible composition or masking"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": true,
+        "consistency_score": 0.5364,
+        "avg_winding_stability": 0.5364,
+        "pair_stabilities": [
+          0.3333,
+          0.3333,
+          0.3333,
+          0.3333,
+          0.596,
+          0.596,
+          0.596,
+          0.7121,
+          0.7121,
+          0.8182
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "LCG-class",
+      "consensus_reason": "Head A confirms full linearity (1.00)"
+    },
+    {
+      "generator_name": "Constant Additive (a=1)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "YES",
+        "confidence": 1.0,
+        "fully_commutative_lanes": 5,
+        "total_lanes": 5,
+        "avg_consistency": 1.0,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 2,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 5,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 10,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 12,
+            "consistency": 1.0
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "NON_LINEAR",
+        "confidence": 0.3125,
+        "linear_bits": 5,
+        "total_bits": 16,
+        "avg_lfsr_length": 98.2
+      },
+      "head_c": {
+        "verdict": "QR_SPARSE",
+        "confidence": 0.004,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.665,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.0017
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.6,
+            "expected_qr_density": 0.6,
+            "deviation": 0.0
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.57,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.0014
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.545,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.0005
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.545,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0065
+          }
+        ],
+        "avg_deviation": 0.002
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          -0.4981,
+          -0.406,
+          -0.2495,
+          0.5029,
+          0.5633
+        ],
+        "avg_correlation_magnitude": 0.444,
+        "correlation_range": [
+          -0.4981,
+          0.5633
+        ],
+        "observation": "Wide spread (-0.50 to 0.56): possible composition or masking"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.252,
+        "avg_winding_stability": 0.252,
+        "pair_stabilities": [
+          0.3384,
+          0.2374,
+          0.1515,
+          0.0758,
+          0.0859,
+          0.0152,
+          0.202,
+          0.1717,
+          0.4242,
+          0.8182
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "LCG-class",
+      "consensus_reason": "Head A confirms full linearity (1.00)"
+    },
+    {
+      "generator_name": "LCG (Park-Miller, M=2^31-1)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "NO",
+        "confidence": 0.0,
+        "fully_commutative_lanes": 0,
+        "total_lanes": 5,
+        "avg_consistency": 0.195,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 2,
+            "consistency": 0.3618
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 4,
+            "consistency": 0.2362
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 3,
+            "c_recovered": 1,
+            "consistency": 0.1307
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 6,
+            "c_recovered": 7,
+            "consistency": 0.1658
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 5,
+            "consistency": 0.0804
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "WEAK_GF2",
+        "confidence": 0.5625,
+        "linear_bits": 9,
+        "total_bits": 16,
+        "avg_lfsr_length": 99.8
+      },
+      "head_c": {
+        "verdict": "QR_SPARSE",
+        "confidence": 0.0725,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.62,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.0467
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.595,
+            "expected_qr_density": 0.6,
+            "deviation": 0.005
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.6,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.0286
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.57,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.0245
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.615,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0765
+          }
+        ],
+        "avg_deviation": 0.0363
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          -0.1077,
+          -0.0403,
+          0.1049,
+          0.0775,
+          0.0966
+        ],
+        "avg_correlation_magnitude": 0.0854,
+        "correlation_range": [
+          -0.1077,
+          0.1049
+        ],
+        "observation": "Low/mixed correlation (0.09): masked output or complex structure"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.1258,
+        "avg_winding_stability": 0.1258,
+        "pair_stabilities": [
+          0.3131,
+          0.2172,
+          0.1414,
+          0.0657,
+          0.0707,
+          0.0707,
+          0.0909,
+          0.1111,
+          0.0707,
+          0.1061
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "Partially-Structured",
+      "consensus_reason": "Head B detects weak GF(2) structure (0.56) \u2014 bit-shift or compound generator"
+    },
+    {
+      "generator_name": "LCG (Reel-Mapped Output)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "NO",
+        "confidence": 0.0,
+        "fully_commutative_lanes": 0,
+        "total_lanes": 5,
+        "avg_consistency": 0.7638,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency": 0.804
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency": 0.7538
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency": 0.7538
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency": 0.7538
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency": 0.7538
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "NON_LINEAR",
+        "confidence": 0.1875,
+        "linear_bits": 3,
+        "total_bits": 16,
+        "avg_lfsr_length": 18.3
+      },
+      "head_c": {
+        "verdict": "QR_STRUCTURED",
+        "confidence": 0.7912,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 1.0,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.3333
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.95,
+            "expected_qr_density": 0.6,
+            "deviation": 0.35
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.95,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.3786
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 1.0,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.4545
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 1.0,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.4615
+          }
+        ],
+        "avg_deviation": 0.3956
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "avg_correlation_magnitude": 0.0,
+        "correlation_range": [
+          0.0,
+          0.0
+        ],
+        "observation": "Low/mixed correlation (0.00): masked output or complex structure"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": true,
+        "consistency_score": 0.8222,
+        "avg_winding_stability": 0.8222,
+        "pair_stabilities": [
+          0.5556,
+          0.5556,
+          0.5556,
+          0.5556,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "QR-Patterned",
+      "consensus_reason": "Head C detects QR structure (0.79) \u2014 quadratic residue bias"
+    },
+    {
+      "generator_name": "LCG (Truncated / Bit-Masked)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "NO",
+        "confidence": 0.0,
+        "fully_commutative_lanes": 0,
+        "total_lanes": 5,
+        "avg_consistency": 0.2211,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency": 0.4673
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 4,
+            "c_recovered": 2,
+            "consistency": 0.1658
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 5,
+            "consistency": 0.201
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 9,
+            "c_recovered": 3,
+            "consistency": 0.1357
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 8,
+            "c_recovered": 6,
+            "consistency": 0.1357
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "WEAK_GF2",
+        "confidence": 0.625,
+        "linear_bits": 10,
+        "total_bits": 16,
+        "avg_lfsr_length": 28.0
+      },
+      "head_c": {
+        "verdict": "QR_NOISE",
+        "confidence": 0.2031,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.73,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.0633
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.46,
+            "expected_qr_density": 0.6,
+            "deviation": 0.14
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.43,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.1414
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.695,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.1495
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.525,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0135
+          }
+        ],
+        "avg_deviation": 0.1016
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          0.4991,
+          0.1281,
+          0.157,
+          0.2637,
+          0.1473
+        ],
+        "avg_correlation_magnitude": 0.239,
+        "correlation_range": [
+          0.1281,
+          0.4991
+        ],
+        "observation": "Low/mixed correlation (0.24): masked output or complex structure"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.1263,
+        "avg_winding_stability": 0.1263,
+        "pair_stabilities": [
+          0.5253,
+          0.1313,
+          0.1414,
+          0.1616,
+          0.0354,
+          0.0,
+          0.0606,
+          0.1364,
+          0.0354,
+          0.0354
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "Partially-Structured",
+      "consensus_reason": "Head B detects weak GF(2) structure (0.62) \u2014 bit-shift or compound generator"
+    },
+    {
+      "generator_name": "Compound LCG (Dual-Interleaved)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "NO",
+        "confidence": 0.6,
+        "fully_commutative_lanes": 3,
+        "total_lanes": 5,
+        "avg_consistency": 0.6744,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 0,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": true,
+            "a_recovered": 2,
+            "c_recovered": 4,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": true,
+            "a_recovered": 2,
+            "c_recovered": 0,
+            "consistency": 1.0
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 3,
+            "c_recovered": 10,
+            "consistency": 0.201
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 12,
+            "c_recovered": 8,
+            "consistency": 0.1709
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "GF2_LINEAR",
+        "confidence": 0.875,
+        "linear_bits": 14,
+        "total_bits": 16,
+        "avg_lfsr_length": 57.3
+      },
+      "head_c": {
+        "verdict": "QR_NOISE",
+        "confidence": 0.5185,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.0,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.6667
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.5,
+            "expected_qr_density": 0.6,
+            "deviation": 0.1
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 1.0,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.4286
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.6,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.0545
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.585,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0465
+          }
+        ],
+        "avg_deviation": 0.2593
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          0.0,
+          -0.6696,
+          -0.3976,
+          -0.0856,
+          -0.2001
+        ],
+        "avg_correlation_magnitude": 0.2706,
+        "correlation_range": [
+          -0.6696,
+          0.0
+        ],
+        "observation": "Wide spread (-0.67 to 0.00): possible composition or masking"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.1646,
+        "avg_winding_stability": 0.1646,
+        "pair_stabilities": [
+          0.5,
+          0.3333,
+          0.202,
+          0.3333,
+          0.0,
+          0.0505,
+          0.1717,
+          0.0,
+          0.0,
+          0.0556
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "Output-Masked",
+      "consensus_reason": "Head B detects GF(2) structure (0.88) + Head A shows partial lane linearity \u2192 masked algebraic generator"
+    },
+    {
+      "generator_name": "LFSR-16 (Galois)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "NO",
+        "confidence": 0.0,
+        "fully_commutative_lanes": 0,
+        "total_lanes": 5,
+        "avg_consistency": 0.1859,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 1,
+            "consistency": 0.3467
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 3,
+            "consistency": 0.2412
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 6,
+            "consistency": 0.1809
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 1,
+            "c_recovered": 10,
+            "consistency": 0.0905
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 8,
+            "c_recovered": 5,
+            "consistency": 0.0704
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "GF2_LINEAR",
+        "confidence": 1.0,
+        "linear_bits": 16,
+        "total_bits": 16,
+        "avg_lfsr_length": 16.0
+      },
+      "head_c": {
+        "verdict": "QR_SPARSE",
+        "confidence": 0.0737,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.665,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.0017
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.585,
+            "expected_qr_density": 0.6,
+            "deviation": 0.015
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.465,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.1064
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.575,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.0295
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.57,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0315
+          }
+        ],
+        "avg_deviation": 0.0368
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          0.2452,
+          0.254,
+          0.1599,
+          0.2103,
+          0.3325
+        ],
+        "avg_correlation_magnitude": 0.2404,
+        "correlation_range": [
+          0.1599,
+          0.3325
+        ],
+        "observation": "Low/mixed correlation (0.24): masked output or complex structure"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.1359,
+        "avg_winding_stability": 0.1359,
+        "pair_stabilities": [
+          0.3939,
+          0.2525,
+          0.1667,
+          0.1313,
+          0.1061,
+          0.0606,
+          0.0758,
+          0.0556,
+          0.0758,
+          0.0404
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "LFSR-class",
+      "consensus_reason": "Head B confirms GF(2)-linear (1.00), Head A shows zero linearity \u2192 true LFSR"
+    },
+    {
+      "generator_name": "XorShift32",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "NO",
+        "confidence": 0.0,
+        "fully_commutative_lanes": 0,
+        "total_lanes": 5,
+        "avg_consistency": 0.1729,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 1,
+            "consistency": 0.3367
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 3,
+            "consistency": 0.1508
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 6,
+            "c_recovered": 6,
+            "consistency": 0.1055
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 5,
+            "c_recovered": 1,
+            "consistency": 0.1307
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 1,
+            "consistency": 0.1407
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "WEAK_GF2",
+        "confidence": 0.5,
+        "linear_bits": 8,
+        "total_bits": 16,
+        "avg_lfsr_length": 99.8
+      },
+      "head_c": {
+        "verdict": "QR_SPARSE",
+        "confidence": 0.0692,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.685,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.0183
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.645,
+            "expected_qr_density": 0.6,
+            "deviation": 0.045
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.59,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.0186
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.61,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.0645
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.565,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0265
+          }
+        ],
+        "avg_deviation": 0.0346
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          0.5493,
+          0.2688,
+          0.2321,
+          0.0523,
+          0.0012
+        ],
+        "avg_correlation_magnitude": 0.2207,
+        "correlation_range": [
+          0.0012,
+          0.5493
+        ],
+        "observation": "Low/mixed correlation (0.22): masked output or complex structure"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.1242,
+        "avg_winding_stability": 0.1242,
+        "pair_stabilities": [
+          0.3535,
+          0.1717,
+          0.1313,
+          0.0707,
+          0.101,
+          0.0859,
+          0.0859,
+          0.0808,
+          0.0657,
+          0.096
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "Partially-Structured",
+      "consensus_reason": "Head B detects weak GF(2) structure (0.50) \u2014 bit-shift or compound generator"
+    },
+    {
+      "generator_name": "Mersenne Twister (MT19937)",
+      "total_spins": 200,
+      "basis": [
+        3,
+        5,
+        7,
+        11,
+        13
+      ],
+      "head_a": {
+        "verdict": "NO",
+        "confidence": 0.0,
+        "fully_commutative_lanes": 0,
+        "total_lanes": 5,
+        "avg_consistency": 0.1779,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency": 0.3467
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 3,
+            "c_recovered": 4,
+            "consistency": 0.201
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 4,
+            "c_recovered": 5,
+            "consistency": 0.1608
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 6,
+            "c_recovered": 1,
+            "consistency": 0.1055
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 12,
+            "c_recovered": 8,
+            "consistency": 0.0754
+          }
+        ]
+      },
+      "head_b": {
+        "verdict": "WEAK_GF2",
+        "confidence": 0.6875,
+        "linear_bits": 11,
+        "total_bits": 16,
+        "avg_lfsr_length": 100.0
+      },
+      "head_c": {
+        "verdict": "QR_SPARSE",
+        "confidence": 0.0356,
+        "lane_details": [
+          {
+            "modulus": 3,
+            "qr_ratio": 0.67,
+            "expected_qr_density": 0.6667,
+            "deviation": 0.0033
+          },
+          {
+            "modulus": 5,
+            "qr_ratio": 0.56,
+            "expected_qr_density": 0.6,
+            "deviation": 0.04
+          },
+          {
+            "modulus": 7,
+            "qr_ratio": 0.585,
+            "expected_qr_density": 0.5714,
+            "deviation": 0.0136
+          },
+          {
+            "modulus": 11,
+            "qr_ratio": 0.525,
+            "expected_qr_density": 0.5455,
+            "deviation": 0.0205
+          },
+          {
+            "modulus": 13,
+            "qr_ratio": 0.55,
+            "expected_qr_density": 0.5385,
+            "deviation": 0.0115
+          }
+        ],
+        "avg_deviation": 0.0178
+      },
+      "head_d": {
+        "verdict": "FLAGGED",
+        "confidence": 0.0,
+        "lane_correlations": [
+          0.6027,
+          -0.0642,
+          -0.0334,
+          0.0065,
+          -0.0076
+        ],
+        "avg_correlation_magnitude": 0.1429,
+        "correlation_range": [
+          -0.0642,
+          0.6027
+        ],
+        "observation": "Wide spread (-0.06 to 0.60): possible composition or masking"
+      },
+      "winding_diagnostic": {
+        "winding_consistent": false,
+        "consistency_score": 0.1116,
+        "avg_winding_stability": 0.1116,
+        "pair_stabilities": [
+          0.2677,
+          0.1869,
+          0.1364,
+          0.0859,
+          0.096,
+          0.0556,
+          0.0758,
+          0.0606,
+          0.0808,
+          0.0707
+        ],
+        "n_transitions": 199
+      },
+      "consensus_type": "Partially-Structured",
+      "consensus_reason": "Head B detects weak GF(2) structure (0.69) \u2014 bit-shift or compound generator"
+    }
+  ]
+}

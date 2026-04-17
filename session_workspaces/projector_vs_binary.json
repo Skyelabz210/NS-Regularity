@@ -1,0 +1,387 @@
+{
+  "timestamp": "2026-04-13T14:28:02.786245",
+  "generators": [
+    {
+      "name": "Compound LCG (Dual-Interleaved)",
+      "t1_tractable": false,
+      "t1_avg_match_rate": 0.0,
+      "t2_fully_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": false,
+          "consistency_score": 0.3316582914572864
+        },
+        {
+          "modulus": 5,
+          "is_linear": false,
+          "consistency_score": 0.5025125628140703
+        },
+        {
+          "modulus": 7,
+          "is_linear": false,
+          "consistency_score": 0.6633165829145728
+        },
+        {
+          "modulus": 11,
+          "is_linear": false,
+          "consistency_score": 0.09045226130653267
+        },
+        {
+          "modulus": 13,
+          "is_linear": false,
+          "consistency_score": 0.1708542713567839
+        }
+      ]
+    },
+    {
+      "name": "Constant Additive (a=1)",
+      "t1_tractable": true,
+      "t1_avg_match_rate": 100.0,
+      "t2_fully_commutative": true,
+      "t2_commutativity_score": 1.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 5,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 7,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 11,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 13,
+          "is_linear": true,
+          "consistency_score": 1.0
+        }
+      ]
+    },
+    {
+      "name": "LCG (Full Period / Hull-Dobell)",
+      "t1_tractable": true,
+      "t1_avg_match_rate": 100.0,
+      "t2_fully_commutative": true,
+      "t2_commutativity_score": 1.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 5,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 7,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 11,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 13,
+          "is_linear": true,
+          "consistency_score": 1.0
+        }
+      ]
+    },
+    {
+      "name": "LCG (Park-Miller, M=2^31-1)",
+      "t1_tractable": false,
+      "t1_avg_match_rate": 0.0,
+      "t2_fully_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": false,
+          "consistency_score": 0.3417085427135678
+        },
+        {
+          "modulus": 5,
+          "is_linear": false,
+          "consistency_score": 0.20100502512562815
+        },
+        {
+          "modulus": 7,
+          "is_linear": false,
+          "consistency_score": 0.18592964824120603
+        },
+        {
+          "modulus": 11,
+          "is_linear": false,
+          "consistency_score": 0.10050251256281408
+        },
+        {
+          "modulus": 13,
+          "is_linear": false,
+          "consistency_score": 0.11055276381909548
+        }
+      ]
+    },
+    {
+      "name": "LCG (Reel-Mapped Output)",
+      "t1_tractable": false,
+      "t1_avg_match_rate": 17.55557,
+      "t2_fully_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": false,
+          "consistency_score": 0.33668341708542715
+        },
+        {
+          "modulus": 5,
+          "is_linear": false,
+          "consistency_score": 0.1407035175879397
+        },
+        {
+          "modulus": 7,
+          "is_linear": false,
+          "consistency_score": 0.1407035175879397
+        },
+        {
+          "modulus": 11,
+          "is_linear": false,
+          "consistency_score": 0.1407035175879397
+        },
+        {
+          "modulus": 13,
+          "is_linear": false,
+          "consistency_score": 0.1407035175879397
+        }
+      ]
+    },
+    {
+      "name": "LCG (Simple)",
+      "t1_tractable": true,
+      "t1_avg_match_rate": 85.94736947368422,
+      "t2_fully_commutative": true,
+      "t2_commutativity_score": 1.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 5,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 7,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 11,
+          "is_linear": true,
+          "consistency_score": 1.0
+        },
+        {
+          "modulus": 13,
+          "is_linear": true,
+          "consistency_score": 1.0
+        }
+      ]
+    },
+    {
+      "name": "LCG (Truncated / Bit-Masked)",
+      "t1_tractable": false,
+      "t1_avg_match_rate": 0.0,
+      "t2_fully_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": false,
+          "consistency_score": 0.21608040201005024
+        },
+        {
+          "modulus": 5,
+          "is_linear": false,
+          "consistency_score": 0.1708542713567839
+        },
+        {
+          "modulus": 7,
+          "is_linear": false,
+          "consistency_score": 0.17587939698492464
+        },
+        {
+          "modulus": 11,
+          "is_linear": false,
+          "consistency_score": 0.1708542713567839
+        },
+        {
+          "modulus": 13,
+          "is_linear": false,
+          "consistency_score": 0.09045226130653267
+        }
+      ]
+    },
+    {
+      "name": "LFSR-16 (Galois)",
+      "t1_tractable": false,
+      "t1_avg_match_rate": 7.555539999999999,
+      "t2_fully_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": false,
+          "consistency_score": 0.6231155778894473
+        },
+        {
+          "modulus": 5,
+          "is_linear": false,
+          "consistency_score": 0.6532663316582915
+        },
+        {
+          "modulus": 7,
+          "is_linear": false,
+          "consistency_score": 0.5728643216080402
+        },
+        {
+          "modulus": 11,
+          "is_linear": false,
+          "consistency_score": 0.5175879396984925
+        },
+        {
+          "modulus": 13,
+          "is_linear": false,
+          "consistency_score": 0.5175879396984925
+        }
+      ]
+    },
+    {
+      "name": "Mersenne Twister (MT19937)",
+      "t1_tractable": false,
+      "t1_avg_match_rate": 0.11112,
+      "t2_fully_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": false,
+          "consistency_score": 0.3969849246231156
+        },
+        {
+          "modulus": 5,
+          "is_linear": false,
+          "consistency_score": 0.15577889447236182
+        },
+        {
+          "modulus": 7,
+          "is_linear": false,
+          "consistency_score": 0.1457286432160804
+        },
+        {
+          "modulus": 11,
+          "is_linear": false,
+          "consistency_score": 0.08040201005025126
+        },
+        {
+          "modulus": 13,
+          "is_linear": false,
+          "consistency_score": 0.11055276381909548
+        }
+      ]
+    },
+    {
+      "name": "XorShift32",
+      "t1_tractable": false,
+      "t1_avg_match_rate": 0.0,
+      "t2_fully_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "classification_agree": true,
+      "lane_details": [
+        {
+          "modulus": 3,
+          "is_linear": false,
+          "consistency_score": 0.40703517587939697
+        },
+        {
+          "modulus": 5,
+          "is_linear": false,
+          "consistency_score": 0.21105527638190955
+        },
+        {
+          "modulus": 7,
+          "is_linear": false,
+          "consistency_score": 0.135678391959799
+        },
+        {
+          "modulus": 11,
+          "is_linear": false,
+          "consistency_score": 0.06532663316582915
+        },
+        {
+          "modulus": 13,
+          "is_linear": false,
+          "consistency_score": 0.10552763819095477
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_generators": 10,
+    "classification_agreement_pct": 100.0,
+    "both_tractable": 3,
+    "both_intractable": 7,
+    "disagreement_count": 0
+  },
+  "findings": {
+    "output_masking": {
+      "reel_mapped_score": 0.0,
+      "truncated_score": 0.0,
+      "can_distinguish": false,
+      "note": "Both are output-masked LCGs; projector gives same verdict"
+    },
+    "bit_shift_patterns": {
+      "lfsr_avg_consistency": 0.5768844221105528,
+      "xorshift_avg_consistency": 0.1849246231155779,
+      "lfsr_min_lane": 0.5175879396984925,
+      "xorshift_min_lane": 0.06532663316582915,
+      "note": "LFSR shows higher consistency (c=57.7%), likely due to linear GF(2) structure"
+    },
+    "composition": {
+      "compound_commutativity": 0.0,
+      "simple_commutativity": 1.0,
+      "compound_lane_variance": 0.5728643216080402,
+      "note": "Compound dual-interleaved shows varying per-lane failure rates"
+    },
+    "correlation": {
+      "description": "Relationship between T1 match rate and T2 commutativity",
+      "observation": "Perfect separation: tractable generators have commutativity=100%, intractable=0%"
+    }
+  }
+}

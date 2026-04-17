@@ -15,6 +15,17 @@
 # Claude Code local state
 .claude/
 
+# Python build artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Lean build artifacts
+**/.lake/
+
+# Raw archive drops (redundant — extracted contents are committed)
+_archives/
+
 # Temporary / log files
 *.log
 *.tmp

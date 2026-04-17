@@ -1,0 +1,743 @@
+{
+  "timestamp": "2026-04-13T14:27:25.052408",
+  "total_generators": 10,
+  "generators": [
+    {
+      "name": "LCG (Simple)",
+      "projector_result": {
+        "generator_name": "LCG (Simple)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 2,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": true,
+            "a_recovered": 2,
+            "c_recovered": 1,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": true,
+            "a_recovered": 6,
+            "c_recovered": 1,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": true,
+            "a_recovered": 8,
+            "c_recovered": 6,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": true,
+            "a_recovered": 12,
+            "c_recovered": 10,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": true,
+        "commutative_lanes": 5,
+        "total_lanes": 5,
+        "commutativity_score": 1.0
+      },
+      "generation_time_ms": 0.048160552978515625
+    },
+    {
+      "name": "LCG (Full Period / Hull-Dobell)",
+      "projector_result": {
+        "generator_name": "LCG (Full Period / Hull-Dobell)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": true,
+        "commutative_lanes": 5,
+        "total_lanes": 5,
+        "commutativity_score": 1.0
+      },
+      "generation_time_ms": 0.04506111145019531
+    },
+    {
+      "name": "Constant Additive (a=1)",
+      "projector_result": {
+        "generator_name": "Constant Additive (a=1)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 0,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 3,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 2,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 8,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": true,
+            "a_recovered": 1,
+            "c_recovered": 0,
+            "consistency_score": 1.0,
+            "first_failure_idx": null,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": true,
+        "commutative_lanes": 5,
+        "total_lanes": 5,
+        "commutativity_score": 1.0
+      },
+      "generation_time_ms": 0.036716461181640625
+    },
+    {
+      "name": "LCG (Park-Miller, M=2^31-1)",
+      "projector_result": {
+        "generator_name": "LCG (Park-Miller, M=2^31-1)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency_score": 0.3417085427135678,
+            "first_failure_idx": 3,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 1,
+            "c_recovered": 4,
+            "consistency_score": 0.20100502512562815,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 5,
+            "c_recovered": 1,
+            "consistency_score": 0.18592964824120603,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 7,
+            "c_recovered": 3,
+            "consistency_score": 0.10050251256281408,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 10,
+            "c_recovered": 6,
+            "consistency_score": 0.11055276381909548,
+            "first_failure_idx": 4,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": false,
+        "commutative_lanes": 0,
+        "total_lanes": 5,
+        "commutativity_score": 0.0
+      },
+      "generation_time_ms": 0.09059906005859375
+    },
+    {
+      "name": "LCG (Reel-Mapped Output)",
+      "projector_result": {
+        "generator_name": "LCG (Reel-Mapped Output)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 0,
+            "consistency_score": 0.33668341708542715,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 4,
+            "c_recovered": 3,
+            "consistency_score": 0.1407035175879397,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 6,
+            "c_recovered": 3,
+            "consistency_score": 0.1407035175879397,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 10,
+            "c_recovered": 3,
+            "consistency_score": 0.1407035175879397,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 12,
+            "c_recovered": 3,
+            "consistency_score": 0.1407035175879397,
+            "first_failure_idx": 0,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": false,
+        "commutative_lanes": 0,
+        "total_lanes": 5,
+        "commutativity_score": 0.0
+      },
+      "generation_time_ms": 0.06985664367675781
+    },
+    {
+      "name": "LCG (Truncated / Bit-Masked)",
+      "projector_result": {
+        "generator_name": "LCG (Truncated / Bit-Masked)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 2,
+            "consistency_score": 0.21608040201005024,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 1,
+            "c_recovered": 2,
+            "consistency_score": 0.1708542713567839,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 4,
+            "consistency_score": 0.17587939698492464,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 1,
+            "c_recovered": 6,
+            "consistency_score": 0.1708542713567839,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 3,
+            "c_recovered": 9,
+            "consistency_score": 0.09045226130653267,
+            "first_failure_idx": 2,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": false,
+        "commutative_lanes": 0,
+        "total_lanes": 5,
+        "commutativity_score": 0.0
+      },
+      "generation_time_ms": 0.049591064453125
+    },
+    {
+      "name": "Compound LCG (Dual-Interleaved)",
+      "projector_result": {
+        "generator_name": "Compound LCG (Dual-Interleaved)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 1,
+            "consistency_score": 0.3316582914572864,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 1,
+            "c_recovered": 1,
+            "consistency_score": 0.5025125628140703,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 6,
+            "c_recovered": 4,
+            "consistency_score": 0.6633165829145728,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 5,
+            "consistency_score": 0.09045226130653267,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 9,
+            "c_recovered": 3,
+            "consistency_score": 0.1708542713567839,
+            "first_failure_idx": 2,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": false,
+        "commutative_lanes": 0,
+        "total_lanes": 5,
+        "commutativity_score": 0.0
+      },
+      "generation_time_ms": 0.09369850158691406
+    },
+    {
+      "name": "LFSR-16 (Galois)",
+      "projector_result": {
+        "generator_name": "LFSR-16 (Galois)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 0,
+            "consistency_score": 0.6231155778894473,
+            "first_failure_idx": 3,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 3,
+            "c_recovered": 0,
+            "consistency_score": 0.6532663316582915,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 4,
+            "c_recovered": 0,
+            "consistency_score": 0.5728643216080402,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 6,
+            "c_recovered": 0,
+            "consistency_score": 0.5175879396984925,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 7,
+            "c_recovered": 0,
+            "consistency_score": 0.5175879396984925,
+            "first_failure_idx": 2,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": false,
+        "commutative_lanes": 0,
+        "total_lanes": 5,
+        "commutativity_score": 0.0
+      },
+      "generation_time_ms": 0.06961822509765625
+    },
+    {
+      "name": "XorShift32",
+      "projector_result": {
+        "generator_name": "XorShift32",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 1,
+            "consistency_score": 0.40703517587939697,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 1,
+            "c_recovered": 3,
+            "consistency_score": 0.21105527638190955,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 2,
+            "consistency_score": 0.135678391959799,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 6,
+            "c_recovered": 7,
+            "consistency_score": 0.06532663316582915,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 4,
+            "c_recovered": 4,
+            "consistency_score": 0.10552763819095477,
+            "first_failure_idx": 2,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": false,
+        "commutative_lanes": 0,
+        "total_lanes": 5,
+        "commutativity_score": 0.0
+      },
+      "generation_time_ms": 0.1342296600341797
+    },
+    {
+      "name": "Mersenne Twister (MT19937)",
+      "projector_result": {
+        "generator_name": "Mersenne Twister (MT19937)",
+        "basis": [
+          3,
+          5,
+          7,
+          11,
+          13
+        ],
+        "M": 15015,
+        "total_observations": 200,
+        "calibration_window": 20,
+        "lane_results": [
+          {
+            "modulus": 3,
+            "lane_number": 0,
+            "is_linear": false,
+            "a_recovered": 0,
+            "c_recovered": 0,
+            "consistency_score": 0.3969849246231156,
+            "first_failure_idx": 0,
+            "notes": ""
+          },
+          {
+            "modulus": 5,
+            "lane_number": 1,
+            "is_linear": false,
+            "a_recovered": 3,
+            "c_recovered": 0,
+            "consistency_score": 0.15577889447236182,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 7,
+            "lane_number": 2,
+            "is_linear": false,
+            "a_recovered": 2,
+            "c_recovered": 0,
+            "consistency_score": 0.1457286432160804,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 11,
+            "lane_number": 3,
+            "is_linear": false,
+            "a_recovered": 5,
+            "c_recovered": 4,
+            "consistency_score": 0.08040201005025126,
+            "first_failure_idx": 2,
+            "notes": ""
+          },
+          {
+            "modulus": 13,
+            "lane_number": 4,
+            "is_linear": false,
+            "a_recovered": 10,
+            "c_recovered": 4,
+            "consistency_score": 0.11055276381909548,
+            "first_failure_idx": 2,
+            "notes": ""
+          }
+        ],
+        "fully_commutative": false,
+        "commutative_lanes": 0,
+        "total_lanes": 5,
+        "commutativity_score": 0.0
+      },
+      "generation_time_ms": 0.1766681671142578
+    }
+  ],
+  "summary": {
+    "fully_commutative_count": 3,
+    "total_generators": 10,
+    "avg_commutativity_score": 0.3,
+    "max_commutativity_score": 1.0,
+    "min_commutativity_score": 0.0
+  }
+}

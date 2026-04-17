@@ -1,0 +1,6 @@
+name = "NSRegularity"
+version = "0.1.0"
+defaultTargets = ["NSRegularity"]
+
+[[lean_lib]]
+name = "NSRegularity"

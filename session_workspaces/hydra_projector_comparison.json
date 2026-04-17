@@ -1,0 +1,242 @@
+{
+  "timestamp": "2026-04-13T14:34:47.252561",
+  "generators": [
+    {
+      "name": "Compound LCG (Dual-Interleaved)",
+      "t2_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "t3_consensus": "Unknown",
+      "t3_predicted_from_t2": "Non-LCG",
+      "t3_matches_projection": false,
+      "head_verdicts": {
+        "A": "NO",
+        "B": "NON_LINEAR",
+        "C": "QR_NOISE",
+        "D": "MASKED"
+      },
+      "confidence_scores": {
+        "A_LCG": 0.2,
+        "B_GF2": 0.125,
+        "C_QR": 0.49200000000000005,
+        "D_Comp": 0.5831028194959034
+      }
+    },
+    {
+      "name": "Constant Additive (a=1)",
+      "t2_commutative": true,
+      "t2_commutativity_score": 1.0,
+      "t3_consensus": "LCG-class",
+      "t3_predicted_from_t2": "LCG-class",
+      "t3_matches_projection": true,
+      "head_verdicts": {
+        "A": "YES",
+        "B": "NON_LINEAR",
+        "C": "QR_NOISE",
+        "D": "MASKED"
+      },
+      "confidence_scores": {
+        "A_LCG": 1.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.302,
+        "D_Comp": 0.8888116543428977
+      }
+    },
+    {
+      "name": "LCG (Full Period / Hull-Dobell)",
+      "t2_commutative": true,
+      "t2_commutativity_score": 1.0,
+      "t3_consensus": "LCG-class",
+      "t3_predicted_from_t2": "LCG-class",
+      "t3_matches_projection": true,
+      "head_verdicts": {
+        "A": "YES",
+        "B": "WEAK_GF2",
+        "C": "QR_SPARSE",
+        "D": "COMPOUND"
+      },
+      "confidence_scores": {
+        "A_LCG": 1.0,
+        "B_GF2": 0.5,
+        "C_QR": 0.168,
+        "D_Comp": 1.0
+      }
+    },
+    {
+      "name": "LCG (Park-Miller, M=2^31-1)",
+      "t2_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "t3_consensus": "Unknown",
+      "t3_predicted_from_t2": "Non-LCG",
+      "t3_matches_projection": false,
+      "head_verdicts": {
+        "A": "NO",
+        "B": "NON_LINEAR",
+        "C": "QR_NOISE",
+        "D": "MASKED"
+      },
+      "confidence_scores": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.24000000000000005,
+        "D_Comp": 0.5396968732262722
+      }
+    },
+    {
+      "name": "LCG (Reel-Mapped Output)",
+      "t2_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "t3_consensus": "LFSR-like",
+      "t3_predicted_from_t2": "Non-LCG",
+      "t3_matches_projection": false,
+      "head_verdicts": {
+        "A": "NO",
+        "B": "GF2_LINEAR",
+        "C": "QR_NOISE",
+        "D": "SINGLE"
+      },
+      "confidence_scores": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.875,
+        "C_QR": 0.328,
+        "D_Comp": 0.028438103985485037
+      }
+    },
+    {
+      "name": "LCG (Simple)",
+      "t2_commutative": true,
+      "t2_commutativity_score": 1.0,
+      "t3_consensus": "LCG-class",
+      "t3_predicted_from_t2": "LCG-class",
+      "t3_matches_projection": true,
+      "head_verdicts": {
+        "A": "YES",
+        "B": "WEAK_GF2",
+        "C": "QR_NOISE",
+        "D": "MASKED"
+      },
+      "confidence_scores": {
+        "A_LCG": 1.0,
+        "B_GF2": 0.4375,
+        "C_QR": 0.568,
+        "D_Comp": 0.6345853143104869
+      }
+    },
+    {
+      "name": "LCG (Truncated / Bit-Masked)",
+      "t2_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "t3_consensus": "LFSR-like",
+      "t3_predicted_from_t2": "Non-LCG",
+      "t3_matches_projection": false,
+      "head_verdicts": {
+        "A": "NO",
+        "B": "GF2_LINEAR",
+        "C": "QR_NOISE",
+        "D": "MASKED"
+      },
+      "confidence_scores": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.75,
+        "C_QR": 0.20600000000000002,
+        "D_Comp": 0.9857067453873509
+      }
+    },
+    {
+      "name": "LFSR-16 (Galois)",
+      "t2_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "t3_consensus": "Unknown",
+      "t3_predicted_from_t2": "Non-LCG",
+      "t3_matches_projection": false,
+      "head_verdicts": {
+        "A": "NO",
+        "B": "NON_LINEAR",
+        "C": "QR_SPARSE",
+        "D": "SINGLE"
+      },
+      "confidence_scores": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.18,
+        "D_Comp": 0.03387869212882306
+      }
+    },
+    {
+      "name": "Mersenne Twister (MT19937)",
+      "t2_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "t3_consensus": "Unknown",
+      "t3_predicted_from_t2": "Non-LCG",
+      "t3_matches_projection": false,
+      "head_verdicts": {
+        "A": "NO",
+        "B": "NON_LINEAR",
+        "C": "QR_SPARSE",
+        "D": "MASKED"
+      },
+      "confidence_scores": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.11800000000000006,
+        "D_Comp": 0.8121617832193142
+      }
+    },
+    {
+      "name": "XorShift32",
+      "t2_commutative": false,
+      "t2_commutativity_score": 0.0,
+      "t3_consensus": "Unknown",
+      "t3_predicted_from_t2": "Non-LCG",
+      "t3_matches_projection": false,
+      "head_verdicts": {
+        "A": "NO",
+        "B": "NON_LINEAR",
+        "C": "QR_SPARSE",
+        "D": "SINGLE"
+      },
+      "confidence_scores": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.196,
+        "D_Comp": 0.1637269350978547
+      }
+    }
+  ],
+  "summary": {
+    "total_generators": 10,
+    "t3_projection_agreement": "3/10",
+    "agreement_pct": 30.0
+  },
+  "findings": {
+    "output_masking_separation": {
+      "reel_consensus": "LFSR-like",
+      "reel_head_b": "GF2_LINEAR",
+      "truncated_consensus": "LFSR-like",
+      "truncated_head_b": "GF2_LINEAR",
+      "can_distinguish": false,
+      "note": "Both are LCG + output masking; Hydra can separate: LFSR-like vs LFSR-like"
+    },
+    "head_effectiveness_on_tractable": {
+      "total_tractable": 3,
+      "head_a_yes": 3,
+      "note": "Head A consistently identifies tractable (LCG) generators with YES verdict"
+    },
+    "high_confidence_heads": {
+      "A_LCG": [
+        "Constant Additive (a=1)",
+        "LCG (Full Period / Hull-Dobell)",
+        "LCG (Simple)"
+      ],
+      "D_Comp": [
+        "Constant Additive (a=1)",
+        "LCG (Full Period / Hull-Dobell)",
+        "LCG (Truncated / Bit-Masked)",
+        "Mersenne Twister (MT19937)"
+      ],
+      "B_GF2": [
+        "LCG (Reel-Mapped Output)",
+        "LCG (Truncated / Bit-Masked)"
+      ]
+    }
+  }
+}

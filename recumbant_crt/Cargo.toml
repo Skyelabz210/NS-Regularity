@@ -1,0 +1,10 @@
+[package]
+name = "hydra-sieve"
+version = "3.0.0"
+edition = "2021"
+authors = ["Acid (Anthony Diaz) / HackFate", "Claude (Anthropic)"]
+description = "Multi-Dimensional Operator-Toric Carry-Propagation Sieve with Heterogeneous CRAM Topology"
+
+[profile.release]
+opt-level = 3
+lto = true

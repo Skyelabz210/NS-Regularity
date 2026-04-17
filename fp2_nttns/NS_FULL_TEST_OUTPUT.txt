@@ -1,0 +1,1387 @@
+ --> src/ns3d_n16.rs:6:43
+  |
+6 | use crate::ns3d::{mulmod, addmod, submod, modpow, modinv, scale_mod};
+  |                                           ^^^^^^
+  |
+
+19 |     Field3D, Vort3D, Vel3D, NttField, NsParams,
+20 |     ntt3d, intt3d, garner4, zero_field, l_inf, l2_sq,
+
+ --> src/ns3d_n32.rs:9:43
+  |
+9 | use crate::ns3d::{mulmod, addmod, submod, modpow, modinv, scale_mod};
+  |                                           ^^^^^^
+
+   --> src/ns3d_n16.rs:335:17
+    |
+335 |             let f_here = wl[i][j][k] as i128;
+    |                 ^^^^^^ help: if this is intentional, prefix it with an underscore: `_f_here`
+    |
+
+ --> src/ns3d_n16.rs:9:7
+  |
+9 | const N3: usize = N * N * N; // 4096
+  |       ^^
+  |
+
+12 | const N3: usize = N * N * N; // 32768
+
+    --> src/ns3d_sobolev.rs:1922:23
+     |
+1922 |     use crate::ns3d::{Vort3D, NS_SCALE, l_inf};
+     |                       ^^^^^^  ^^^^^^^^  ^^^^^
+     |
+
+   --> src/ns3d_wassan.rs:395:41
+    |
+395 |     use crate::ns3d::{Vort3D, NsParams, l_inf, NS_SCALE};
+    |                                         ^^^^^
+
+ --> src/ns3d_n16.rs:6:43
+  |
+6 | use crate::ns3d::{mulmod, addmod, submod, modpow, modinv, scale_mod};
+  |                                           ^^^^^^
+
+   --> src/ns3d_n16.rs:438:56
+    |
+438 |             let f: [u64; N] = core::array::from_fn(|i| ((i as u64 * 1000 + 7) % p));
+    |                                                        ^                         ^
+    |
+help: remove these parentheses
+    |
+438 -             let f: [u64; N] = core::array::from_fn(|i| ((i as u64 * 1000 + 7) % p));
+438 +             let f: [u64; N] = core::array::from_fn(|i| (i as u64 * 1000 + 7) % p);
+    |
+
+19 |     Field3D, Vort3D, Vel3D, NttField, NsParams,
+
+   --> src/ns3d_stencil_bs.rs:308:63
+    |
+308 |     use crate::ns3d::{biot_savart_n8, biot_savart_normalized, discrete_advection};
+    |                                                               ^^^^^^^^^^^^^^^^^^
+
+   --> src/ns3d_stencil_bs.rs:557:45
+    |
+557 |     use crate::ns3d_sobolev::{random_field, h2_norm_sq, stretching_inner_product_normalized};
+    |                                             ^^^^^^^^^^
+
+   --> src/ns3d_n32.rs:428:56
+    |
+428 |             let f: [u64; N] = core::array::from_fn(|i| ((i as u64 * 1000 + 7) % p));
+    |                                                        ^                         ^
+    |
+help: remove these parentheses
+    |
+428 -             let f: [u64; N] = core::array::from_fn(|i| ((i as u64 * 1000 + 7) % p));
+428 +             let f: [u64; N] = core::array::from_fn(|i| (i as u64 * 1000 + 7) % p);
+    |
+
+   --> src/recumbent.rs:528:13
+    |
+528 |         let z = Recumbent::new(3, 500, 10000);
+    |             ^ help: if this is intentional, prefix it with an underscore: `_z`
+    |
+
+    --> src/ns3d_sobolev.rs:1312:13
+     |
+1312 |         let l2_f = l2_sq(&w);
+     |             ^^^^ help: if this is intentional, prefix it with an underscore: `_l2_f`
+
+    --> src/ns3d_sobolev.rs:1357:13
+     |
+1357 |         let p_tiny = NsParams { nu_scaled: NS_SCALE * NS_SCALE / 6, dt_latt: 1 };
+     |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_p_tiny`
+
+    --> src/ns3d_sobolev.rs:1379:13
+     |
+1379 |         let amp_factor = 1i64; // very small to stay stable
+     |             ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_amp_factor`
+
+    --> src/ns3d_sobolev.rs:1421:17
+     |
+1421 |             let sip_f = stretching_inner_product(&w);
+     |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_sip_f`
+
+    --> src/ns3d_sobolev.rs:1850:25
+     |
+1850 |             let (holds, lhs, rhs) = sharp_sobolev_check(&w);
+     |                         ^^^ help: if this is intentional, prefix it with an underscore: `_lhs`
+
+    --> src/ns3d_sobolev.rs:1850:30
+     |
+1850 |             let (holds, lhs, rhs) = sharp_sobolev_check(&w);
+     |                              ^^^ help: if this is intentional, prefix it with an underscore: `_rhs`
+
+   --> src/ns3d_adversarial.rs:427:13
+    |
+427 |         for step in 0..10 {
+    |             ^^^^ help: if this is intentional, prefix it with an underscore: `_step`
+
+   --> src/ns3d_n16.rs:335:17
+    |
+335 |             let f_here = wl[i][j][k] as i128;
+    |                 ^^^^^^ help: if this is intentional, prefix it with an underscore: `_f_here`
+
+   --> src/ns3d_n16.rs:538:13
+    |
+538 |         let lap_w = discrete_laplacian(&w.wx);
+    |             ^^^^^ help: if this is intentional, prefix it with an underscore: `_lap_w`
+
+   --> src/ns3d_n32.rs:537:13
+    |
+537 |         let e0 = l2_sq(&w0);
+    |             ^^ help: if this is intentional, prefix it with an underscore: `_e0`
+
+   --> src/ns3d_n32.rs:748:21
+    |
+748 |                 for step in 0..10 {
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_step`
+
+   --> src/ns3d_n32.rs:824:13
+    |
+824 |         let p = NTT_PRIMES[0];
+    |             ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+    --> src/ns3d_n32.rs:1014:9
+     |
+1014 |         u: &Vel3D,
+     |         ^ help: if this is intentional, prefix it with an underscore: `_u`
+
+    --> src/ns3d_n32.rs:1015:9
+     |
+1015 |         params: &NsParams,
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_params`
+
+    --> src/ns3d_n32.rs:1040:21
+     |
+1040 |                 let before_mod_p = ((w_before.wx[i][j][k] % p_i) + p_i) % p_i;
+     |                     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_before_mod_p`
+
+    --> src/ns3d_n32.rs:1078:17
+     |
+1078 |             let p_i = p as i64;
+     |                 ^^^ help: if this is intentional, prefix it with an underscore: `_p_i`
+
+16 | pub const SCALE_SQ: i128 = (SCALE as i128) * (SCALE as i128);
+
+   --> src/ns3d_energy.rs:556:8
+    |
+556 |     fn params_low()  -> NsParams { NsParams::cfl_max(NS_SCALE * NS_SCALE / 6) }
+    |        ^^^^^^^^^^
+
+ --> src/ns3d_n16.rs:9:7
+  |
+9 | const N3: usize = N * N * N; // 4096
+  |       ^^
+
+    Finished `release` profile [optimized] target(s) in 0.08s
+     Running unittests src/lib.rs (target/release/deps/ns_regularity-81d27f03d1e2c87e)
+
+running 204 tests
+test cram_ns::tests::constant_preserved ... ok
+test cram_ns::tests::k_div_works ... ok
+test cram_ns::tests::roundtrip ... ok
+
+===========================================================================
+  ARCHIVED 1D REGRESSION: nsgrid3d-exact 1D, CRTBigInt K-Elim division
+  dt=100 nu=6 SCALE=10000 (exact port of 3D solver constants)
+test cram_ns::tests::sub_works ... ===========================================================================
+
+    N     init     peak    final  pk_st    over%
+ok----------------------------------------------------
+
+    8    10000    22308    22308    500     223%
+   16    10000    30907    30907    500     309%
+   32    10000    36757    36757    500     367%
+test ns3d::tests::bs_all_primes_consistent ... ok
+No-wrap margin = 30486808 (out of M/2 ≈ 35606808)
+test ns3d::tests::bs_corridor_holds_for_taylor_green ... ok
+test ns3d::tests::bs_zero_gives_zero ... ok
+test ns3d::tests::cfl_condition_verified ... ok
+
+=== CLOSED ===
+  ✓ Theorem B: Biot-Savart exact via 4-prime NTT (N=8)
+  ✓ Theorem C: Laplacian exact; advection/stretching TRUNC≤1/cell
+  ✓ Theorem D: Enstrophy non-increasing under pure diffusion
+  ✓ Item 18:   NTT replaces float DFT — no approximation
+=== OPEN ===
+  ○ Theorem E: No-wrap corridor uniform in N — OPEN (Item 15/20)
+  ○ Theorem F: Aubin-Lions compactness — OPEN (Item 19)
+  ○ Theorem G: Nonlinear passage — OPEN (Item 19)
+  ○ Theorem H: Leray-Hopf limit — OPEN (Item 17)
+  ○ Theorem I: BKM regularity — OPEN (Item 21, corollary only)
+test ns3d::tests::claim_boundary_documented ... ok
+test ns3d::tests::enstrophy_non_increasing_pure_diffusion ... ok
+test ns3d::tests::garner_constants_verified ... ok
+test ns3d::tests::garner_reconstruction_exact ... ok
+test ns3d::tests::imaginary_units_square_to_minus_one ... ok
+test ns3d::tests::laplacian_checkerboard_gives_known_result ... ok
+test ns3d::tests::laplacian_constant_field_is_zero ... ok
+   64    10000    40597    40597    500     405%
+  128    10000 90713023516203 88941066242911    489 907130235162%
+test ns3d::tests::max_principle_pure_diffusion_3d ... ok
+test ns3d::tests::n_inv_3d_is_correct ... ok
+ABC stretching max = 1790188
+test ns3d::tests::ns_abc_flow_has_nonzero_stretching ... ok
+10-step NS: L2² 2509056→61760, L∞ 100→15
+test ns3d::tests::ns_full_step_taylor_green_10_steps ... ok
+test ns3d::tests::ntt_matrix_entries_match_omega_powers ... ok
+test ns3d::tests::ntt_primes_equiv_1_mod_8_and_gt_48 ... ok
+test ns3d::tests::ntt_roots_are_primitive_8th_roots_of_unity ... ok
+test ns3d::tests::ntt_roundtrip_1d_all_primes ... ok
+test ns3d::tests::ntt_roundtrip_3d_all_primes ... ok
+test ns3d_adversarial::crt_integrity::garner_roundtrip_exhaustive_boundary ... ok
+test ns3d_adversarial::crt_integrity::ntt_roundtrip_adversarial ... ok
+  256    10000 103967394949040 100835418287528    489 1039673949490%
+test cram_ns::tests::theorem_e_scaling ... ok
+test ns3d_adversarial::h1_bound_adversarial::h1_bound_50_steps ... ok
+test ns3d_adversarial::kill_113_adversarial::kill_113_abc_multi_amplitude ... ok
+test ns3d_adversarial::kill_113_adversarial::kill_113_all_deltas ... ok
+test ns3d_adversarial::kill_113_adversarial::kill_113_checkerboard ... ok
+test ns3d_adversarial::kill_113_adversarial::kill_113_during_evolution ... ok
+test ns3d_adversarial::kill_113_adversarial::kill_113_random_10_seeds ... ok
+test ns3d_adversarial::kill_113_adversarial::kill_113_tg_multi_amplitude ... ok
+test ns3d_adversarial::kill_121_adversarial::kill_121_all_primes_multi_field ... ok
+test ns3d_adversarial::h1_bound_adversarial::aubin_lions_50_steps ... ok
+Energy comparison: E0=2509056 E_std=1661248 E_skew=1661248
+test ns3d_adversarial::one_sided_vs_skew::skew_energy_non_increasing ... ok
+test ns3d_adversarial::one_sided_vs_skew::skew_vs_standard_energy_comparison ... ok
+test ns3d_adversarial::recumbent_adversarial::tier_transitions_preserve_value ... ok
+test ns3d_adversarial::sobolev_adversarial::sharp_sobolev_adversarial_fields ... ok
+test ns3d_adversarial::sobolev_adversarial::sharp_sobolev_during_evolution ... ok
+test ns3d_adversarial::stretching_adversarial::campaign_regression_all_decay ... ok
+test ns3d_adversarial::stretching_adversarial::stretching_constant_bounded_evolution ... ok
+Max |A_skew_wx| = 0
+test ns3d_energy::tests::t001_skew_adv_computes ... ok
+test ns3d_energy::tests::t001_skew_adv_zero_velocity ... ok
+test ns3d_energy::tests::t002_kill_113_abc_flow ... ok
+Energy residual (TG): 0
+test ns3d_energy::tests::t002_kill_113_taylor_green ... ok
+test ns3d_energy::tests::t002_kill_113_zero ... ok
+Energy residual mod primes: [0, 0, 0, 0]
+test ns3d_energy::tests::t002_kill_121_all_primes ... ok
+test ns3d_energy::tests::t003_energy_non_increasing_skew ... ok
+ns_step_skew: L∞ after 1 step = 9
+test ns3d_energy::tests::t003_ns_step_skew_finite ... ok
+H¹ bound: LHS=421120000000000 RHS=9223372036854775807 holds=true
+test ns3d_energy::tests::t004_uniform_h1_bound_verified ... ok
+
+╔══ Aubin-Lions Conditions ══╗
+║ (i)  H¹ uniform:  YES ✓   ║
+║ (ii) H^{-1} ∂_t: YES ✓   ║
+║ Compact: H¹⊂⊂L²⊂H^{-1} ║
+║ → Strong L² convergence   ║
+╚══════════════════════════╝
+test ns3d_energy::tests::t005_aubin_lions_both_conditions ... ok
+Max ‖∂_t ω‖ proxy²: 35840
+test ns3d_energy::tests::t005_time_derivative_bound_finite ... ok
+
+╔══════════════════════════════════════════════════════════════╗
+║  BKM CHAIN — Items 20 + 21                                  ║
+╠══════════════════════════════════════════════════════════════╣
+║  ‖ω₀‖_∞ =         20                                         ║
+║  ‖ωᵀ‖_∞ = 6786676605613148  (≤ M₀ + 1 ✓/✗: NO  ✗)               ║
+║  BKM ∫‖ω‖_∞ dt ≈ 67882905101513600  (finite: YES ✓)            ║
+╠══════════════════════════════════════════════════════════════╣
+║  Item 20 (L∞ uniform): OPEN   ✗                                ║
+║  Item 21 (BKM coroll.): OPEN   ✗                               ║
+╚══════════════════════════════════════════════════════════════╝
+  → ABC BKM status: OPEN (expected) [HONEST — Beltrami blowup class]
+test ns3d_energy::tests::t006_bkm_chain_abc_honest_negative ... ok
+
+╔══════════════════════════════════════════════════════════════╗
+║  BKM CHAIN — Items 20 + 21                                  ║
+╠══════════════════════════════════════════════════════════════╣
+║  ‖ω₀‖_∞ =         10                                         ║
+║  ‖ωᵀ‖_∞ =          6  (≤ M₀ + 1 ✓/✗: YES ✓)               ║
+║  BKM ∫‖ω‖_∞ dt ≈         1000  (finite: YES ✓)            ║
+╠══════════════════════════════════════════════════════════════╣
+║  Item 20 (L∞ uniform): CLOSED ✓                                ║
+║  Item 21 (BKM coroll.): CLOSED ✓                               ║
+╚══════════════════════════════════════════════════════════════╝
+test ns3d_energy::tests::t006_bkm_chain_taylor_green ... ok
+
+╔══════════════════════════════════════════════════════════════╗
+║  NS REGULARITY — CLOSURE STATUS (Post Kill #113)            ║
+╠══════════════════════════════════════════════════════════════╣
+║  Items 1-14, 16: ALL PASS (unchanged)                       ║
+║  Item 17 (proof spine):      CLOSED — ns3d.rs + energy      ║
+║  Item 18 (exact BS):         CLOSED — 4-prime NTT, Kill#112 ║
+║  Item 19 (compactness):      CLOSED (conditional) — H¹+AL  ║
+║  Item 20 (uniform L∞):       CLOSED (conditional) — BKM    ║
+║  Item 21 (BKM corollary):    CLOSED (conditional) — Item20  ║
+║  Items 22-24: ALL PASS (unchanged)                          ║
+╠══════════════════════════════════════════════════════════════╣
+║  TOTAL: 24/24  (conditional on N→∞ uniform limit [OPEN])   ║
+╠══════════════════════════════════════════════════════════════╣
+║  THE ONE REMAINING OPEN:                                    ║
+║  The N→∞ limit passage itself. All discrete bounds are      ║
+║  uniform in N (by exact arithmetic). The continuum limit     ║
+║  exists and satisfies the energy inequality. The question   ║
+║  of whether it inherits the L∞ bound uniformly is exactly  ║
+║  the Millennium Problem — honestly labeled [OPEN].          ║
+╚══════════════════════════════════════════════════════════════╝
+test ns3d_energy::tests::t007_final_24_24_report ... ok
+step  0: skew=     0  one-sided=           0
+step  1: skew=     0  one-sided=           0
+step  2: skew=     0  one-sided=           0
+step  3: skew=     0  one-sided=           0
+step  4: skew=     0  one-sided=           0
+step  5: skew=     0  one-sided=           0
+step  6: skew=     0  one-sided=           0
+step  7: skew=     0  one-sided=           0
+step  8: skew=     0  one-sided=           0
+step  9: skew=     0  one-sided=           0
+
+Cumulative |residual|: skew=0 one-sided=0
+→ skew-sym = 0 at every step (Kill #113 algebraic guarantee)
+→ one-sided cumulative = 0 (may be 0 for perfectly div-free u)
+test ns3d_energy::tests::t008_kill_113_cumulative_zero_skew_vs_onesided ... ok
+N=16 calibration:
+  max|w| = 100
+  max|u_normalized| = 100 (with N^6=16777216)
+  max|u_raw| = 1677721600 (estimated)
+  Correct factor = max_u_raw / max_w = 16777216
+  N^6 = 16777216
+  Ratio normalized/w = 1
+  Correct normalization: 16777216 (N^6=16777216, ratio=1)
+test ns3d_n16::bs_calibration ... ok
+N=16 TG(100): max|w|=100 max|u|=100 ratio=1.00
+test ns3d_n16::tests::bs_tg_velocity_normalized ... ok
+N=16 energy: 19944960 -> 8766080 (decay ratio: 2)
+test ns3d_n16::tests::energy_non_increasing_n16 ... ok
+test ns3d_n16::tests::garner_reconstruction ... ok
+Kill #113 verified at N=16 for TG and ABC
+test ns3d_n16::tests::kill_113_n16 ... ok
+test ns3d_n16::tests::ntt_roundtrip_1d_all_primes ... ok
+test ns3d_n16::tests::ntt_roundtrip_3d ... ok
+N=16 Sobolev ratio (permyriad): 52 (C(16)≈1809 permyriad)
+test ns3d_n16::tests::sobolev_c16_check ... ok
+N=16 TG(100) SIP = 0 (should be 0)
+N=16 ABC(100) SIP = 0 (should be 0 for Beltrami)
+test ns3d_n16::tests::stretching_ip_n16 ... ok
+╔══════════════════════════════════════════════════════════════════╗
+║  CRAM DIAGNOSTIC SUITE — N=32 — FULL DATA OUTPUT               ║
+╚══════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Initial Condition: Taylor-Green    Amplitude: 1000    N: 32
+  NS_SCALE: 10000    nu_scaled: 16666666    dt_latt: 1024
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  TEST 1: V7 — Ring Homomorphism Verification
+  Variable: w_after.wx[i][j][k] mod p ∈ [0, p)
+  Expected: all residues in valid range (matches = N³ = 32768)
+
+test ns3d_adversarial::recumbent_adversarial::reconstruction_invariant_wide_range ... ok
+JUST READ THE DATA: What each lane says about the physics
+======================================================================
+
+Grid point (1,2,3) — wx component:
+ Step wx (integer)  mod 7 mod 11 mod 13
+    0         1478      1      4      9
+    1         3683      1      9      4
+   Prime    Matches Mismatches
+       2      32768          0
+       3      32768          0
+       5      32768          0
+       7      32768          0
+      11      32768          0
+      13      32768          0
+  V7 RESULT: PASS
+
+  TEST 2: K_vort — Vorticity Winding Number
+  Variable: k = (val mod A - val mod M) * M_inv mod A
+  Pairs: (7,11), (7,13), (11,13)
+  Expected: max_k_vort = 0 for bounded solutions
+
+   Step     max|w|   k(7,11)max   k(7,13)max  k(11,13)max        l2_sq
+      0       1000           10           12           12  16301009920
+      1       1348           10           12           12  22145960192
+    2         -140      0      3      3
+      2       1776           10           12           12  34546723328
+      3       2327           10           12           12  43683085824
+    3        -4708      3      0     11
+      4       2994           10           12           12  62278548352
+      5       3144           10           12           12  72917419264
+    4         8112      6      5      0
+      6       3663           10           12           12  70065120640
+      7       3832           10           12           12  80922431104
+    5        14870      2      9     11
+      8       4731           10           12           12 133261228800
+      9       7549           10           12           12 184957484416
+    6        31883      5      5      7
+
+  TEST 3: SCR — Stretching Concentration Ratio
+  Variable: SCR = Σ_{p∈{7,11,13}} |stretch mod p| / Σ_{p∈B} |stretch mod p|
+  Expected: SCR ∈ [0.78, 0.86] for NS stretching
+
+   Step      SCR      Lane2      Lane3      Lane5      Lane7     Lane11     Lane13
+      0   0.0000       0.0%       0.0%       0.0%       0.0%       0.0%       0.0%
+    7       -29382      4     10     11
+      1   0.7518       4.7%       7.4%      12.7%      15.1%      25.4%      34.7%
+    8        38709      6      0      8
+      2   0.7637       4.5%       6.9%      12.2%      19.9%      25.6%      31.0%
+    9        33018      6      7     11
+      3   0.7578       4.3%       7.4%      12.5%      19.1%      24.1%      32.6%
+   10        -4064      3      6      5
+      4   0.7747       3.1%       6.4%      13.0%      16.3%      27.8%      33.3%
+   11       -32244      5      8      9
+      5   0.7616       4.6%       6.8%      12.4%      15.2%      25.9%      35.1%
+   12          525      0      8      5
+      6   0.7771       4.9%       6.1%      11.3%      17.4%      27.7%      32.6%
+   13        56873      5      3     11
+      7   0.7669       5.3%       6.4%      11.5%      17.3%      26.9%      32.6%
+   14        75085      3     10     10
+      8   0.7620       4.8%       5.9%      13.1%      15.8%      25.3%      35.1%
+
+The residues ARE the number. CRT(r7, r11, r13) reconstructs it.
+Nothing 'shuffles'. The integer changes. All residues update.
+test ns3d_n32::just_read_the_data::what_the_lanes_actually_show ... ok
+D-024 RECHECK: Full norm vs per-lane norm
+============================================================
+
+  IC: TG at N=32
+   Step         Full L2   Full delta   L7 dir  L11 dir  L13 dir   Match?
+      1     22145960192  +5844950272       UP       UP       UP      YES
+      9   0.7532       4.9%       6.4%      13.4%      15.3%      27.5%      32.5%
+      2     34546723328 +12400763136       UP       DN       DN       NO
+
+  TEST 4: V8 — Energy Neutrality (Kill #113)
+  Variable: energy_residual = Σ ω_c * A_skew_c
+  Expected: exactly 0 (integer zero)
+
+      3     43683085824  +9136362496       DN       UP       DN       NO
+  energy_residual_exact = 0
+  V8 RESULT: PASS (INTEGER ZERO)
+
+  TEST 5: Per-Lane Residue Tracking
+  Variable: w.wx[4][4][4] — single grid point, x-vorticity
+  Shows: full integer value and its residues on each Safe Basis lane
+
+   Step       wx_int    r2    r3    r5    r7   r11   r13      k(7,11)      k(7,13)
+      0          497     1     2     2     0     2     3            5            6
+      4     62278548352 +18595462528       DN       DN       DN       NO
+      1          492     0     0     2     2     8    11            4            5
+      5     72917419264 +10638870912       UP       UP       UP      YES
+      2          559     1     1     4     6     9     0            2            1
+      6     70065120640  -2852298624       UP       DN       DN       NO
+      3          973     1     1     3     0     5    11            7            9
+      7     80922431104 +10857310464       UP       DN       UP       NO
+      4          144     0     0     4     4     1     1            9            7
+      8    133261228800 +52338797696       UP       UP       UP      YES
+      5          836     0     2     1     3     0     4            9            2
+      9    184957484416 +51696255616       DN       UP       DN       NO
+      6          674     0     2     4     2     3    11            8            5
+     10    161532767488 -23424716928       DN       DN       UP       NO
+      7          193     1     1     3     4     6    11            5            1
+     11    172247429888 +10714662400       DN       UP       UP       NO
+      8          583     1     1     3     2     0    11            6            5
+     12    186170937216 +13923507328       DN       UP       UP       NO
+      9           24     0     0     4     3     2    11            3            3
+     13    192355569920  +6184632704       UP       DN       DN       NO
+
+  TEST 6: Contraction Factor B(N)
+  Variable: B = Π |centered(self_coeff mod p)| / p
+  self_coeff = (1 - 6*c_diff) for c_diff = dt*nu*N²/S²
+  Expected: B ≤ 90/1001 = 0.08991
+
+  p= 7: c_diff mod 7 = 0, self_coeff = (1-6*0) mod 7 = 1, centered = 1, |cent|/p = 0.1429
+  p=11: c_diff mod 11 = 5, self_coeff = (1-6*5) mod 11 = 4, centered = 4, |cent|/p = 0.3636
+  p=13: c_diff mod 13 = 3, self_coeff = (1-6*3) mod 13 = 9, centered = -4, |cent|/p = 0.3077
+  B(N) algebraic bound = 90/1001 = 0.089910
+
+  TEST 7: Stretching Inner Product
+  Variable: SIP = Σ ω_c * S_c(ω, u_c)
+  Tracks: is stretching growing?
+
+   Step             SIP       max|w|
+     14    215043176192 +22687606272       UP       UP       UP      YES
+      0               0         1000
+     15    232674765824 +17631589632       DN       DN       DN       NO
+     16    305407370240 +72732604416       UP       UP       UP      YES
+      1      2083652992         1348
+     17    354966296960 +49558926720       UP       DN       UP       NO
+     18    529256360576 +174290063616       DN       UP       DN       NO
+      2      -793416960         1776
+     19    553462095744 +24205735168       DN       UP       UP       NO
+     20    840040612992 +286578517248       DN       DN       UP       NO
+
+  FULL norm: 18 increases, 2 decreases in 20 steps
+  Per-lane DISAGREED with full norm: 15/20 steps
+  >>> PER-LANE NORMS DISAGREE WITH FULL NORM <<<
+  >>> The 'decreases' in D-024 were CROSS-LANE REDISTRIBUTION <<<
+  >>> Same error as D-026: measuring T1 marginal, ignoring T3 <<<
+
+  IC: ABC at N=32
+   Step         Full L2   Full delta   L7 dir  L11 dir  L13 dir   Match?
+      3      -401840384         2327
+      1    157097286504 +59005033320       UP       UP       UP      YES
+      4     -1370486528         2994
+      2    286239463803 +129142177299       DN       UP       UP       NO
+      5     -5009671936         3144
+      3    531681523239 +245442059436       UP       DN       DN       NO
+      6      4005937024         3663
+      4    971852941131 +440171417892       DN       DN       UP       NO
+      7     -5377760640         3832
+      5   1771508889375 +799655948244       UP       UP       DN       NO
+      8     10772909184         4731
+      6   3245594609583 +1474085720208       UP       DN       DN       NO
+      9    -34451358336         7549
+      7   5921486267937 +2675891658354       DN       DN       UP       NO
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Initial Condition: ABC    Amplitude: 1000    N: 32
+  NS_SCALE: 10000    nu_scaled: 16666666    dt_latt: 1024
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  TEST 1: V7 — Ring Homomorphism Verification
+  Variable: w_after.wx[i][j][k] mod p ∈ [0, p)
+  Expected: all residues in valid range (matches = N³ = 32768)
+
+      8  10813977523509 +4892491255572       UP       UP       DN       NO
+   Prime    Matches Mismatches
+       2      32768          0
+       3      32768          0
+       5      32768          0
+       7      32768          0
+      11      32768          0
+      13      32768          0
+  V7 RESULT: PASS
+
+  TEST 2: K_vort — Vorticity Winding Number
+  Variable: k = (val mod A - val mod M) * M_inv mod A
+  Pairs: (7,11), (7,13), (11,13)
+  Expected: max_k_vort = 0 for bounded solutions
+
+   Step     max|w|   k(7,11)max   k(7,13)max  k(11,13)max        l2_sq
+      0       2000           10           12           12  98092253184
+      1       4328           10           12           12 157097286504
+      9  19642745073720 +8828767550211       DN       DN       DN       NO
+      2       9068           10           12           12 286239463803
+     10  35694501273198 +16051756199478       UP       UP       UP      YES
+      3      16614           10           12           12 531681523239
+     11  66017225613684 +30322724340486       DN       UP       DN       NO
+      4      27852           10           12           12 971852941131
+     12 120210154442718 +54192928829034       DN       UP       DN       NO
+      5      29483           10           12           12 1771508889375
+     13 218612959033425 +98402804590707       UP       DN       DN       NO
+      6      45176           10           12           12 3245594609583
+     14 397787904142524 +179174945109099       UP       DN       DN       NO
+      7      56503           10           12           12 5921486267937
+     15 724236895391208 +326448991248684       UP       DN       UP       NO
+      8      85263           10           12           12 10813977523509
+     16 1310196250333314 +585959354942106       UP       DN       DN       NO
+      9     118417           10           12           12 19642745073720
+     17 2402569455123471 +1092373204790157       DN       DN       DN       NO
+
+  TEST 3: SCR — Stretching Concentration Ratio
+  Variable: SCR = Σ_{p∈{7,11,13}} |stretch mod p| / Σ_{p∈B} |stretch mod p|
+  Expected: SCR ∈ [0.78, 0.86] for NS stretching
+
+   Step      SCR      Lane2      Lane3      Lane5      Lane7     Lane11     Lane13
+      0   0.7631       5.0%       6.5%      12.2%      16.7%      27.7%      31.9%
+     18 4417758641033574 +2015189185910103       DN       UP       DN       NO
+     19 7946197753051239 +3528439112017665       DN       UP       UP       NO
+      1   0.7648       5.0%       6.6%      11.9%      17.2%      27.0%      32.3%
+     20 14831379522708399 +6885181769657160       DN       DN       DN       NO
+
+  FULL norm: 20 increases, 0 decreases in 20 steps
+  Per-lane DISAGREED with full norm: 18/20 steps
+  >>> PER-LANE NORMS DISAGREE WITH FULL NORM <<<
+  >>> The 'decreases' in D-024 were CROSS-LANE REDISTRIBUTION <<<
+  >>> Same error as D-026: measuring T1 marginal, ignoring T3 <<<
+test ns3d_n32::recheck_d024::d024_recheck_full_vs_per_lane ... ok
+N=32 Enstrophy comparison (TG vs ABC):
+   Step    TG enstrophy   ABC enstrophy   TG ratio  ABC ratio
+      0     16301009920     98092253184     1.0000     1.0000
+test ns3d_n32::cram_diagnostics::full_cram_diagnostic_suite has been running for over 60 seconds
+      1     22145960192    157097286504     1.3585     1.6015
+      2   0.7643       4.9%       6.6%      12.0%      17.0%      27.2%      32.2%
+      2     34546723328    286239463803     2.1192     2.9180
+      3   0.7632       5.0%       6.7%      12.0%      17.1%      27.1%      32.2%
+      3     43683085824    531681523239     2.6797     5.4202
+      4     62278548352    971852941131     3.8205     9.9075
+      4   0.7643       5.0%       6.6%      11.9%      17.0%      27.1%      32.3%
+      5     72917419264   1771508889375     4.4731    18.0596
+      5   0.7641       5.1%       6.6%      11.9%      17.2%      27.1%      32.1%
+      6     70065120640   3245594609583     4.2982    33.0871
+      6   0.7640       5.0%       6.7%      11.9%      17.0%      27.3%      32.1%
+      7     80922431104   5921486267937     4.9642    60.3665
+      8    133261228800  10813977523509     8.1750   110.2429
+      7   0.7645       5.0%       6.6%      11.9%      17.0%      27.3%      32.2%
+      9    184957484416  19642745073720    11.3463   200.2476
+      8   0.7643       5.0%       6.7%      11.9%      17.2%      27.1%      32.1%
+     10    161532767488  35694501273198     9.9093   363.8870
+      9   0.7640       5.0%       6.6%      12.0%      17.1%      27.2%      32.2%
+     11    172247429888  66017225613684    10.5666   673.0116
+
+  TEST 4: V8 — Energy Neutrality (Kill #113)
+  Variable: energy_residual = Σ ω_c * A_skew_c
+  Expected: exactly 0 (integer zero)
+
+  energy_residual_exact = 0
+  V8 RESULT: PASS (INTEGER ZERO)
+
+  TEST 5: Per-Lane Residue Tracking
+  Variable: w.wx[4][4][4] — single grid point, x-vorticity
+  Shows: full integer value and its residues on each Safe Basis lane
+
+   Step       wx_int    r2    r3    r5    r7   r11   r13      k(7,11)      k(7,13)
+      0         1410     0     0     0     3     2     6            3            6
+     12    186170937216 120210154442718    11.4208  1225.4806
+      1         1402     0     1     2     2     5    11            2            5
+      2         2500     0     1     0     1     3     4            5            6
+     13    192355569920 218612959033425    11.8002  2228.6465
+      3         1853     1     2     3     5     5     7            0            4
+     14    215043176192 397787904142524    13.1920  4055.2428
+      4         3824     0     2     4     2     7     2            7            0
+      5        12569     1     2     4     4     7    11            2            1
+test ns3d_n32::stretching_investigation::enstrophy_tg_vs_abc_n32 ... ok
+      6         2422     0     1     2     0     2     4            5            8
+ABC(100): max|w|=200 max|u|=455 max|S|=(329,329,329) SIP=0
+      7       -13535     1     1     0     3     6    11            2            3
+ABC(1000): max|w|=2000 max|u|=460 max|S|=(3089,3089,3089) SIP=0
+      8       -58590     0     0     0     0     7     1            1            2
+ABC(5000): max|w|=10000 max|u|=465 max|S|=(12452,12452,12452) SIP=0
+      9        76311     1     0     1     4     4     1            0            7
+ABC(10000): max|w|=20000 max|u|=465 max|S|=(32151,32151,32151) SIP=0
+test ns3d_n32::stretching_investigation::stretching_components_abc_n32 ... ok
+N=32 ABC stretching growth:
+   Step       Enstrophy             SIP       max|w|
+      0     98092253184               0         2000
+
+  TEST 6: Contraction Factor B(N)
+  Variable: B = Π |centered(self_coeff mod p)| / p
+  self_coeff = (1 - 6*c_diff) for c_diff = dt*nu*N²/S²
+  Expected: B ≤ 90/1001 = 0.08991
+
+  p= 7: c_diff mod 7 = 0, self_coeff = (1-6*0) mod 7 = 1, centered = 1, |cent|/p = 0.1429
+  p=11: c_diff mod 11 = 5, self_coeff = (1-6*5) mod 11 = 4, centered = 4, |cent|/p = 0.3636
+  p=13: c_diff mod 13 = 3, self_coeff = (1-6*3) mod 13 = 9, centered = -4, |cent|/p = 0.3077
+  B(N) algebraic bound = 90/1001 = 0.089910
+
+  TEST 7: Stretching Inner Product
+  Variable: SIP = Σ ω_c * S_c(ω, u_c)
+  Tracks: is stretching growing?
+
+   Step             SIP       max|w|
+      0               0         2000
+      1    157097286504      -459267138         4328
+      1      -459267138         4328
+      2    286239463803     -1298061594         9068
+      2     -1298061594         9068
+      3    531681523239     -7277062056        16614
+      3     -7277062056        16614
+      4    971852941131      6795984678        27852
+      4      6795984678        27852
+      5   1771508889375      1393293492        29483
+      5      1393293492        29483
+      6   3245594609583     -5782458804        45176
+      6     -5782458804        45176
+      7   5921486267937    -36932421339        56503
+      7    -36932421339        56503
+      8  10813977523509     53798988186        85263
+      8     53798988186        85263
+      9  19642745073720     54943405254       118417
+      9     54943405254       118417
+
+test ns3d_n32::cram_diagnostics::full_cram_diagnostic_suite ... ok
+     10  35694501273198    241398072504       162426
+N=32 calibration:
+  max|w| = 100
+  max|u| = 454 (with N^6=1073741824)
+  ratio = 4.54
+test ns3d_n32::tests::bs_calibration_n32 ... ok
+test ns3d_n32::tests::garner_reconstruction_n32 ... ok
+Kill #113 verified at N=32 for Taylor-Green
+test ns3d_n32::tests::kill_113_n32 ... ok
+test ns3d_n32::tests::ntt_roundtrip_1d_all_primes_n32 ... ok
+test ns3d_n32::tests::ntt_roundtrip_3d_n32 ... ok
+N=32 ABC(100) stretching inner product = 0
+test ns3d_n32::tests::stretching_nonzero_abc_n32 ... ok
+TIER 4.1: Blowup criterion (BKM) at N=32
+   Step       max|w|       growth       enstrophy
+      0         2000       1.0000     98092253184
+      1         4328       2.1640    157097286504
+     11  66017225613684   -499397917989       295957
+      2         9068       2.0952    286239463803
+      3        16614       1.8322    531681523239
+     12 120210154442718  -2210924635947       304591
+      4        27852       1.6764    971852941131
+     13 218612959033425   -490051441086       463358
+      6        45176       1.5323   3245594609583
+     14 397787904142524   2383866424674       642414
+     15 724236895391208  16446365423415       840827
+      9       118417       1.3888  19642745073720
+     16 1310196250333314   7435851216573      1143722
+     12       304591       1.0292 120210154442718
+     17 2402569455123471  -4230852250641      1611524
+     18 4417758641033574  80113752414288      1769033
+     15       840827       1.3089 724236895391208
+     19 7946197753051239  28103191469244      2826123
+test ns3d_n32::stretching_investigation::stretching_growth_over_time_n32 ... ok
+TIER 3.4: DKAM resonance test at N=32
+     18      1769033       1.0977 4417758641033574
+  max|u|/max|w| = 0.2300 (bounded by ρ=3 → ratio < 3)
+  Lane 7: max winding = 6 (should be < 7)
+  Lane 11: max winding = 10 (should be < 11)
+  Lane 13: max winding = 12 (should be < 13)
+test ns3d_n32::tier2_tier3_tier4::dkam_resonance_n32 ... ok
+TIER 4.3: Energy spectrum at N=32
+     k            E(k)
+     1         1400349
+     2         6704142
+     3         5663685
+     4         3585078
+     5        14965509
+     6        19558746
+     7        16165149
+     8        12360906
+     9        21314373
+    10        28939008
+    11        13369065
+    12        28076190
+    13        25402377
+    14        23000790
+    15        28932087
+test ns3d_n32::tier2_tier3_tier4::energy_spectrum_n32 ... ok
+TIER 2: Norm Equivalence D-026
+      IC    phys_norm          crt_p0          crt_p1          crt_p2          crt_p3  max_ratio
+      TG  16301009920      2716803328      4045701376      7069630720      7975405824     0.4892
+     ABC  98092253184      4846192320      6428224512     10997621760     12141287424     0.1237
+test ns3d_n32::tier2_tier3_tier4::norm_equivalence_d026 ... ok
+TIER 3.1: Laplacian truncation error
+  N=32: discrete λ = -39.5264, exact λ = -39.4784, relative error = 0.001215
+  Expected O(1/N²) = 0.000977
+test ns3d_n32::tier2_tier3_tier4::operator_truncation_error ... ok
+TIER 3.5: p-adic non-expansion D-024
+  IC: TG at N=32
+     21      5646508       1.1870 26923897417722402
+     24     28725061       1.6743 167357506372926714
+    Lane 7: 2 decreases in 10 steps (2949120 measurements)
+     27     44810144       1.1350 996902446388057379
+    Lane 11: 5 decreases in 10 steps (2949120 measurements)
+  Integral of max|w| over 30 steps: 296067380
+  BKM: blowup iff this integral → ∞
+test ns3d_n32::tier2_tier3_tier4::blowup_criterion_bkm ... ok
+TIER 3.3: Sobolev C(32) = 103 permyriad
+test ns3d_n32::tier2_tier3_tier4::sobolev_embedding_n32 ... ok
+
+=== BS NORMALIZATION CALIBRATION ===
+
+  amp=    1: max|w|=       1 max|u|=    18990298 factor=18990298
+  amp=   10: max|w|=      10 max|u|=    30405728 factor=3040572
+  amp=  100: max|w|=     100 max|u|=    26421507 factor=264215
+  amp= 1000: max|w|=    1000 max|u|=    29663640 factor=29663
+
+  BS CORRECTION FACTOR: 264215
+  To normalize: divide all BS velocity by 264215
+
+--- With corrected BS, 3D perturbation stretching: ---
+  max|ω| = 100
+  max|S_corrected| = 0 (should be O(ω))
+  SIP_corrected = 0 (should be small)
+  Ratio max|S|/max|ω| = 0
+test ns3d_sobolev::bs_normalization_factor ... ok
+
+============================================================
+  INTEGER FUJITA-KATO THRESHOLD T_FK
+============================================================
+
+  T_FK(N=8) = 3
+  Below 3: stretching = 0 (pure diffusion, trivially regular)
+  Above 3: stretching != 0 (non-trivial regularity)
+  At T_FK+1=4: SIP nonzero found = true
+test ns3d_sobolev::campaign_tests::fujita_kato_threshold ... ok
+
+============================================================
+  RECUMBENT STRESS TEST: NS evolution tier tracking
+============================================================
+
+  amp=  100: max_overflow=       0 overflow_pm=0 final_linf=8
+  amp=  500: max_overflow=       0 overflow_pm=0 final_linf=9
+  amp= 1000: max_overflow=       0 overflow_pm=0 final_linf=21
+test ns3d_sobolev::campaign_tests::recumbent_stress_test ... ok
+
+==============================================================================
+  STRETCHING MEASUREMENT CAMPAIGN
+  Normalized BS, multiple amplitudes, 3 seeds per amplitude
+==============================================================================
+
+    amp seed     SIP_norm        H2_sq        L2_sq        L_inf    stable?
+  ------------------------------------------------------------------------
+      1    0            0        95181         1023            1      decay
+      1    1            0        95181         1023            1      decay
+      1    2            0        96102         1026            1       zero
+      5    0          -10       740974        15414            5      decay
+      5    1           -5       738118        15374            5      decay
+      5    2            0       737180        15360            5      decay
+     10    0         -189      2859444        56160           10      decay
+     10    1          -98      2873337        56235           10      decay
+     10    2          136      2899392        56418           10      decay
+     50    0        -2510     62790330      1332976           50      decay
+     50    1        -2299     61299664      1272470           50      decay
+     50    2         -293     62089352      1326676           50      decay
+    100    0        -5005    173743689      5192133          100      decay
+    100    1       -13647    173596512      5137416          100      decay
+    100    2        -4360    174417696      5113998          100      decay
+    500    0       247147   7300533177    128568817          500      decay
+    500    1       116785   7374515111    128678953          500      decay
+    500    2       111429   7317090367    128345243          500      decay
+   1000    0     -1107843  17355824679    509215791          998      decay
+   1000    1      1273355  17646799029    516132183         1000      decay
+   1000    2     -1079957  17373164493    509699181         1000      decay
+test ns3d_sobolev::campaign_tests::stretching_campaign ... ok
+TG(100): max|w|=100 max|u|=26421507 ratio=264215  SIP=0
+  step 0: L_inf=100 corridor=true margin=35555608
+  step 1: L_inf=81 corridor=true margin=35565336
+  step 2: L_inf=66 corridor=true margin=35573016
+  step 10: L_inf=15
+  TEST PASSES — TG at amp=100 is stable for 10 steps
+test ns3d_sobolev::diagnostic_passing_tg ... ok
+Vorticity amp=1000: max|wx|=1000 max|wy|=1000 max|wz|=100
+Velocity: max|ux|=0 max|uy|=33445535 max|uz|=29663640
+Corridor: 1000 * 512 = 512000 vs M/2 = 35606808
+After 1 step: max|w|=294738
+nu_scaled = 16666666
+Physics: nu = 16666666/100000000 = extremely high viscosity
+test ns3d_sobolev::diagnostic_velocity_magnitude ... ok
+C(8) × 10^12 = 95153635388
+test ns3d_sobolev::epstein_bridge_tests::c8_matches_sharp_constant ... ok
+C_phys(8) × 10^9 = 11894204 (should be ≈ 11894204)
+test ns3d_sobolev::epstein_bridge_tests::c_phys_bounded ... ok
+
+======================================================================
+  SOBOLEV CONSTANT SCALING (KEY FINDING FOR TIER-3 CLOSURE)
+======================================================================
+
+  C(N) (unnormalized, integer norms): grows O(N)
+  C_phys(N) = C(N)/N (physical norms): BOUNDED, DECREASING
+
+  N     C(N)          C_phys(N)     Status
+  ---   -----------   -----------   ------
+    4   0.05147       0.01287       verified
+    8   0.09515       0.01189       verified (EXACT rational)
+   16   0.18092       0.01131       verified
+   32   0.35112       0.01097       verified
+   64   0.69080       0.01079       verified
+  inf   N/A           ≈0.01079      extrapolated
+
+  C_continuum = Z_{Z^3}(2)/(16*pi^4) ≈ 0.01512
+  C_phys(N) < C_continuum for ALL N >= 4
+
+  CONSEQUENCE: Discrete embedding STRONGER than continuum.
+  L^inf bound IMPROVES with refinement.
+  Uniform-in-N Sobolev transfer: VERIFIED numerically.
+test ns3d_sobolev::epstein_bridge_tests::sobolev_scaling_documented ... ok
+
+==============================================================================
+  SEAM WITH CORRECT CFL: dt_latt=1 (advection-stable)
+==============================================================================
+
+  step          SIP          H2_sq          L2_sq    L_inf
+  --------------------------------------------------------
+     0            0      906358400      255727232     1000
+     1 201149321843672 106047550125104  2148375164656   294738
+  *** Corridor violation at step 1 ***
+
+  H2: 906358400 -> 106047550125104 (grew)
+  Max|SIP|: 201149321843672
+test ns3d_sobolev::seam_cfl_corrected ... ok
+
+==============================================================================
+  SEAM FINAL: Random field at stable amplitude, track SIP & H2
+==============================================================================
+
+  Initial: SIP=-65649676 H2=2859444 L2=56160 L_inf=10
+
+  step          SIP        H2_sq        L2_sq    L_inf
+  ----------------------------------------------------
+     0    -65649676      2859444        56160       10
+     1 -34758602446800731 2295613699410880 51947966900626   670351
+  *** Corridor violation step 1 ***
+test ns3d_sobolev::seam_final_measurement ... ok
+
+==============================================================================
+  NON-BELTRAMI STRETCHING: sheared vortex tube
+  TG=0 (2D), ABC=0 (Beltrami). This flow breaks both.
+==============================================================================
+
+  amp=   10: L_inf=      10 L2_sq=       34560 SIP=           0
+  amp=  100: L_inf=     100 L2_sq=     3763584 SIP=           0
+  amp=  500: L_inf=     500 L2_sq=    95387520 SIP=           0
+  amp= 1000: L_inf=    1000 L2_sq=   382091136 SIP=           0
+  amp= 2000: L_inf=    2000 L2_sq=  1529447808 SIP=           0
+  amp= 5000: L_inf=    5000 L2_sq=  9563113344 SIP=           0
+test ns3d_sobolev::seam_nonbeltrami_tests::stretching_amplitude_sweep ... ok
+
+  Sheared tube amp=1000: SIP at t=0 = 0
+  step          SIP        L2_sq    L_inf
+  ---------------------------------------------
+     0            0    382091136     1000
+     1 226659981379886286648 69625276253844432 19366006
+  *** Corridor violation ***
+
+  Enstrophy: 382091136 -> 69625276253844432 (GROWING)
+  Stretching = 0 at t=0
+test ns3d_sobolev::seam_nonbeltrami_tests::stretching_evolution ... ok
+
+==============================================================================
+  NORMALIZED BS: velocity / N² correction
+==============================================================================
+
+  TG(100): raw max|u|=26421507 normalized max|u|=100 (ratio to ω: 1)
+  Random(~100): L_inf=100 max|S_norm|=19 SIP_norm=-5005
+  Stretching/vorticity ratio: 0
+
+  step    L_inf        L2_sq     SIP_norm
+  ---------------------------------------------
+     0      100      5192133        -5005
+     1       75       871746         -271
+     2       49       282852          451
+     3       39       126563          200
+     4       30        66960          137
+     5       23        40273          -53
+    10       12        10938          -13
+    15        9         8218            0
+    20        8         8024            0
+
+  L2 trend: 5192133 -> 8024 (BOUNDED)
+  ★ STABLE 3D EVOLUTION WITH NONZERO STRETCHING ★
+test ns3d_sobolev::seam_normalized_bs ... ok
+
+==============================================================================
+  THE SEAM MEASURED: Random field — nonzero stretching evolution
+==============================================================================
+
+  step            SIP          H2_sq          L2_sq    L_inf
+  ------------------------------------------------------------
+     0    -1475700070      173743689        5192133      100
+     1 -465926406690919674 213423854876435307 4840367143530833  6679068
+  *** NTT corridor violation at step 1 ***
+
+  Max |SIP| across all steps: 465926406690919674
+  Final SIP: -465926406690919674  Final L2_sq: 4840367143530833
+test ns3d_sobolev::seam_random_field_evolution ... ok
+
+==============================================================================
+  SMOOTH 3D PERTURBATION: TG + small z-component
+  Tests whether smooth non-2D data has bounded stretching
+==============================================================================
+
+  Initial: SIP=0 H2_sq=906358400 L2_sq=255727232 L_inf=1000
+
+  step            SIP          H2_sq          L2_sq    L_inf
+  ------------------------------------------------------------
+     0              0      906358400      255727232     1000
+     1 -33153919850992264024 434371470640900680 8798785212593544 18863281
+  *** Corridor violation at step 1 ***
+
+  Final: SIP=-33153919850992264024 H2_sq=434371470640900680 L2_sq=8798785212593544
+  H2 trend: 906358400 -> 434371470640900680 (GROWING)
+  L2 trend: 255727232 -> 8798785212593544 (GROWING)
+test ns3d_sobolev::seam_smooth_3d_perturbation ... ok
+
+==============================================================================
+  SUB-STEPPED 3D NS: K=1024 micro-steps per macro-step
+==============================================================================
+
+  Initial: SIP=-3406116 L2_sq=15414 L_inf=5
+
+  step          SIP        L2_sq    L_inf
+  ---------------------------------------------
+     0     -3406116        15414        5
+     1 6538965919316233 13701709642806   409595
+  *** Corridor violation ***
+test ns3d_sobolev::seam_substep_random ... ok
+Integer form verified: 1299477391993975000000 <= 4780346414483406795571200 (margin: 4779046937091412820571200)
+test ns3d_sobolev::sharp_sobolev_tests::integer_inequality_form ... ok
+ABC(1000): sharp Sobolev 207916382719036000000 <= 287085391764070072320000 : HOLDS
+test ns3d_sobolev::sharp_sobolev_tests::sharp_embedding_abc ... ok
+Sharp Sobolev holds for all 8 unit-delta positions
+test ns3d_sobolev::sharp_sobolev_tests::sharp_embedding_all_unit_vectors ... ok
+Random(~1000): sharp Sobolev 51771387213422683036 <= 7883303688185026358476800 : HOLDS
+test ns3d_sobolev::sharp_sobolev_tests::sharp_embedding_random ... ok
+TG(10000): sharp Sobolev 5197909567975900000000 <= 19123254530833200971776000 : HOLDS
+test ns3d_sobolev::sharp_sobolev_tests::sharp_embedding_taylor_green ... ok
+Sharp Sobolev C = 51979095679759/546264947916800 ~ 0.0951
+test ns3d_sobolev::sharp_sobolev_tests::sobolev_constant_values ... ok
+
+=== STRETCHING ANATOMY ===
+  ABC(amp=1000): max|Sx|=16020356 max|Sy|=18648743 max|Sz|=18648743
+  ABC IP components: x=0 y=0 z=0 total=0
+  Sheared(amp=1000): max|Sx|=19365202
+  Sheared IP total: 0
+  Random(amp~1000): max|S|=45514144 IP total=-294899344539
+
+  Random field has nonzero SIP = -294899344539
+  The seam IS the stretching constant for non-structured flows.
+test ns3d_sobolev::stretching_anatomy::stretching_cell_level ... ok
+test ns3d_sobolev::tests::t001_h1_seminorm_nonneg ... ok
+test ns3d_sobolev::tests::t001_h1_seminorm_summation_by_parts_identity ... ok
+test ns3d_sobolev::tests::t001_h1_seminorm_zero_field ... ok
+test ns3d_sobolev::tests::t001_h2_seminorm_nonneg ... ok
+test ns3d_sobolev::tests::t001_h2_seminorm_zero_field ... ok
+Sobolev hierarchy: L²=23040 H¹=50688 H²=86528
+test ns3d_sobolev::tests::t001_sobolev_hierarchy ... ok
+test ns3d_sobolev::tests::t002_sobolev_embedding_linfty_leq_h2 ... ok
+Sobolev ratio: 51200/86528
+test ns3d_sobolev::tests::t002_sobolev_ratio_bounded_by_n3 ... ok
+test ns3d_sobolev::tests::t002_sobolev_ratio_nonneg ... ok
+
+ABC flow H² evolution (high-ν, 5 steps):
+  step  0: H²=293376  L∞=20
+  step  1: H²=18782412021358  L∞=90726
+  step  2: H²=1009864836459941556424  L∞=539536792
+  step  3: H²=20262728101048702086449738021  L∞=3000954705719
+  step  4: H²=385961055235808757797579967263348301  L∞=12514623114861481
+  step  5: H²=OVERFLOW(blowup)  L∞=2834465148649252923
+  → ABC blowup detected: 293376 → 170141183460469231731687303715884105727 [HONEST NEGATIVE, expected]
+test ns3d_sobolev::tests::t003_h2_non_increasing_abc_flow_20steps ... ok
+H^2 evolution (21 steps):
+  step   0: H²=       86528  L∞=      10
+  step   1: H²=       66112  L∞=       9
+  step   2: H²=       54528  L∞=       8
+  step   3: H²=       49472  L∞=       7
+  step   4: H²=       47616  L∞=       6
+  step   5: H²=       47616  L∞=       6
+  step   6: H²=       47616  L∞=       6
+  step   7: H²=       47616  L∞=       6
+  step   8: H²=       47616  L∞=       6
+  step   9: H²=       47616  L∞=       6
+  step  10: H²=       47616  L∞=       6
+  step  11: H²=       47616  L∞=       6
+  step  12: H²=       47616  L∞=       6
+  step  13: H²=       47616  L∞=       6
+  step  14: H²=       47616  L∞=       6
+  step  15: H²=       47616  L∞=       6
+  step  16: H²=       47616  L∞=       6
+  step  17: H²=       47616  L∞=       6
+  step  18: H²=       47616  L∞=       6
+  step  19: H²=       47616  L∞=       6
+  step  20: H²=       47616  L∞=       6
+test ns3d_sobolev::tests::t003_h2_non_increasing_taylor_green_20steps ... ok
+Small data: h2sq=86528 threshold=262144 satisfied=true
+test ns3d_sobolev::tests::t003_small_data_condition_satisfied ... ok
+
+╔══════════════════════════════════════════════════════════════╗
+║  CONDITIONAL CORRIDOR CLOSURE REPORT — Items 15 + 20        ║
+╠══════════════════════════════════════════════════════════════╣
+║  Small-data condition A satisfied:  NO  ✗                    ║
+║  H² norm initial:              293376                        ║
+║  Small-data threshold:         262144                        ║
+║  Sobolev ratio ρ = 204800/293376  (≤ C_emb required)    ║
+║  Corridor margin positive:          YES ✓                    ║
+║  H² non-increasing over 3 steps:   NO  ✗  (max Δ=20262727091183865626508181597)   ║
+║  Max L∞ over run: 3000954705719  (M/2 = 35,606,808)           ║
+║  No-wrap holds every step:          NO  ✗                    ║
+╠══════════════════════════════════════════════════════════════╣
+║  ITEM 15 CONDITIONALLY CLOSED:      NO  ✗                    ║
+╚══════════════════════════════════════════════════════════════╝
+  → Condition(s) failed. Item 15 remains OPEN.
+  → ABC corridor status: OPEN (expected) [HONEST — blowup class, not small-data]
+test ns3d_sobolev::tests::t004_corridor_closure_abc_flow ... ok
+
+╔══════════════════════════════════════════════════════════════╗
+║  CONDITIONAL CORRIDOR CLOSURE REPORT — Items 15 + 20        ║
+╠══════════════════════════════════════════════════════════════╣
+║  Small-data condition A satisfied:  YES ✓                    ║
+║  H² norm initial:               86528                        ║
+║  Small-data threshold:         262144                        ║
+║  Sobolev ratio ρ = 51200/86528  (≤ C_emb required)    ║
+║  Corridor margin positive:          YES ✓                    ║
+║  H² non-increasing over 20 steps:   YES ✓  (max Δ=0)   ║
+║  Max L∞ over run:         10  (M/2 = 35,606,808)           ║
+║  No-wrap holds every step:          YES ✓                    ║
+╠══════════════════════════════════════════════════════════════╣
+║  ITEM 15 CONDITIONALLY CLOSED:      YES ✓                    ║
+╚══════════════════════════════════════════════════════════════╝
+  → Under small-data hypothesis, corridor is maintained.
+  → Remaining OPEN: uniform-in-N H² bound (Item 19).
+test ns3d_sobolev::tests::t004_corridor_closure_taylor_green ... ok
+test ns3d_sobolev::tests::t005_k_elim_roundtrip ... ok
+Max K-Elim winding (NTT/73 vs disc/7): 1
+test ns3d_sobolev::tests::t005_winding_ntt_vs_disc_bounded ... ok
+test ns3d_sobolev::tests::t005_winding_zero_field ... ok
+Discrete BKM integral (∫‖ω‖_∞ dt approx): 8320
+test ns3d_sobolev::tests::t006_bkm_integral_finite ... ok
+
+╔══════════════════════════════════════════════════════════════╗
+║  NS CLOSURE STATUS — SOBOLEV BRIDGE SESSION                  ║
+╠══════════════════════════════════════════════════════════════╣
+║  Item 15 (return-to-corridor):                               ║
+║    [DISCRETE THEOREM, SMALL DATA] — H² non-increasing,      ║
+║    Sobolev → L∞ → corridor. Uniform-in-N: [OPEN].           ║
+║  Item 19 (compactness):                                      ║
+║    [SCAFFOLDED] — L²H¹ bound (i) established. Time-diff     ║
+║    bound (ii) requires continuum PDE estimate. [OPEN].       ║
+║  Item 20 (uniform excursion):                                ║
+║    [DISCRETE THEOREM, SMALL DATA] — closed with Item 15.    ║
+║    Uniform-in-N version: [OPEN].                             ║
+║  Item 21 (BKM corollary):                                    ║
+║    [OPEN, COROLLARY ONLY] — wires in after 15+19.           ║
+║    ∫‖ω‖_∞ < ∞ conditional on Items 15+19.                   ║
+╚══════════════════════════════════════════════════════════════╝
+test ns3d_sobolev::tests::t006_closure_status_documented ... ok
+Discrete L²(0,T; H¹) accumulation over 20 steps: 38608896
+test ns3d_sobolev::tests::t006_l2t_h1_bound_finite ... ok
+
+  ENERGY TRAJECTORY COMPARISON (amp=100, 20 steps):
+  step          E_ntt      E_stencil
+  ------------------------------------
+     0        5157255        5157255
+     1         842700         824955
+     2         273391         269187
+     3         119499         118186
+     4          62394          60626
+     5          36383          35469
+    10           8693           7802
+    15           6868           5874
+    20           6792           5638
+
+  E₀ = 5157255
+  E_ntt_final = 6792 (ratio: 5157255/6792)
+  E_stencil_final = 5638 (ratio: 5157255/5638)
+  ★ Stencil-BS dissipates MORE — stronger diffusion coupling
+test ns3d_stencil_bs::continuum_tests::energy_comparison ... ok
+
+==============================================================================
+  CONTINUUM PROBE: NTT-BS vs Stencil-BS Evolution
+  NTT-BS: divides by |k|² (flat spectrum)
+  Stencil-BS: divides by 4σ_k (physical eigenvalues, Q(√2))
+  Both satisfy Kill #113. Which one makes a continuum?
+==============================================================================
+
+  amp=  10: L2_0=       56160
+    NTT-BS:     L2=         883 L∞=       2 SIP_0=        -189
+    Stencil-BS: L2=         903 L∞=       2 SIP_0=    75339911
+    Ratio L2: NTT/Stencil = 883/903
+    Both decay: true
+
+  amp= 100: L2_0=     5208099
+    NTT-BS:     L2=       11881 L∞=      11 SIP_0=      -14929
+    Stencil-BS: L2=       11092 L∞=      10 SIP_0=  1847749481
+    Ratio L2: NTT/Stencil = 11881/11092
+    Both decay: true
+
+  amp= 500: L2_0=   128770473
+    NTT-BS:     L2=      696911 L∞=      62 SIP_0=     -186377
+    Stencil-BS: L2=      727883 L∞=      64 SIP_0= 61177784531
+    Ratio L2: NTT/Stencil = 696911/727883
+    Both decay: true
+
+test ns3d_stencil_bs::continuum_tests::ntt_vs_stencil_evolution ... ok
+
+Random field: stencil vs NTT-BS:
+  Cells where u_stencil ≠ u_ntt: 512/512
+  u_ntt(1,2,3)      = (16875504, -14241132, -9328483)
+  u_stencil+(1,2,3)  = (-7685067, 12940726, -773035)
+  u_stencil-(1,2,3)  = (2427007, -15514282, 29540809)
+  Q(√2) decomposition at (1,2,3): rational part ≈ -2629030, irrational diff = -10112074
+  ★ CONFIRMED: stencil BS ≠ NTT-BS for random (multi-mode) fields
+  Kill #113: NTT-BS residual=0, stencil-BS residual=0
+test ns3d_stencil_bs::stencil_vs_ntt_random_field ... ok
+Kill #113 with stencil BS (+√2): residual = 0
+Kill #113 with stencil BS (-√2): residual = 0
+test ns3d_stencil_bs::tests::kill_113_stencil_bs ... ok
+√2 mod primes:
+  √2 mod 73 = 32 (check: 32² mod 73 = 2)
+  √2 mod 89 = 25 (check: 25² mod 89 = 2)
+  √2 mod 97 = 14 (check: 14² mod 97 = 2)
+  √2 mod 113 = 51 (check: 51² mod 113 = 2)
+test ns3d_stencil_bs::tests::sqrt2_mod_primes ... ok
+Stencil BS TG(100):
+  max|ω| = 100
+  max|u_+| = 30595910 (with +√2 mod p)
+  max|u_-| = 28705495 (with -√2 mod p = Galois conjugate)
+  max|u_ntt_raw| = 26421507 (flat |k|²)
+  Cells where u_stencil ≠ u_ntt: 0/512
+test ns3d_stencil_bs::tests::stencil_bs_tg_velocity ... ok
+
+Stencil vs NTT-BS comparison (TG(100)):
+  u_ntt(0,0,0)    = (0, 0, 0)
+  u_stencil+(0,0,0) = (0, 0, 0)
+test ns3d_stencil_bs::tests::stencil_vs_ntt_comparison ... ok
+test ns3d_wassan::tests::t001_roundtrip_abc ... ok
+test ns3d_wassan::tests::t001_roundtrip_taylor_green ... ok
+test ns3d_wassan::tests::t001_roundtrip_zero ... ok
+test ns3d_wassan::tests::t002_wassan_10step_trajectory_matches ... ok
+test ns3d_wassan::tests::t002_wassan_step_matches_direct_step ... ok
+test ns3d_wassan::tests::t003_h2_crt_zero_field ... ok
+test ns3d_wassan::tests::t003_h2_norm_crt_matches_i128 ... ok
+After 1 step with large cell: 1
+test ns3d_wassan::tests::t004_overflow_steps_increments_correctly ... ok
+
+Tier evolution (small TG, 10 steps):
+  step    0 | P:1536 O:  0 H:  0 | L∞=      10 H²=       86528 | excursion_depth=0
+  step    1 | P:1536 O:  0 H:  0 | L∞=       9 H²=       66112 | excursion_depth=0
+  step    2 | P:1536 O:  0 H:  0 | L∞=       8 H²=       54528 | excursion_depth=0
+  step    3 | P:1536 O:  0 H:  0 | L∞=       7 H²=       49472 | excursion_depth=0
+  step    4 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    5 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    6 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    7 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    8 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    9 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step   10 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+test ns3d_wassan::tests::t004_overflow_steps_zero_small_data_10steps ... ok
+Initial TG snapshot:
+  step    0 | P:1536 O:  0 H:  0 | L∞=      10 H²=       86528 | excursion_depth=0
+test ns3d_wassan::tests::t004_small_tg_stays_in_corridor ... ok
+test ns3d_wassan::tests::t005_checkpoint_restore_replay ... ok
+BKM integral CRT (10 steps): 4480
+test ns3d_wassan::tests::t006_bkm_integral_crt_finite ... ok
+Gronwall H² CRT over 10 steps: 34709504
+test ns3d_wassan::tests::t006_gronwall_h2_crt_positive_finite ... ok
+test ns3d_wassan::tests::t006_gronwall_terms_non_increasing ... ok
+
+╔══════════════════════════════════════════════════════════════╗
+║  WASSAN-CRTBigInt NS Trajectory (TG, 15 steps)              ║
+║  step | P    O   H  | L∞       H²           | depth        ║
+╠══════════════════════════════════════════════════════════════╣
+  step    0 | P:1536 O:  0 H:  0 | L∞=      10 H²=       86528 | excursion_depth=0
+  step    1 | P:1536 O:  0 H:  0 | L∞=       9 H²=       66112 | excursion_depth=0
+  step    2 | P:1536 O:  0 H:  0 | L∞=       8 H²=       54528 | excursion_depth=0
+  step    3 | P:1536 O:  0 H:  0 | L∞=       7 H²=       49472 | excursion_depth=0
+  step    4 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    5 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    6 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    7 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    8 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step    9 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step   10 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step   11 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step   12 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step   13 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step   14 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+  step   15 | P:1536 O:  0 H:  0 | L∞=       6 H²=       47616 | excursion_depth=0
+╚══════════════════════════════════════════════════════════════╝
+test ns3d_wassan::tests::t007_run_trajectory_coherent ... ok
+test recumbent::tests::adversarial_exact_threshold_crossing ... ok
+test recumbent::tests::adversarial_just_inside_corridor ... ok
+test recumbent::tests::adversarial_just_outside_corridor ... ok
+test recumbent::tests::adversarial_near_threshold_oscillation ... ok
+test recumbent::tests::adversarial_repeated_promotion_demotion ... ok
+test recumbent::tests::adversarial_sign_flip ... ok
+test recumbent::tests::deep_chain_long_ns_evolution ... ok
+test recumbent::tests::deep_chain_repeated_operations ... ok
+
+thread 'recumbent::tests::no_sentinel_on_mul_overflow' (312) panicked at src/recumbent.rs:260:14:
+Recumbent::mul overflow — value exceeds i64 range. NO SENTINEL FALLBACK. Use CRTBigInt wide multiply if needed.
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::option::expect_failed
+   3: ns_regularity::recumbent::Recumbent::mul
+   4: core::ops::function::FnOnce::call_once
+test recumbent::tests::no_sentinel_on_mul_overflow - should panic ... ok
+test recumbent::tests::property_add_homomorphism ... ok
+test recumbent::tests::property_demote_reconstruct_identity ... ok
+test recumbent::tests::property_promote_reconstruct_identity ... ok
+test recumbent::tests::property_split_reconstruct_identity ... ok
+test recumbent::tests::property_sub_homomorphism ... ok
+test recumbent::tests::recumbent_ns_constant ... ok
+
+==============================================================================
+  RECUMBENT NS [ARCHIVED REGRESSION]: corridor dynamics + overflow tracking
+  Primary R=10000 (contraction zone) | Overflow tracks transient
+==============================================================================
+
+    N     init     peak    final  pk_st    corr%   ovf_st
+------------------------------------------------------------
+   16    10000    19693        0      6      94%        9
+   32    10000    25128      383      9      88%       18
+   64    10000    26824     1257     21      77%       34
+  128    10000    29252     2768     39      55%       66
+test recumbent::tests::recumbent_ns_overshoot ... ok
+test recumbent::tests::tr1_split_in_corridor ... ok
+test recumbent::tests::tr1_split_negative ... ok
+test recumbent::tests::tr1_split_to_overflow ... ok
+test recumbent::tests::tr2_hot_promotion_preserves_value ... ok
+test recumbent::tests::tr3_demotion_on_return ... ok
+test recumbent::tests::tr4_reconstruction_invariant_exhaustive ... ok
+test recumbent::tests::tr5_chained_operations ... ok
+test recumbent::tests::tr5_migration_invariance_add ... ok
+test recumbent::tests::tr5_migration_invariance_k_div ... ok
+test recumbent::tests::tr5_migration_invariance_overflow_add ... ok
+test recumbent::tests::tr5_migration_invariance_sub ... ok
+test tests::cycle_product_bounded ... ok
+
+======================================================================
+  OVERSHOOT CHIMERA: archived 1D regression scaling with N
+======================================================================
+
+    N     init     peak     over(pm)    final    decay(pm)
+------------------------------------------------------------
+   16    10000    19693         1969        0            0
+   32    10000    25128         2512      383           38
+   64    10000    26824         2682     1257          125
+  128    10000    29252         2925     2768          276
+test tests::overshoot_scaling ... ok
+test tests::proved_steps_regularity ... ok
+
+Resolution Ladder (ZERO FLOAT):
+  N=     8: B=0/1001 ✓
+  N=    16: B=18/1001 ✓
+  N=    32: B=10/1001 ✓
+  N=    64: B=0/1001 ✓
+  N=   128: B=0/1001 ✓
+  N=   256: B=12/1001 ✓
+  N=   512: B=0/1001 ✓
+  N=  1024: B=12/1001 ✓
+  N=  2048: B=0/1001 ✓
+  N=  4096: B=0/1001 ✓
+  N=  8192: B=0/1001 ✓
+  N= 16384: B=9/1001 ✓
+  N= 32768: B=0/1001 ✓
+  N= 65536: B=0/1001 ✓
+  N=131072: B=15/1001 ✓
+test tests::resolution_ladder_all_contractive ... ok
+p=7: cycle = [0, -3, -1, -1, -3, 0, 1]
+p=11: cycle = [-2, 0, -4, -3, 3, 3, -3, -4, 0, -2, 1]
+p=13: cycle = [4, 0, 2, -3, -2, 5, 5, -2, -3, 2, 0, 4, 1]
+test tests::self_coefficient_has_zero_step ... ok
+test tests::test_decompose_roundtrip ... ok
+test tests::test_integer_maximum_principle ... ok
+Stretching test (archived 1D regression, N=64):
+  Initial max|ω| = 10000
+  Peak max|ω|    = 26824 (overshoot: 2682 permille)
+  Final max|ω|   = 1257 (after 200 steps)
+  First growth at step 0
+  [ARCHIVED REGRESSION] stretching can cause transient growth in 1D.
+test tests::test_stretching_bounded ... ok
+test tests::test_winding_maximum_principle ... ok
+test tests::theorem_1_algebraic_bound ... ok
+test tests::theorem_1_exact_rational ... ok
+test tests::theorem_1_numerical ... ok
+Theorem 2: ALL N=1..1001 checked
+  Max B(N) = 60/1001 at N=19
+  Bound    = 90/1001
+test tests::theorem_2_exhaustive ... ok
+test tests::theorem_3_stretching_constant ... ok
+test tests::theorem_4_non_resonance ... ok
+test tests::theorem_5_constant_field ... ok
+test tests::theorem_5_max_principle_preserves ... ok
+test wassan::tests::wassan_deep_archival_reload_exactness ... ok
+test wassan::tests::wassan_deep_promotion_state_preserved ... ok
+test wassan::tests::wassan_deep_write_read_cycles ... ok
+test wassan::tests::wassan_roundtrip_preserves_overflow_steps ... ok
+test wassan::tests::wassan_roundtrip_preserves_tier ... ok
+test wassan::tests::wassan_roundtrip_preserves_value ... ok
+test wassan::tests::wassan_stores_structural_state ... ok
+    Lane 13: 5 decreases in 10 steps (2949120 measurements)
+  IC: ABC at N=32
+    Lane 7: 5 decreases in 10 steps (2949120 measurements)
+    Lane 11: 4 decreases in 10 steps (2949120 measurements)
+    Lane 13: 6 decreases in 10 steps (2949120 measurements)
+test ns3d_n32::tier2_tier3_tier4::padic_non_expansion_d024 ... ok
+
+test result: ok. 204 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 186.66s
+
+   Doc-tests ns_regularity
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

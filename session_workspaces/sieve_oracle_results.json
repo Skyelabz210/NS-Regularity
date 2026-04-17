@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-04-13T14:43:05.218738",
+  "generators_tested": 3,
+  "results": [
+    {
+      "generator": "LFSR-16 (Galois)",
+      "bit_width": 16,
+      "true_state": 43981,
+      "observed_spins": 15,
+      "exhaustive_sieve": true,
+      "recovery_success": true,
+      "sieve": {
+        "candidates_before": 65536,
+        "candidates_after": 1,
+        "reduction_factor": 65536.0,
+        "time_ms": 265.8368200000041
+      },
+      "grover": {
+        "candidates_searched": 1,
+        "iterations": 0,
+        "oracle_calls": 1,
+        "time_ms": 0.0
+      },
+      "total_time_ms": 265.86643300015567
+    },
+    {
+      "generator": "XorShift32",
+      "bit_width": 32,
+      "true_state": 12345,
+      "observed_spins": 10,
+      "exhaustive_sieve": false,
+      "recovery_success": false,
+      "sieve": {
+        "candidates_before": 4294967296,
+        "candidates_after": 0,
+        "reduction_factor": 4294967296.0,
+        "time_ms": 32.193976999906226
+      },
+      "grover": {
+        "candidates_searched": 0,
+        "iterations": 0,
+        "oracle_calls": 0,
+        "time_ms": 0.0
+      },
+      "total_time_ms": 32.293477999928655
+    }
+  ],
+  "summary": {
+    "total_generators": 2,
+    "successful_recovery": 1,
+    "success_rate": "1/2",
+    "findings": {
+      "lfsr_16_exhaustive": "LFSR-16 sieveable exhaustively; all 65536 candidates checked",
+      "xorshift_32_sampling": "XorShift32 uses sampling for large state space",
+      "compound_lcg_sampling": "Compound LCG uses sampling for 64-bit state"
+    }
+  }
+}

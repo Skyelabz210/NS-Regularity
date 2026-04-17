@@ -1,0 +1,1369 @@
+{
+  "timestamp": "2026-04-13T14:33:52.415510",
+  "total_generators": 10,
+  "results": [
+    {
+      "name": "LCG (Simple)",
+      "hydra_result": {
+        "generator_name": "LCG (Simple)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "YES",
+          "confidence": 1.0,
+          "fully_commutative_lanes": 5,
+          "total_lanes": 5,
+          "avg_consistency": 1.0,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 5,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 2,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 7,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 4,
+              "c_recovered": 2
+            },
+            {
+              "modulus": 11,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 13,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 5,
+              "c_recovered": 10
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "WEAK_GF2",
+          "confidence": 0.4375,
+          "linear_bits": 7,
+          "total_bits": 16,
+          "feedback_matches": 14,
+          "best_feedback": 166
+        },
+        "head_c": {
+          "verdict": "QR_NOISE",
+          "confidence": 0.568,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.0,
+              "deviation": 0.5
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.5,
+              "deviation": 0.0
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.33,
+              "deviation": 0.16999999999999998
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 1.0,
+              "deviation": 0.5
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.25,
+              "deviation": 0.25
+            }
+          ],
+          "avg_deviation": 0.284
+        },
+        "head_d": {
+          "verdict": "MASKED",
+          "confidence": 0.6345853143104869,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.0
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.16778901380350608
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": -0.4964928255427974
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": 0.0
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": 0.005768601462790722
+            }
+          ],
+          "correlation_variance": 0.0634585314310487,
+          "avg_correlation": -0.06458704205530012
+        },
+        "consensus_type": "LCG-class",
+        "confidence_scores": {
+          "A_LCG": 1.0,
+          "B_GF2": 0.4375,
+          "C_QR": 0.568,
+          "D_Comp": 0.6345853143104869
+        },
+        "max_confidence_head": "A_LCG"
+      },
+      "generation_time_ms": 0.02956390380859375
+    },
+    {
+      "name": "LCG (Full Period / Hull-Dobell)",
+      "hydra_result": {
+        "generator_name": "LCG (Full Period / Hull-Dobell)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "YES",
+          "confidence": 1.0,
+          "fully_commutative_lanes": 5,
+          "total_lanes": 5,
+          "avg_consistency": 1.0,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 1
+            },
+            {
+              "modulus": 5,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 1
+            },
+            {
+              "modulus": 7,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 1
+            },
+            {
+              "modulus": 11,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 1
+            },
+            {
+              "modulus": 13,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 1
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "WEAK_GF2",
+          "confidence": 0.5,
+          "linear_bits": 8,
+          "total_bits": 16,
+          "feedback_matches": 10,
+          "best_feedback": 3
+        },
+        "head_c": {
+          "verdict": "QR_SPARSE",
+          "confidence": 0.168,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.665,
+              "deviation": 0.16500000000000004
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.6,
+              "deviation": 0.09999999999999998
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.575,
+              "deviation": 0.07499999999999996
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.54,
+              "deviation": 0.040000000000000036
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.54,
+              "deviation": 0.040000000000000036
+            }
+          ],
+          "avg_deviation": 0.084
+        },
+        "head_d": {
+          "verdict": "COMPOUND",
+          "confidence": 1.0,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": -0.31503669675254004
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.0
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.38873366301174744
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": 0.5013847413732443
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": 0.5461836682918534
+            }
+          ],
+          "correlation_variance": 0.13715450770015208,
+          "avg_correlation": 0.224253075184861
+        },
+        "consensus_type": "LCG-class",
+        "confidence_scores": {
+          "A_LCG": 1.0,
+          "B_GF2": 0.5,
+          "C_QR": 0.168,
+          "D_Comp": 1.0
+        },
+        "max_confidence_head": "A_LCG"
+      },
+      "generation_time_ms": 0.03814697265625
+    },
+    {
+      "name": "Constant Additive (a=1)",
+      "hydra_result": {
+        "generator_name": "Constant Additive (a=1)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "YES",
+          "confidence": 1.0,
+          "fully_commutative_lanes": 5,
+          "total_lanes": 5,
+          "avg_consistency": 1.0,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 5,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 7,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 11,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 5
+            },
+            {
+              "modulus": 13,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 4
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "NON_LINEAR",
+          "confidence": 0.125,
+          "linear_bits": 2,
+          "total_bits": 16,
+          "feedback_matches": 3,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_NOISE",
+          "confidence": 0.302,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.0,
+              "deviation": 0.5
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.6,
+              "deviation": 0.09999999999999998
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.575,
+              "deviation": 0.07499999999999996
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.545,
+              "deviation": 0.04500000000000004
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.535,
+              "deviation": 0.03500000000000003
+            }
+          ],
+          "avg_deviation": 0.151
+        },
+        "head_d": {
+          "verdict": "MASKED",
+          "confidence": 0.8888116543428977,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.0
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.32687737344490403
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": -0.20626895854398383
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": -0.47698337456906315
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": -0.20292804692961092
+            }
+          ],
+          "correlation_variance": 0.08888116543428977,
+          "avg_correlation": -0.11186060131955078
+        },
+        "consensus_type": "LCG-class",
+        "confidence_scores": {
+          "A_LCG": 1.0,
+          "B_GF2": 0.125,
+          "C_QR": 0.302,
+          "D_Comp": 0.8888116543428977
+        },
+        "max_confidence_head": "A_LCG"
+      },
+      "generation_time_ms": 0.025033950805664062
+    },
+    {
+      "name": "LCG (Park-Miller, M=2^31-1)",
+      "hydra_result": {
+        "generator_name": "LCG (Park-Miller, M=2^31-1)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "NO",
+          "confidence": 0.0,
+          "fully_commutative_lanes": 0,
+          "total_lanes": 5,
+          "avg_consistency": 0.18391959798994975,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": false,
+              "consistency": 0.3316582914572864,
+              "a_recovered": 1,
+              "c_recovered": 2
+            },
+            {
+              "modulus": 5,
+              "is_linear": false,
+              "consistency": 0.21105527638190955,
+              "a_recovered": 4,
+              "c_recovered": 1
+            },
+            {
+              "modulus": 7,
+              "is_linear": false,
+              "consistency": 0.15577889447236182,
+              "a_recovered": 0,
+              "c_recovered": 2
+            },
+            {
+              "modulus": 11,
+              "is_linear": false,
+              "consistency": 0.10552763819095477,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 13,
+              "is_linear": false,
+              "consistency": 0.11557788944723618,
+              "a_recovered": 10,
+              "c_recovered": 11
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "NON_LINEAR",
+          "confidence": 0.125,
+          "linear_bits": 2,
+          "total_bits": 16,
+          "feedback_matches": 2,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_NOISE",
+          "confidence": 0.24000000000000005,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.675,
+              "deviation": 0.17500000000000004
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.68,
+              "deviation": 0.18000000000000005
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.605,
+              "deviation": 0.10499999999999998
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.62,
+              "deviation": 0.12
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.48,
+              "deviation": 0.020000000000000018
+            }
+          ],
+          "avg_deviation": 0.12000000000000002
+        },
+        "head_d": {
+          "verdict": "MASKED",
+          "confidence": 0.5396968732262722,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.5978156650902523
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.13461638030235318
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.18445754320028374
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": 0.01594010273780943
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": 0.061314483202524375
+            }
+          ],
+          "correlation_variance": 0.053969687322627226,
+          "avg_correlation": 0.1988288349066446
+        },
+        "consensus_type": "Unknown",
+        "confidence_scores": {
+          "A_LCG": 0.0,
+          "B_GF2": 0.125,
+          "C_QR": 0.24000000000000005,
+          "D_Comp": 0.5396968732262722
+        },
+        "max_confidence_head": "D_Comp"
+      },
+      "generation_time_ms": 0.04100799560546875
+    },
+    {
+      "name": "LCG (Reel-Mapped Output)",
+      "hydra_result": {
+        "generator_name": "LCG (Reel-Mapped Output)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "NO",
+          "confidence": 0.0,
+          "fully_commutative_lanes": 0,
+          "total_lanes": 5,
+          "avg_consistency": 0.26834170854271355,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": false,
+              "consistency": 0.33668341708542715,
+              "a_recovered": 1,
+              "c_recovered": 2
+            },
+            {
+              "modulus": 5,
+              "is_linear": false,
+              "consistency": 0.25125628140703515,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 7,
+              "is_linear": false,
+              "consistency": 0.25125628140703515,
+              "a_recovered": 1,
+              "c_recovered": 6
+            },
+            {
+              "modulus": 11,
+              "is_linear": false,
+              "consistency": 0.25125628140703515,
+              "a_recovered": 1,
+              "c_recovered": 10
+            },
+            {
+              "modulus": 13,
+              "is_linear": false,
+              "consistency": 0.25125628140703515,
+              "a_recovered": 1,
+              "c_recovered": 12
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "GF2_LINEAR",
+          "confidence": 0.875,
+          "linear_bits": 14,
+          "total_bits": 16,
+          "feedback_matches": 14,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_NOISE",
+          "confidence": 0.328,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.62,
+              "deviation": 0.12
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.54,
+              "deviation": 0.040000000000000036
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.92,
+              "deviation": 0.42000000000000004
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.62,
+              "deviation": 0.12
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.62,
+              "deviation": 0.12
+            }
+          ],
+          "avg_deviation": 0.164
+        },
+        "head_d": {
+          "verdict": "SINGLE",
+          "confidence": 0.028438103985485037,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": -0.09824621881515055
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.020997447652895115
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.020997447652895115
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": 0.020997447652895115
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": 0.020997447652895115
+            }
+          ],
+          "correlation_variance": 0.0028438103985485037,
+          "avg_correlation": -0.0028512856407140186
+        },
+        "consensus_type": "LFSR-like",
+        "confidence_scores": {
+          "A_LCG": 0.0,
+          "B_GF2": 0.875,
+          "C_QR": 0.328,
+          "D_Comp": 0.028438103985485037
+        },
+        "max_confidence_head": "B_GF2"
+      },
+      "generation_time_ms": 0.040531158447265625
+    },
+    {
+      "name": "LCG (Truncated / Bit-Masked)",
+      "hydra_result": {
+        "generator_name": "LCG (Truncated / Bit-Masked)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "NO",
+          "confidence": 0.0,
+          "fully_commutative_lanes": 0,
+          "total_lanes": 5,
+          "avg_consistency": 0.31959798994974875,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": false,
+              "consistency": 0.41708542713567837,
+              "a_recovered": 2,
+              "c_recovered": 2
+            },
+            {
+              "modulus": 5,
+              "is_linear": false,
+              "consistency": 0.4221105527638191,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 7,
+              "is_linear": false,
+              "consistency": 0.2562814070351759,
+              "a_recovered": 0,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 11,
+              "is_linear": false,
+              "consistency": 0.3316582914572864,
+              "a_recovered": 6,
+              "c_recovered": 6
+            },
+            {
+              "modulus": 13,
+              "is_linear": false,
+              "consistency": 0.1708542713567839,
+              "a_recovered": 4,
+              "c_recovered": 10
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "GF2_LINEAR",
+          "confidence": 0.75,
+          "linear_bits": 12,
+          "total_bits": 16,
+          "feedback_matches": 16,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_NOISE",
+          "confidence": 0.20600000000000002,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.75,
+              "deviation": 0.25
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.665,
+              "deviation": 0.16500000000000004
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.505,
+              "deviation": 0.0050000000000000044
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.415,
+              "deviation": 0.08500000000000002
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.49,
+              "deviation": 0.010000000000000009
+            }
+          ],
+          "avg_deviation": 0.10300000000000001
+        },
+        "head_d": {
+          "verdict": "MASKED",
+          "confidence": 0.9857067453873509,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.30885177179121515
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.2657894736842105
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.0
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": -0.46477024070021883
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": -0.1106253771520583
+            }
+          ],
+          "correlation_variance": 0.0985706745387351,
+          "avg_correlation": -0.0001508744753702912
+        },
+        "consensus_type": "LFSR-like",
+        "confidence_scores": {
+          "A_LCG": 0.0,
+          "B_GF2": 0.75,
+          "C_QR": 0.20600000000000002,
+          "D_Comp": 0.9857067453873509
+        },
+        "max_confidence_head": "D_Comp"
+      },
+      "generation_time_ms": 0.11754035949707031
+    },
+    {
+      "name": "Compound LCG (Dual-Interleaved)",
+      "hydra_result": {
+        "generator_name": "Compound LCG (Dual-Interleaved)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "NO",
+          "confidence": 0.2,
+          "fully_commutative_lanes": 1,
+          "total_lanes": 5,
+          "avg_consistency": 0.4201005025125628,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": false,
+              "consistency": 0.3316582914572864,
+              "a_recovered": 0,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 5,
+              "is_linear": false,
+              "consistency": 0.5025125628140703,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 7,
+              "is_linear": true,
+              "consistency": 1.0,
+              "a_recovered": 1,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 11,
+              "is_linear": false,
+              "consistency": 0.09547738693467336,
+              "a_recovered": 9,
+              "c_recovered": 6
+            },
+            {
+              "modulus": 13,
+              "is_linear": false,
+              "consistency": 0.1708542713567839,
+              "a_recovered": 1,
+              "c_recovered": 1
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "NON_LINEAR",
+          "confidence": 0.125,
+          "linear_bits": 2,
+          "total_bits": 16,
+          "feedback_matches": 2,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_NOISE",
+          "confidence": 0.49200000000000005,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.67,
+              "deviation": 0.17000000000000004
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 1.0,
+              "deviation": 0.5
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 1.0,
+              "deviation": 0.5
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.555,
+              "deviation": 0.05500000000000005
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.505,
+              "deviation": 0.0050000000000000044
+            }
+          ],
+          "avg_deviation": 0.24600000000000002
+        },
+        "head_d": {
+          "verdict": "MASKED",
+          "confidence": 0.5831028194959034,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.25
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": -0.3027370055031567
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.0
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": 0.08410780669144981
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": -0.2927054280091425
+            }
+          ],
+          "correlation_variance": 0.05831028194959034,
+          "avg_correlation": -0.05226692536416988
+        },
+        "consensus_type": "Unknown",
+        "confidence_scores": {
+          "A_LCG": 0.2,
+          "B_GF2": 0.125,
+          "C_QR": 0.49200000000000005,
+          "D_Comp": 0.5831028194959034
+        },
+        "max_confidence_head": "D_Comp"
+      },
+      "generation_time_ms": 0.06556510925292969
+    },
+    {
+      "name": "LFSR-16 (Galois)",
+      "hydra_result": {
+        "generator_name": "LFSR-16 (Galois)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "NO",
+          "confidence": 0.0,
+          "fully_commutative_lanes": 0,
+          "total_lanes": 5,
+          "avg_consistency": 0.2241206030150754,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": false,
+              "consistency": 0.6180904522613065,
+              "a_recovered": 2,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 5,
+              "is_linear": false,
+              "consistency": 0.20100502512562815,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 7,
+              "is_linear": false,
+              "consistency": 0.135678391959799,
+              "a_recovered": 5,
+              "c_recovered": 6
+            },
+            {
+              "modulus": 11,
+              "is_linear": false,
+              "consistency": 0.10552763819095477,
+              "a_recovered": 9,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 13,
+              "is_linear": false,
+              "consistency": 0.06030150753768844,
+              "a_recovered": 2,
+              "c_recovered": 12
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "NON_LINEAR",
+          "confidence": 0.125,
+          "linear_bits": 2,
+          "total_bits": 16,
+          "feedback_matches": 2,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_SPARSE",
+          "confidence": 0.18,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.64,
+              "deviation": 0.14
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.625,
+              "deviation": 0.125
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.58,
+              "deviation": 0.07999999999999996
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.585,
+              "deviation": 0.08499999999999996
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.52,
+              "deviation": 0.020000000000000018
+            }
+          ],
+          "avg_deviation": 0.09
+        },
+        "head_d": {
+          "verdict": "SINGLE",
+          "confidence": 0.03387869212882306,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.2
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.24575633052029858
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.22361456197974425
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": 0.27528391570561517
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": 0.35053028890939386
+            }
+          ],
+          "correlation_variance": 0.003387869212882306,
+          "avg_correlation": 0.2590370194230104
+        },
+        "consensus_type": "Unknown",
+        "confidence_scores": {
+          "A_LCG": 0.0,
+          "B_GF2": 0.125,
+          "C_QR": 0.18,
+          "D_Comp": 0.03387869212882306
+        },
+        "max_confidence_head": "C_QR"
+      },
+      "generation_time_ms": 0.042438507080078125
+    },
+    {
+      "name": "XorShift32",
+      "hydra_result": {
+        "generator_name": "XorShift32",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "NO",
+          "confidence": 0.0,
+          "fully_commutative_lanes": 0,
+          "total_lanes": 5,
+          "avg_consistency": 0.1899497487437186,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": false,
+              "consistency": 0.37185929648241206,
+              "a_recovered": 0,
+              "c_recovered": 2
+            },
+            {
+              "modulus": 5,
+              "is_linear": false,
+              "consistency": 0.22613065326633167,
+              "a_recovered": 1,
+              "c_recovered": 4
+            },
+            {
+              "modulus": 7,
+              "is_linear": false,
+              "consistency": 0.1457286432160804,
+              "a_recovered": 1,
+              "c_recovered": 5
+            },
+            {
+              "modulus": 11,
+              "is_linear": false,
+              "consistency": 0.09045226130653267,
+              "a_recovered": 3,
+              "c_recovered": 8
+            },
+            {
+              "modulus": 13,
+              "is_linear": false,
+              "consistency": 0.11557788944723618,
+              "a_recovered": 4,
+              "c_recovered": 8
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "NON_LINEAR",
+          "confidence": 0.125,
+          "linear_bits": 2,
+          "total_bits": 16,
+          "feedback_matches": 2,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_SPARSE",
+          "confidence": 0.196,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.63,
+              "deviation": 0.13
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.655,
+              "deviation": 0.15500000000000003
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.57,
+              "deviation": 0.06999999999999995
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.59,
+              "deviation": 0.08999999999999997
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.545,
+              "deviation": 0.04500000000000004
+            }
+          ],
+          "avg_deviation": 0.098
+        },
+        "head_d": {
+          "verdict": "SINGLE",
+          "confidence": 0.1637269350978547,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.09219858156028368
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": 0.31049541354972454
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.09359097424838371
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": 0.03544554766493992
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": -0.030053076158188415
+            }
+          ],
+          "correlation_variance": 0.016372693509785468,
+          "avg_correlation": 0.10033548817302869
+        },
+        "consensus_type": "Unknown",
+        "confidence_scores": {
+          "A_LCG": 0.0,
+          "B_GF2": 0.125,
+          "C_QR": 0.196,
+          "D_Comp": 0.1637269350978547
+        },
+        "max_confidence_head": "C_QR"
+      },
+      "generation_time_ms": 0.1285076141357422
+    },
+    {
+      "name": "Mersenne Twister (MT19937)",
+      "hydra_result": {
+        "generator_name": "Mersenne Twister (MT19937)",
+        "total_spins": 200,
+        "head_a": {
+          "verdict": "NO",
+          "confidence": 0.0,
+          "fully_commutative_lanes": 0,
+          "total_lanes": 5,
+          "avg_consistency": 0.19597989949748745,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "is_linear": false,
+              "consistency": 0.35175879396984927,
+              "a_recovered": 2,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 5,
+              "is_linear": false,
+              "consistency": 0.24120603015075376,
+              "a_recovered": 1,
+              "c_recovered": 3
+            },
+            {
+              "modulus": 7,
+              "is_linear": false,
+              "consistency": 0.20100502512562815,
+              "a_recovered": 5,
+              "c_recovered": 0
+            },
+            {
+              "modulus": 11,
+              "is_linear": false,
+              "consistency": 0.09045226130653267,
+              "a_recovered": 1,
+              "c_recovered": 9
+            },
+            {
+              "modulus": 13,
+              "is_linear": false,
+              "consistency": 0.09547738693467336,
+              "a_recovered": 9,
+              "c_recovered": 12
+            }
+          ]
+        },
+        "head_b": {
+          "verdict": "NON_LINEAR",
+          "confidence": 0.125,
+          "linear_bits": 2,
+          "total_bits": 16,
+          "feedback_matches": 2,
+          "best_feedback": 0
+        },
+        "head_c": {
+          "verdict": "QR_SPARSE",
+          "confidence": 0.11800000000000006,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "qr_ratio": 0.665,
+              "deviation": 0.16500000000000004
+            },
+            {
+              "modulus": 5,
+              "qr_ratio": 0.53,
+              "deviation": 0.030000000000000027
+            },
+            {
+              "modulus": 7,
+              "qr_ratio": 0.48,
+              "deviation": 0.020000000000000018
+            },
+            {
+              "modulus": 11,
+              "qr_ratio": 0.55,
+              "deviation": 0.050000000000000044
+            },
+            {
+              "modulus": 13,
+              "qr_ratio": 0.53,
+              "deviation": 0.030000000000000027
+            }
+          ],
+          "avg_deviation": 0.05900000000000003
+        },
+        "head_d": {
+          "verdict": "MASKED",
+          "confidence": 0.8121617832193142,
+          "lane_details": [
+            {
+              "modulus": 3,
+              "correlation_lag1": 0.5914744103195311
+            },
+            {
+              "modulus": 5,
+              "correlation_lag1": -0.035182711507823004
+            },
+            {
+              "modulus": 7,
+              "correlation_lag1": 0.009271523178807948
+            },
+            {
+              "modulus": 11,
+              "correlation_lag1": -0.13492680565429777
+            },
+            {
+              "modulus": 13,
+              "correlation_lag1": 0.05949741315594974
+            }
+          ],
+          "correlation_variance": 0.08121617832193143,
+          "avg_correlation": 0.0980267658984336
+        },
+        "consensus_type": "Unknown",
+        "confidence_scores": {
+          "A_LCG": 0.0,
+          "B_GF2": 0.125,
+          "C_QR": 0.11800000000000006,
+          "D_Comp": 0.8121617832193142
+        },
+        "max_confidence_head": "D_Comp"
+      },
+      "generation_time_ms": 0.10943412780761719
+    }
+  ],
+  "summary": {
+    "consensus_types": {
+      "LCG-class": [
+        "LCG (Simple)",
+        "LCG (Full Period / Hull-Dobell)",
+        "Constant Additive (a=1)"
+      ],
+      "Unknown": [
+        "LCG (Park-Miller, M=2^31-1)",
+        "Compound LCG (Dual-Interleaved)",
+        "LFSR-16 (Galois)",
+        "XorShift32",
+        "Mersenne Twister (MT19937)"
+      ],
+      "LFSR-like": [
+        "LCG (Reel-Mapped Output)",
+        "LCG (Truncated / Bit-Masked)"
+      ]
+    },
+    "head_confidence_matrix": {
+      "LCG (Simple)": {
+        "A_LCG": 1.0,
+        "B_GF2": 0.4375,
+        "C_QR": 0.568,
+        "D_Comp": 0.6345853143104869
+      },
+      "LCG (Full Period / Hull-Dobell)": {
+        "A_LCG": 1.0,
+        "B_GF2": 0.5,
+        "C_QR": 0.168,
+        "D_Comp": 1.0
+      },
+      "Constant Additive (a=1)": {
+        "A_LCG": 1.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.302,
+        "D_Comp": 0.8888116543428977
+      },
+      "LCG (Park-Miller, M=2^31-1)": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.24000000000000005,
+        "D_Comp": 0.5396968732262722
+      },
+      "LCG (Reel-Mapped Output)": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.875,
+        "C_QR": 0.328,
+        "D_Comp": 0.028438103985485037
+      },
+      "LCG (Truncated / Bit-Masked)": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.75,
+        "C_QR": 0.20600000000000002,
+        "D_Comp": 0.9857067453873509
+      },
+      "Compound LCG (Dual-Interleaved)": {
+        "A_LCG": 0.2,
+        "B_GF2": 0.125,
+        "C_QR": 0.49200000000000005,
+        "D_Comp": 0.5831028194959034
+      },
+      "LFSR-16 (Galois)": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.18,
+        "D_Comp": 0.03387869212882306
+      },
+      "XorShift32": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.196,
+        "D_Comp": 0.1637269350978547
+      },
+      "Mersenne Twister (MT19937)": {
+        "A_LCG": 0.0,
+        "B_GF2": 0.125,
+        "C_QR": 0.11800000000000006,
+        "D_Comp": 0.8121617832193142
+      }
+    },
+    "unique_consensus_types": 3
+  }
+}

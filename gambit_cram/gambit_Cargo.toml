@@ -1,0 +1,18 @@
+[package]
+name = "gambit"
+version = "0.1.0"
+edition = "2021"
+description = "CRAM slot predictor — edge finder, Hydra oracle, sieve+oracle pipeline"
+authors = ["Acid <acid@hackfate.us>"]
+
+[[bin]]
+name = "gambit"
+path = "src/main.rs"
+
+[dependencies]
+cram_explorer = { path = "../cram_explorer" }
+hydra_v3 = { path = "../hydra_v3" }
+prime_hunt = { path = "../prime_hunt" }
+qmnf_primitives = { path = "../qmnf_primitives" }
+landau_siegel_chimera = { path = "../landau_siegel_chimera" }
+time_crystal = { path = "../time_crystal" }

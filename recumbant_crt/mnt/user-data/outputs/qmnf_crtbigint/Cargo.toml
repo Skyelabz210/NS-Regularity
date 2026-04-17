@@ -1,0 +1,23 @@
+[package]
+name = "qmnf_crtbigint"
+version = "3.0.0"
+edition = "2021"
+authors = ["QMNF Project — HackFate.us / Skyelabz210"]
+license = "MIT"
+description = """
+Recombinant CRT Bridge: Exact absorption of approximation via 11-smooth
+composite base extension. Chinese Remainder Theorem BigInt with K-Elimination,
+typed operator lanes, and frozen-error approximation sub-lanes.
+"""
+
+[lib]
+name = "qmnf_crtbigint"
+crate-type = ["rlib"]
+
+[dependencies]
+lazy_static = "1.5"
+
+[dev-dependencies]
+criterion = "0.5"
+
+
