@@ -1,46 +1,35 @@
 import NSRegularity.Shift.Defs
 import NSRegularity.Kill113
+import NSRegularity.DKAM.DiffusionMaxPreserving
+import NSRegularity.DKAM.Stretching
+import NSRegularity.DKAM.Winding
 
 /-!
-# M2 — DKAM L∞ Non-Increasing (macro-level claim)
+# M2 — DKAM L∞ Non-Increasing (top-level composition)
 
-**Proof step 2** of the NS regularity proof.
+**Proof step 2.** Composes:
+- (a) diffusion max-preserving (DiffusionMaxPreserving.lean)
+- (b) advection energy-neutral (Kill113 — M1, already proved)
+- (c) stretching DKAM-subcritical (Stretching.lean)
+- (d) winding + energy ⇒ L∞ bound (Winding.lean)
+- (e) DKAM persistence at all N (N-independent, from (c))
 
-**Status:** `pending_decomposition`. This file holds the macro-level claim until
-decomposed into sub-leaves:
-- (a) diffusion max-preserving
-- (b) advection energy-neutral (uses M1 / Kill113)  ← **proved** in `Kill113.lean`
-- (c) stretching DKAM-subcritical
-- (d) winding monotonicity + energy ⇒ L∞ bound (D-030)
-- (e) DKAM persistence at all N
-
-Compiles sorry-free using minimal placeholder definitions. Strengthening each
-placeholder to the actual operator definition is the sub-leaf work.
-**Theorem structure is committed; content is a vacuous trivial case pending
-decomposition.**
+**Status:** decomposed into sub-leaves. Composition proof below is `sorry`,
+awaiting all sub-leaves closed.
 -/
 
 namespace NSRegularity.DKAM
 
-open NSRegularity
-
-/-- Placeholder NS step — currently the identity map. The real NS step is
-    diffusion + skew advection + stretching; this will be strengthened to the
-    actual composition once the time-integration scheme is formalized. -/
-def NSStep : VField → VField := id
-
-/-- Placeholder L∞ norm — currently constant zero. The real L∞ norm is
-    `max_{i,j,k,c} |ω_c(i,j,k)|`; to be strengthened once an integer-valued
-    max over `Fin N × Fin N × Fin N × Fin 3` is formalized. -/
-def lInf : VField → Int := fun _ => 0
+open NSRegularity NSRegularity.NS
 
 /-- **M2 — L∞ Non-Increasing** (top-level claim).
 
-    Under the full NS discrete scheme, the L∞ norm of vorticity is
-    non-increasing at every step. Closed trivially against placeholders above;
-    body awaits decomposition into (a)–(e). -/
-theorem l_inf_non_increasing (ω : VField) :
-    lInf (NSStep ω) ≤ lInf ω := by
-  simp [lInf, NSStep]
+    Under the full NS discrete scheme with CFL, the L∞ norm of vorticity is
+    non-increasing at every step. Composition of (a)–(e). -/
+theorem l_inf_non_increasing (w : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) :
+    lInf (⟨diffusion_step w.x p, diffusion_step w.y p, diffusion_step w.z p⟩ : VField)
+    ≤ lInf w := by
+  sorry
 
 end NSRegularity.DKAM
