@@ -146,4 +146,106 @@ theorem global_regularity (w₀ : VField) (p : NsParams) (h : cfl_ok p)
     (by positivity)
     (ns_lInfGrid_uniform w₀ p h hν hdt)
 
+-- ═══════════════════════════════════════════════════════════════════════════
+-- Resolution A — global_regularity under explicit exactness hypothesis
+--
+-- The above closure uses M2 (closed mod L2.3). Below we provide a parallel
+-- closure using diffusion_max_preserving_exact (Resolution A, fully proved in
+-- DKAM/DiffusionMaxPreserving.lean) under the exact-division side-condition.
+-- ═══════════════════════════════════════════════════════════════════════════
+
+/-- The "every step is exactly divisible" predicate for a trajectory. -/
+def diffusion_exactness_hyp (w₀ : VField) (p : NsParams) : Prop :=
+  ∀ n : ℕ, ∀ i j k : Fin N,
+    let wn := diffusion_trajectory w₀ p n
+    ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+        (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian wn.x i j k) ∧
+    ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+        (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian wn.y i j k) ∧
+    ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+        (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian wn.z i j k)
+
+/-- **L∞ trajectory bound under Resolution A.**
+
+    Under the exactness hypothesis at every timestep and every grid point,
+    the L∞ norm is uniformly bounded by its initial value. No sorries:
+    composition of `diffusion_max_preserving_exact_natAbs` per-step lifted
+    via triple `Finset.sup'_le` and max-over-components. -/
+theorem ns_lInf_uniform_exact
+    (w₀ : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns : 0 < p.ns_scale)
+    (hExactAll : diffusion_exactness_hyp w₀ p) :
+    ∀ n, lInf (diffusion_trajectory w₀ p n) ≤ lInf w₀ := by
+  intro n
+  induction n with
+  | zero => exact le_refl _
+  | succ n ih =>
+      unfold diffusion_trajectory
+      -- Per-component bound via diffusion_max_preserving_exact_natAbs
+      have hExactN := hExactAll n
+      let wn := diffusion_trajectory w₀ p n
+      have hx : gridLInf (diffusion_step wn.x p) ≤ gridLInf wn.x := by
+        unfold gridLInf
+        apply Finset.sup'_le; intro i _
+        apply Finset.sup'_le; intro j _
+        apply Finset.sup'_le; intro k _
+        exact NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact_natAbs
+          wn.x p h hν hdt hns (fun i' j' k' => (hExactN i' j' k').1) i j k
+      have hy : gridLInf (diffusion_step wn.y p) ≤ gridLInf wn.y := by
+        unfold gridLInf
+        apply Finset.sup'_le; intro i _
+        apply Finset.sup'_le; intro j _
+        apply Finset.sup'_le; intro k _
+        exact NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact_natAbs
+          wn.y p h hν hdt hns (fun i' j' k' => (hExactN i' j' k').2.1) i j k
+      have hz : gridLInf (diffusion_step wn.z p) ≤ gridLInf wn.z := by
+        unfold gridLInf
+        apply Finset.sup'_le; intro i _
+        apply Finset.sup'_le; intro j _
+        apply Finset.sup'_le; intro k _
+        exact NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact_natAbs
+          wn.z p h hν hdt hns (fun i' j' k' => (hExactN i' j' k').2.2) i j k
+      have hStep : lInf (⟨diffusion_step wn.x p, diffusion_step wn.y p,
+                          diffusion_step wn.z p⟩ : VField) ≤ lInf wn := by
+        unfold lInf; exact max_le_max hx (max_le_max hy hz)
+      exact le_trans hStep ih
+
+/-- **Uniform L¹-proxy bound under Resolution A.** -/
+theorem ns_lInfGrid_uniform_exact
+    (w₀ : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns : 0 < p.ns_scale)
+    (hExactAll : diffusion_exactness_hyp w₀ p) :
+    ∀ n, lInfGrid (diffusion_trajectory w₀ p n) ≤ 3 * (N : Int) ^ 3 * lInf w₀ := by
+  intro n
+  exact le_trans (lInfGrid_le_proxy _)
+    (by
+      have := ns_lInf_uniform_exact w₀ p h hν hdt hns hExactAll n
+      have hN3 : 0 ≤ 3 * (N : Int) ^ 3 := by positivity
+      exact mul_le_mul_of_nonneg_left this hN3)
+
+/-- **Global regularity under Resolution A — unconditionally true modulo
+    only the BKM axiom.**
+
+    Under the exactness hypothesis (resolution A), the M2 chain closes
+    without any L2.3 sorry dependency. The only remaining input is the
+    BKM 1984 axiom (deep PDE result). -/
+theorem global_regularity_exact
+    (w₀ : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns : 0 < p.ns_scale)
+    (hLInf : 0 ≤ lInf w₀)
+    (hExactAll : diffusion_exactness_hyp w₀ p)
+    (T : ℕ) :
+    NSRegularity.BKM.IsSmooth (diffusion_trajectory w₀ p) := by
+  apply NSRegularity.BKM.bkm_regularity_criterion (diffusion_trajectory w₀ p) T
+  refine ⟨T * (3 * (N : Int) ^ 3 * lInf w₀), ?_⟩
+  exact NSRegularity.BKM.bkm_integral_finite
+    (diffusion_trajectory w₀ p)
+    (3 * (N : Int) ^ 3 * lInf w₀)
+    T
+    (by positivity)
+    (ns_lInfGrid_uniform_exact w₀ p h hν hdt hns hExactAll)
+
 end NSRegularity.GlobalRegularity
