@@ -34,20 +34,17 @@ open NSRegularity
 /-- L5.1 — Multiplication commutes with mod p. -/
 theorem mod_mul_comm (a b p : ℤ) :
     (a * b) % p = ((a % p) * (b % p)) % p := by
-  conv_lhs => rw [show a = p * (a / p) + a % p from (Int.ediv_add_emod a p).symm,
-                   show b = p * (b / p) + b % p from (Int.ediv_add_emod b p).symm]
-  ring_nf
-  sorry
+  rw [Int.mul_emod]
 
 /-- L5.2 — Addition commutes with mod p. -/
 theorem mod_add_comm (a b p : ℤ) :
     (a + b) % p = ((a % p) + (b % p)) % p := by
-  sorry
+  rw [Int.add_emod]
 
 /-- L5.3 — Subtraction commutes with mod p. -/
 theorem mod_sub_comm (a b p : ℤ) :
     (a - b) % p = ((a % p) - (b % p)) % p := by
-  sorry
+  rw [Int.sub_emod]
 
 -- ═══════════════════════════════════════════════════════════════════════════
 -- L5.4–L5.5: Grid-level commutativity

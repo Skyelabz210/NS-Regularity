@@ -15,14 +15,15 @@ open NSRegularity NSRegularity.NS
 /-- L2.1 — Under CFL, the stencil self-weight `1 - 6c` is non-negative. -/
 theorem stencil_self_nonneg (p : NsParams) (h : cfl_ok p) :
     0 ≤ (N : Int) ^ 2 * p.ns_scale ^ 2 - 6 * p.nu_scaled * p.dt_latt := by
-  sorry
+  unfold cfl_ok at h
+  linarith
 
 /-- L2.2 — Under CFL, the neighbor weight `c = νΔt/(N²S²)` is non-negative
     (given ν, Δt ≥ 0). -/
 theorem stencil_neighbor_nonneg (p : NsParams) (hν : 0 ≤ p.nu_scaled)
     (hdt : 0 ≤ p.dt_latt) :
     0 ≤ p.nu_scaled * p.dt_latt := by
-  sorry
+  exact mul_nonneg hν hdt
 
 /-- L2.3 — The diffusion step is max-preserving: the updated value at
     any grid point is bounded by the original L∞ norm.

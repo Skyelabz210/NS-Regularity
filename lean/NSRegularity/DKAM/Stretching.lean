@@ -25,11 +25,11 @@ theorem stretching_degree_eq : stretchingDegree = 2 := by rfl
 
 /-- L2.5 — resonance order ≥ 3. -/
 theorem resonance_ge_three : resonanceOrder ≥ 3 := by
-  sorry
+  decide
 
 /-- L2.6 — DKAM subcriticality: deg < ρ. -/
 theorem dkam_subcritical : stretchingDegree < resonanceOrder := by
-  sorry
+  decide
 
 /-- L2.7 — contraction factor B(N) ≤ 90/1001. Exact rational. -/
 theorem contraction_bound : (6 : Rat) * 10 * 12 ≤ 90 ∧ (7 : Rat) * 11 * 13 = 1001 := by
