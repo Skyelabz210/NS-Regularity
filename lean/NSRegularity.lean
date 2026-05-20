@@ -11,3 +11,4 @@ import NSRegularity.Continuum         -- M6
 import NSRegularity.NonlinearPassage  -- M7
 import NSRegularity.BKM               -- M8
 import NSRegularity.ThreeStream       -- M9
+import NSRegularity.GlobalRegularity  -- top-level composition
