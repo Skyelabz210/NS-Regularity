@@ -44,11 +44,25 @@ theorem ultrametric_nonexpansion (p : Nat) (hp : Nat.Prime p) (x : Int)
     pValuation p (c.foldl (fun acc ci => acc * x + ci) 0) ≥ pValuation p x := by
   sorry
 
-/-- **L9.4 — Coprime bounded in L².** -/
+/-- **L9.4 — Coprime bounded in L².**
+    The coprime part `ω / s` has |ω/s| ≤ |ω| when s ≥ 1 (integer division),
+    so its L² norm is bounded by ‖ω‖_{L²} ≤ E₀. -/
 theorem coprime_bounded_l2 (primes : List Nat) (ω : Fin n → Int)
     (hE : ∑ i, ω i ^ 2 ≤ E₀)
     (hSmooth : ∀ i, 0 < smoothPart primes (ω i)) :
     ∑ i, coprimePart primes (ω i) ^ 2 ≤ E₀ := by
-  sorry
+  have hPer : ∀ i, coprimePart primes (ω i) ^ 2 ≤ ω i ^ 2 := by
+    intro i
+    unfold coprimePart
+    have hs : smoothPart primes (ω i) ≠ 0 := ne_of_gt (hSmooth i)
+    rw [if_neg hs]
+    have habs : |ω i / smoothPart primes (ω i)| ≤ |ω i| :=
+      Int.abs_ediv_le_abs _ _
+    have hsq : |ω i / smoothPart primes (ω i)| ^ 2 ≤ |ω i| ^ 2 :=
+      pow_le_pow_left₀ (abs_nonneg _) habs 2
+    rwa [sq_abs, sq_abs] at hsq
+  calc ∑ i, coprimePart primes (ω i) ^ 2
+      ≤ ∑ i, ω i ^ 2 := Finset.sum_le_sum (fun i _ => hPer i)
+    _ ≤ E₀ := hE
 
 end NSRegularity.ThreeStream
