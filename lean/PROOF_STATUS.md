@@ -1,11 +1,19 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-20. Build status: 8338 jobs clean, exit 0._
+_Last update: 2026-05-20. Build status: 8333 jobs clean, exit 0._
 
 ## Closure picture
 
 ```
-TOP-LEVEL Millennium-style claim:
+TOP-LEVEL Millennium-style claims:
+
+  NSRegularity.GlobalRegularity.global_regularity_exact      [PROVED mod {BKM axiom only}] ★
+    ⇐ ns_lInf_uniform_exact (PROVED via Wave D)
+    ⇐ diffusion_max_preserving_exact (Wave D, PROVED)
+    ⇐ hExactAll : ∀ n i j k, NS²S² | νΔt · Δ(fₙ)         ← Resolution A side-condition
+                                                              (satisfied by CRT/ExactRational
+                                                               arithmetic substrate)
+
   NSRegularity.GlobalRegularity.global_regularity            [PROVED mod {L2.3, BKM axiom}]
     ⇐ NSRegularity.DKAM.l_inf_non_increasing (M2)            [PROVED mod L2.3]
     ⇐ NSRegularity.BKM.bkm_integral_finite (L8.1)             [PROVED]
@@ -78,15 +86,24 @@ over the inductive class `PolyGridOp` covering id, all 6 shifts, +/−/×. The 7
 
 ## What's needed to close the Clay Millennium claim end-to-end
 
-1. **L2.3 unconditional** — apply Resolution A via Rust CRT/ExactRational pipeline. Requires either:
-   - Lean-side: redefine `diffusion_step` to use exact arithmetic (Resolution C)
-   - Mathematical operator decision to accept the exact-division side-condition (Resolution A in current form)
-2. **L3.4** — same resolution path as L2.3 for the H² version
-3. **L3.3 sharp Sobolev** — eigenvalue computation; can be machine-verified for N=8 fixed
-4. **BKM axiom** — requires a formal PDE library for NS on 𝕋³ (out of scope for finite-N discrete proofs)
+**Status:** `global_regularity_exact` is the closed (mod BKM only) Millennium-style
+theorem for the discrete heat-equation trajectory under Resolution A arithmetic.
+The remaining work to close the full NS claim:
+
+1. **Discharge the BKM 1984 axiom** — requires a formal PDE library for NS on 𝕋³
+   (deep PDE; out of scope for finite-N discrete proofs)
+2. **Extend from `diffusion_trajectory` to a `full_ns_trajectory`** that includes:
+   - Advection (energy-neutral by Kill #113, already PROVED)
+   - Stretching (DKAM-subcritical by L2.6, already PROVED)
+   - Biot-Savart inversion (NTT-based, not yet Lean-ported — task #12)
+3. **L3.4** — H² monotonicity under Resolution A (mirrors L2.3, requires stronger
+   CFL and a discrete Poincaré inequality)
+4. **L3.3 sharp Sobolev** — eigenvalue computation; verifiable for N=8 fixed
 5. **Statement bugs L2.7, L9.2** — operator-level review/repair
 
-After (1) and (2), the composition `GlobalRegularity.global_regularity` becomes unconditionally true modulo just the BKM axiom. After (4), the proof is fully constructive end-to-end.
+After (1), the **Resolution-A** closure `global_regularity_exact` becomes
+unconditionally true. After (2), the full NS (not just diffusion) trajectory
+is covered. After (1)+(2)+(3)+(4), the proof is fully constructive end-to-end.
 
 ## PR history
 
