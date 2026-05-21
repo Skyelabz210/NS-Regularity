@@ -557,6 +557,47 @@ theorem vfDot_self_nonneg (u : VField) (i j k : Fin N) :
   rw [ex1, ex2, ex3]
   linarith
 
+/-! ## Discrete L² inner product on vector fields -/
+
+/-- **Discrete L² inner product** of two vector fields on the torus. -/
+def innerL2 (u v : VField) : Int := sumGrid (fun i j k => vfDot u v i j k)
+
+/-- **innerL2 is symmetric.** -/
+theorem innerL2_comm (u v : VField) : innerL2 u v = innerL2 v u := by
+  unfold innerL2 sumGrid
+  apply Finset.sum_congr rfl; intros i _
+  apply Finset.sum_congr rfl; intros j _
+  apply Finset.sum_congr rfl; intros k _
+  exact vfDot_comm u v i j k
+
+/-- **innerL2 self-product is non-negative.** -/
+theorem innerL2_self_nonneg (u : VField) : 0 ≤ innerL2 u u := by
+  unfold innerL2 sumGrid
+  apply Finset.sum_nonneg; intros i _
+  apply Finset.sum_nonneg; intros j _
+  apply Finset.sum_nonneg; intros k _
+  exact vfDot_self_nonneg u i j k
+
+/-- **innerL2 is additive in the first argument.** -/
+theorem innerL2_add_left (u₁ u₂ v : VField) :
+    innerL2 (⟨fun a b c => u₁.x a b c + u₂.x a b c,
+              fun a b c => u₁.y a b c + u₂.y a b c,
+              fun a b c => u₁.z a b c + u₂.z a b c⟩) v =
+    innerL2 u₁ v + innerL2 u₂ v := by
+  unfold innerL2 sumGrid
+  have hpt := vfDot_add_left u₁ u₂ v
+  simp only [hpt, Finset.sum_add_distrib]
+
+/-- **innerL2 is additive in the second argument.** -/
+theorem innerL2_add_right (u v₁ v₂ : VField) :
+    innerL2 u (⟨fun a b c => v₁.x a b c + v₂.x a b c,
+                fun a b c => v₁.y a b c + v₂.y a b c,
+                fun a b c => v₁.z a b c + v₂.z a b c⟩) =
+    innerL2 u v₁ + innerL2 u v₂ := by
+  unfold innerL2 sumGrid
+  have hpt := vfDot_add_right u v₁ v₂
+  simp only [hpt, Finset.sum_add_distrib]
+
 open NSRegularity.Shift in
 /-- **`Σ laplacian f = 0` on the torus.** -/
 theorem sumGrid_laplacian_eq_zero (f : Grid) :
