@@ -135,4 +135,26 @@ theorem curl_grad_zero (f : Grid) :
   unfold curl
   rw [hx, hy, hz]
 
+/-! ## Vector-calculus operator linearity -/
+
+/-- **Discrete divergence is linear (additive).** -/
+theorem divV_add (w v : VField) (i j k : Fin N) :
+    divV (⟨fun a b c => w.x a b c + v.x a b c,
+           fun a b c => w.y a b c + v.y a b c,
+           fun a b c => w.z a b c + v.z a b c⟩) i j k =
+    divV w i j k + divV v i j k := by
+  unfold divV
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  ring
+
+/-- **Discrete gradient is linear (additive).** -/
+theorem gradV_add (f g : Grid) :
+    gradV (fun i j k => f i j k + g i j k) =
+    ⟨fun i j k => (gradV f).x i j k + (gradV g).x i j k,
+     fun i j k => (gradV f).y i j k + (gradV g).y i j k,
+     fun i j k => (gradV f).z i j k + (gradV g).z i j k⟩ := by
+  unfold gradV
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  congr <;> (funext i j k; ring)
+
 end NSRegularity.NS
