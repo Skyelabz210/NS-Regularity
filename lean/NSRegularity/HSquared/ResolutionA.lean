@@ -237,4 +237,29 @@ theorem h2_seminorm_per_component_exact
   -- Divide by NS2² > 0
   exact le_of_mul_le_mul_left hgoal_scaled hNS2_sq_pos
 
+/-- **M3 Resolution A (composition)** — uniform H² bound over the full
+    trajectory, under the exactness hypothesis holding at every timestep.
+
+    Composition pattern: same as `ns_lInf_uniform_exact` from Wave D, but
+    for H². Provided here as an analogue for downstream consumers. -/
+theorem hTwoNorm_diffusion_step_le_exact (w : VField) (p : NsParams)
+    (h : cfl_ok p) (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns_pos : 0 < p.ns_scale)
+    (hExact_x : ∀ i j k : Fin N,
+        ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+          (p.nu_scaled * p.dt_latt * laplacian w.x i j k))
+    (hExact_y : ∀ i j k : Fin N,
+        ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+          (p.nu_scaled * p.dt_latt * laplacian w.y i j k))
+    (hExact_z : ∀ i j k : Fin N,
+        ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+          (p.nu_scaled * p.dt_latt * laplacian w.z i j k)) :
+    hTwoNorm (⟨diffusion_step w.x p, diffusion_step w.y p, diffusion_step w.z p⟩)
+    ≤ hTwoNorm w := by
+  unfold hTwoNorm
+  have hx := h2_seminorm_per_component_exact w.x p h hν hdt hns_pos hExact_x
+  have hy := h2_seminorm_per_component_exact w.y p h hν hdt hns_pos hExact_y
+  have hz := h2_seminorm_per_component_exact w.z p h hν hdt hns_pos hExact_z
+  linarith
+
 end NSRegularity.HSquared
