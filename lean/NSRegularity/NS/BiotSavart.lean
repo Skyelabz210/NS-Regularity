@@ -557,6 +557,56 @@ theorem vfDot_self_nonneg (u : VField) (i j k : Fin N) :
   rw [ex1, ex2, ex3]
   linarith
 
+open NSRegularity.Shift in
+/-- **`Σ laplacian f = 0` on the torus.** -/
+theorem sumGrid_laplacian_eq_zero (f : Grid) :
+    sumGrid (fun i j k => laplacian f i j k) = 0 := by
+  unfold sumGrid laplacian
+  have h_xp : sumGrid (fun i j k => f (sp i) j k) = sumGrid f := sumGrid_sp_x f
+  have h_xn : sumGrid (fun i j k => f (sn i) j k) = sumGrid f := sumGrid_sn_x f
+  have h_yp : sumGrid (fun i j k => f i (sp j) k) = sumGrid f := sumGrid_sp_y f
+  have h_yn : sumGrid (fun i j k => f i (sn j) k) = sumGrid f := sumGrid_sn_y f
+  have h_zp : sumGrid (fun i j k => f i j (sp k)) = sumGrid f := sumGrid_sp_z f
+  have h_zn : sumGrid (fun i j k => f i j (sn k)) = sumGrid f := sumGrid_sn_z f
+  unfold sumGrid at h_xp h_xn h_yp h_yn h_zp h_zn
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum]
+  -- Goal reduces to: 6·Σf - 6·Σf = 0
+  linarith
+
+open NSRegularity.Shift in
+/-- **`Σ laplacianH f = 0` on the torus.** -/
+theorem sumGrid_laplacianH_eq_zero (f : Grid) :
+    sumGrid (fun i j k => laplacianH f i j k) = 0 := by
+  unfold sumGrid laplacianH
+  -- Use second-neighbor shift invariance: Σ f(sp²) = Σ f, Σ f(sn²) = Σ f
+  have h_xp : sumGrid (fun i j k => f (sp (sp i)) j k) = sumGrid f := by
+    have h1 := sumGrid_sp_x (fun i j k => f (sp i) j k)
+    have h2 := sumGrid_sp_x f
+    rw [h1, h2]
+  have h_xn : sumGrid (fun i j k => f (sn (sn i)) j k) = sumGrid f := by
+    have h1 := sumGrid_sn_x (fun i j k => f (sn i) j k)
+    have h2 := sumGrid_sn_x f
+    rw [h1, h2]
+  have h_yp : sumGrid (fun i j k => f i (sp (sp j)) k) = sumGrid f := by
+    have h1 := sumGrid_sp_y (fun i j k => f i (sp j) k)
+    have h2 := sumGrid_sp_y f
+    rw [h1, h2]
+  have h_yn : sumGrid (fun i j k => f i (sn (sn j)) k) = sumGrid f := by
+    have h1 := sumGrid_sn_y (fun i j k => f i (sn j) k)
+    have h2 := sumGrid_sn_y f
+    rw [h1, h2]
+  have h_zp : sumGrid (fun i j k => f i j (sp (sp k))) = sumGrid f := by
+    have h1 := sumGrid_sp_z (fun i j k => f i j (sp k))
+    have h2 := sumGrid_sp_z f
+    rw [h1, h2]
+  have h_zn : sumGrid (fun i j k => f i j (sn (sn k))) = sumGrid f := by
+    have h1 := sumGrid_sn_z (fun i j k => f i j (sn k))
+    have h2 := sumGrid_sn_z f
+    rw [h1, h2]
+  unfold sumGrid at h_xp h_xn h_yp h_yn h_zp h_zn
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum]
+  linarith
+
 /-- **`Σ gradV f`** — gradient integrates to zero (componentwise) on torus. -/
 theorem sumGrid_gradV_eq_zero (f : Grid) :
     sumGrid (fun i j k => (gradV f).x i j k) = 0 ∧
