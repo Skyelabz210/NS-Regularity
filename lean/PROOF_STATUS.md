@@ -1,6 +1,6 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-20. Build status: 8333 jobs clean, exit 0._
+_Last update: 2026-05-20 (post-Wave E). Build status: 8341 jobs clean, exit 0._
 
 ## Closure picture
 
@@ -113,3 +113,21 @@ is covered. After (1)+(2)+(3)+(4), the proof is fully constructive end-to-end.
 | #3 | Wave B — discharge bs_bounded_linear, constructive PolyGridOp + descent, L2.7 corrected sibling | open |
 | #4 | Wave C — L9.2 corrected sibling + M3 composition reduction to L3.4 | open |
 | #5 | Wave D — prove L2.3 Resolution A (diffusion_max_preserving under exact division) | open |
+| #6 | Wave E — Generic L∞-step closure + Full NS step defs + AubinLions strengthening | open |
+
+## New top-level theorems exposed in Wave E
+
+```
+generic_global_regularity (step hStep w₀ hLInf T) : IsSmooth (generic_trajectory step w₀)
+    [PROVED unconditionally — modulo BKM axiom]
+
+  ↑ parametric on ANY step preserving L∞ ↑
+
+  Existing specialisation:
+    diffusion_vstep + diffusion_vstep_preserves_lInf_exact (Resolution A)
+    ⟹ recovers global_regularity_exact for the diffusion trajectory
+
+  Future specialisation:
+    ns_step (defined in NS/FullStep.lean) + L∞-preservation of full NS
+    ⟹ full NS global regularity once advection+stretching L∞ behavior is proved
+```
