@@ -1,5 +1,7 @@
 import NSRegularity.NS.Defs
 import NSRegularity.Kill113.Ops
+import NSRegularity.Shift.SpSn
+import NSRegularity.Shift.SnSp
 
 /-!
 # NS/BiotSavart — Biot-Savart inversion skeleton
@@ -185,6 +187,34 @@ theorem curlZ_add (w v : VField) (i j k : Fin N) :
     curlZ w i j k + curlZ v i j k := by
   unfold curlZ
   unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY
+  ring
+
+/-! ## Composed Laplacian — `div ∘ grad` gives the second-neighbor stencil -/
+
+/-- **Second-neighbor (composed) Laplacian.** This is the operator that
+    naturally arises from composing centered-difference `div` and `grad`:
+    `(laplacianH f)(i,j,k) = f(sp²i) + f(sn²i) + f(sp²j) + f(sn²j) + f(sp²k) + f(sn²k) − 6·f(i,j,k)`.
+
+    Distinct from the standard 7-point `laplacian` in `NS/Defs.lean` (which
+    uses first-neighbor differences `sp`/`sn`). The two laplacians coincide
+    on the periodic torus modulo a rescaling of the index variable but are
+    formally distinct operators. -/
+def laplacianH (f : Grid) (i j k : Fin N) : Int :=
+  f (sp (sp i)) j k + f (sn (sn i)) j k
+  + f i (sp (sp j)) k + f i (sn (sn j)) k
+  + f i j (sp (sp k)) + f i j (sn (sn k))
+  - 6 * f i j k
+
+/-- **Discrete Hodge bridge identity: `divV ∘ gradV = laplacianH`.**
+
+    The composed centered-difference Laplacian equals the second-neighbor
+    stencil. Proof: unfold definitions, collapse `sp ∘ sn = sn ∘ sp = id`,
+    then ring. -/
+theorem divV_gradV_eq_laplacianH (f : Grid) (i j k : Fin N) :
+    divV (gradV f) i j k = laplacianH f i j k := by
+  unfold divV gradV laplacianH
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  simp only [NSRegularity.Shift.sn_sp, NSRegularity.Shift.sp_sn]
   ring
 
 end NSRegularity.NS
