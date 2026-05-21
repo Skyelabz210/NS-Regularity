@@ -382,4 +382,38 @@ theorem sbp_quadratic_H_h2 (f : Grid) :
     -sumGrid (fun i j k => vfDot (gradV (laplacianH f)) (gradV (laplacianH f)) i j k) :=
   sbp_quadratic_H (laplacianH f)
 
+/-! ## Harmonic functions and the discrete Hodge harmonic space -/
+
+/-- A scalar field is **harmonic** if its (second-neighbor) Laplacian
+    vanishes everywhere. -/
+def isHarmonicH (f : Grid) : Prop := ∀ i j k : Fin N, laplacianH f i j k = 0
+
+/-- A scalar field is **harmonic (first-neighbor)** if its 7-point
+    Laplacian vanishes everywhere. -/
+def isHarmonic (f : Grid) : Prop := ∀ i j k : Fin N, laplacian f i j k = 0
+
+/-- **Constants are harmonic (first-neighbor).** -/
+theorem const_isHarmonic (c : Int) : isHarmonic (fun _ _ _ => c) := by
+  intros i j k; unfold laplacian; ring
+
+/-- **Constants are harmonic (second-neighbor).** -/
+theorem const_isHarmonicH (c : Int) : isHarmonicH (fun _ _ _ => c) := by
+  intros i j k; unfold laplacianH; ring
+
+/-- **Sum of two harmonic functions is harmonic (first-neighbor).** -/
+theorem isHarmonic_add (f g : Grid) (hf : isHarmonic f) (hg : isHarmonic g) :
+    isHarmonic (fun i j k => f i j k + g i j k) := by
+  intros i j k
+  rw [laplacian_add]
+  rw [hf, hg]
+  ring
+
+/-- **Scalar multiple of a harmonic function is harmonic (first-neighbor).** -/
+theorem isHarmonic_smul (c : Int) (f : Grid) (hf : isHarmonic f) :
+    isHarmonic (fun i j k => c * f i j k) := by
+  intros i j k
+  rw [laplacian_smul]
+  rw [hf]
+  ring
+
 end NSRegularity.NS
