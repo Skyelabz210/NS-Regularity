@@ -1,21 +1,25 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-20 (post-Wave F.3 — SBP fully proved). Build status: 8343 jobs clean, exit 0._
+_Last update: 2026-05-20 (post-Wave F.5 — L3.4 Resolution A PROVED). Build status: 8344 jobs clean, exit 0._
 
-## New in Wave F.1–F.3 (SBP fully proved)
+## New in Wave F.1–F.5 (SBP fully proved AND L3.4 Resolution A PROVED)
 
 ```
-sbp_self_adjoint_bilinear (f g) : Σ f · Δg = Σ g · Δf                    [PROVED]
-sbp_quadratic (f)              : Σ f · Δf = -Σ |∇⁺f|²                   [PROVED]
-sbp_quadratic_h2 (f)           : Σ Δf · Δ²f = -Σ |∇⁺(Δf)|²              [PROVED]
+sbp_self_adjoint_bilinear (f g)          : Σ f · Δg = Σ g · Δf            [PROVED]
+sbp_quadratic (f)                        : Σ f · Δf = -Σ |∇⁺f|²            [PROVED]
+sbp_quadratic_h2 (f)                     : Σ Δf · Δ²f = -Σ |∇⁺(Δf)|²       [PROVED]
+laplacian_sq_le_12_gradSqForward (f)     : Σ (Δf)² ≤ 12 · Σ |∇⁺f|²         [PROVED]
+cauchy_schwarz_6 (a b c d e f)           : (a+b+c+d+e+f)² ≤ 6·(a²+...+f²)  [PROVED]
+h2_seminorm_per_component_exact (...)    : hTwoSeminorm (diffusion f p)    [PROVED]
+                                            ≤ hTwoSeminorm f
+                                            (under hExact1 + cfl_ok + CFL)
 ```
 
-These foundational identities directly unblock L3.4 (H² monotonicity Resolution A)
-and L4.2 (Aubin-Lions H¹ bound from energy identity). The remaining work for
-L3.4 Resolution A is:
-  1. discrete Poincaré inequality: Σ (Δf)² ≤ K · Σ |∇⁺Δf|² for some K
-  2. strict CFL: K · cv ≤ 2 · NS2
-which together with `sbp_quadratic_h2` give the H² monotonicity.
+★ **L3.4 Resolution A is now FULLY PROVED** — Wave F.5 closes the H²
+monotonicity claim under the SAME single-level exactness hypothesis as
+Wave D's L2.3 Resolution A. The originally-anticipated "level-2 exactness"
+(`NS² ∣ cv·Δ²f`) turned out to be unnecessary — it's a CONSEQUENCE of
+level-1 plus the algebraic structure.
 
 ## Closure picture
 
