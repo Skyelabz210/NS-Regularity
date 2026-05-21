@@ -249,4 +249,56 @@ theorem sumGrid_f_diffX_eq_neg_diffX_g (f g : Grid) :
   rw [hLHS_split, hCx_sp, hCx_sn, hRHS_split]
   ring
 
+/-- **IBP for the y-component centered difference.** -/
+theorem sumGrid_f_diffY_eq_neg_diffY_g (f g : Grid) :
+    sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffY g i j k) =
+    -sumGrid (fun i j k => NSRegularity.Kill113.diffY f i j k * g i j k) := by
+  have hLHS_split : sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffY g i j k) =
+                    sumGrid (fun i j k => f i j k * g i (sp j) k) -
+                    sumGrid (fun i j k => f i j k * g i (sn j) k) := by
+    unfold sumGrid NSRegularity.Kill113.diffY
+    have hpt : ∀ i j k : Fin N,
+        f i j k * (g i (sp j) k - g i (sn j) k) =
+        f i j k * g i (sp j) k - f i j k * g i (sn j) k := by intros; ring
+    simp only [hpt, Finset.sum_sub_distrib]
+  have hRHS_split : sumGrid (fun i j k =>
+                      NSRegularity.Kill113.diffY f i j k * g i j k) =
+                    sumGrid (fun i j k => f i (sp j) k * g i j k) -
+                    sumGrid (fun i j k => f i (sn j) k * g i j k) := by
+    unfold sumGrid NSRegularity.Kill113.diffY
+    have hpt : ∀ i j k : Fin N,
+        (f i (sp j) k - f i (sn j) k) * g i j k =
+        f i (sp j) k * g i j k - f i (sn j) k * g i j k := by intros; ring
+    simp only [hpt, Finset.sum_sub_distrib]
+  have hCy_sp := NSRegularity.HSquared.cross_y_sp f g
+  have hCy_sn := NSRegularity.HSquared.cross_y_sn f g
+  rw [hLHS_split, hCy_sp, hCy_sn, hRHS_split]
+  ring
+
+/-- **IBP for the z-component centered difference.** -/
+theorem sumGrid_f_diffZ_eq_neg_diffZ_g (f g : Grid) :
+    sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffZ g i j k) =
+    -sumGrid (fun i j k => NSRegularity.Kill113.diffZ f i j k * g i j k) := by
+  have hLHS_split : sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffZ g i j k) =
+                    sumGrid (fun i j k => f i j k * g i j (sp k)) -
+                    sumGrid (fun i j k => f i j k * g i j (sn k)) := by
+    unfold sumGrid NSRegularity.Kill113.diffZ
+    have hpt : ∀ i j k : Fin N,
+        f i j k * (g i j (sp k) - g i j (sn k)) =
+        f i j k * g i j (sp k) - f i j k * g i j (sn k) := by intros; ring
+    simp only [hpt, Finset.sum_sub_distrib]
+  have hRHS_split : sumGrid (fun i j k =>
+                      NSRegularity.Kill113.diffZ f i j k * g i j k) =
+                    sumGrid (fun i j k => f i j (sp k) * g i j k) -
+                    sumGrid (fun i j k => f i j (sn k) * g i j k) := by
+    unfold sumGrid NSRegularity.Kill113.diffZ
+    have hpt : ∀ i j k : Fin N,
+        (f i j (sp k) - f i j (sn k)) * g i j k =
+        f i j (sp k) * g i j k - f i j (sn k) * g i j k := by intros; ring
+    simp only [hpt, Finset.sum_sub_distrib]
+  have hCz_sp := NSRegularity.HSquared.cross_z_sp f g
+  have hCz_sn := NSRegularity.HSquared.cross_z_sn f g
+  rw [hLHS_split, hCz_sp, hCz_sn, hRHS_split]
+  ring
+
 end NSRegularity.NS
