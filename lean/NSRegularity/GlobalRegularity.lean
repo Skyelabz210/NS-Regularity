@@ -2,6 +2,7 @@ import NSRegularity.DKAM
 import NSRegularity.Continuum
 import NSRegularity.BKM
 import NSRegularity.Kill113
+import NSRegularity.HSquared.ResolutionA
 
 /-!
 # Global Regularity — top-level composition (Millennium claim)
@@ -247,5 +248,38 @@ theorem global_regularity_exact
     T
     (by positivity)
     (ns_lInfGrid_uniform_exact w₀ p h hν hdt hns hExactAll)
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- H² uniform bound along trajectory (parallel to ns_lInf_uniform_exact)
+-- ═══════════════════════════════════════════════════════════════════════════
+
+/-- **H² uniform bound under Resolution A.**
+
+    Under the SAME exactness hypothesis as `ns_lInf_uniform_exact`,
+    the H² seminorm is also uniformly bounded along the trajectory.
+    This uses Wave F.6's `hTwoNorm_diffusion_step_le_exact` per step.
+
+    Combined with `ns_lInf_uniform_exact`, the diffusion trajectory has
+    BOTH L∞ and H² controlled uniformly in time. -/
+theorem ns_hTwoNorm_uniform_exact
+    (w₀ : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns : 0 < p.ns_scale)
+    (hExactAll : diffusion_exactness_hyp w₀ p) :
+    ∀ n, NSRegularity.HSquared.hTwoNorm (diffusion_trajectory w₀ p n)
+         ≤ NSRegularity.HSquared.hTwoNorm w₀ := by
+  intro n
+  induction n with
+  | zero => exact le_refl _
+  | succ n ih =>
+      unfold diffusion_trajectory
+      have hExactN := hExactAll n
+      let wn := diffusion_trajectory w₀ p n
+      have hStep := NSRegularity.HSquared.hTwoNorm_diffusion_step_le_exact
+        wn p h hν hdt hns
+        (fun i j k => (hExactN i j k).1)
+        (fun i j k => (hExactN i j k).2.1)
+        (fun i j k => (hExactN i j k).2.2)
+      exact le_trans hStep ih
 
 end NSRegularity.GlobalRegularity
