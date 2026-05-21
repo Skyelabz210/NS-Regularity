@@ -338,4 +338,131 @@ theorem sbp_quadratic_h2 (f : Grid) :
     -gradSqForward (laplacian f) :=
   sbp_quadratic (laplacian f)
 
+/-! ## Discrete Poincaré inequality -/
+
+/-- **Pointwise Cauchy-Schwarz for 6 terms:** `(a+b+c+d+e+f)² ≤ 6·(a²+b²+c²+d²+e²+f²)`. -/
+theorem cauchy_schwarz_6 (a b c d e f : Int) :
+    (a + b + c + d + e + f) ^ 2 ≤ 6 * (a^2 + b^2 + c^2 + d^2 + e^2 + f^2) := by
+  -- Expand: 6·Σa² − (Σa)² = Σ_{i<j}(aᵢ−aⱼ)² ≥ 0
+  have h := sq_nonneg (a - b)
+  have h₂ := sq_nonneg (a - c)
+  have h₃ := sq_nonneg (a - d)
+  have h₄ := sq_nonneg (a - e)
+  have h₅ := sq_nonneg (a - f)
+  have h₆ := sq_nonneg (b - c)
+  have h₇ := sq_nonneg (b - d)
+  have h₈ := sq_nonneg (b - e)
+  have h₉ := sq_nonneg (b - f)
+  have h₁₀ := sq_nonneg (c - d)
+  have h₁₁ := sq_nonneg (c - e)
+  have h₁₂ := sq_nonneg (c - f)
+  have h₁₃ := sq_nonneg (d - e)
+  have h₁₄ := sq_nonneg (d - f)
+  have h₁₅ := sq_nonneg (e - f)
+  nlinarith [h, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉, h₁₀, h₁₁, h₁₂, h₁₃, h₁₄, h₁₅]
+
+/-- **Discrete Poincaré-type inequality:** `Σ (Δf)² ≤ 12 · Σ |∇⁺f|²`.
+
+    Proved via:
+    1. Pointwise: `(Δf(i,j,k))² ≤ 6 · Σ_{6 neighbors} (f(neighbor) − f)²`
+       (Cauchy-Schwarz on the 6-deviation decomposition of Δf).
+    2. Summed: each "neighbor difference squared" appears twice in
+       Σ_{i,j,k} Σ_{6 neighbors} (f(nbr)−f)² (once from each endpoint),
+       so it equals `2 · Σ |∇⁺f|²`. Hence `Σ(Δf)² ≤ 12 · Σ|∇⁺f|²`.
+
+    This is the load-bearing inequality for L3.4 Resolution A: combined with
+    `sbp_quadratic_h2` and a strict CFL `12 · cv ≤ 2 · NS²S²` (or
+    `6 · cv ≤ NS²S²`, i.e. our existing CFL), the H² seminorm is monotone
+    non-increasing under exact diffusion. -/
+theorem laplacian_sq_le_12_gradSqForward (f : Grid) :
+    sumGrid (fun i j k => (laplacian f i j k) ^ 2) ≤ 12 * gradSqForward f := by
+  -- Pointwise: (Δf)² ≤ 6 · sum of 6 squared neighbor deviations
+  have hpt : ∀ i j k : Fin N,
+      (laplacian f i j k) ^ 2 ≤
+      6 * ((f (sp i) j k - f i j k) ^ 2 + (f (sn i) j k - f i j k) ^ 2
+         + (f i (sp j) k - f i j k) ^ 2 + (f i (sn j) k - f i j k) ^ 2
+         + (f i j (sp k) - f i j k) ^ 2 + (f i j (sn k) - f i j k) ^ 2) := by
+    intros i j k
+    -- Laplacian decomposes as sum of 6 deviations from center
+    have hLapEq : laplacian f i j k =
+        (f (sp i) j k - f i j k) + (f (sn i) j k - f i j k)
+      + (f i (sp j) k - f i j k) + (f i (sn j) k - f i j k)
+      + (f i j (sp k) - f i j k) + (f i j (sn k) - f i j k) := by
+      unfold laplacian; ring
+    rw [hLapEq]
+    exact cauchy_schwarz_6
+      (f (sp i) j k - f i j k) (f (sn i) j k - f i j k)
+      (f i (sp j) k - f i j k) (f i (sn j) k - f i j k)
+      (f i j (sp k) - f i j k) (f i j (sn k) - f i j k)
+  -- Sum over the grid: Σ (Δf)² ≤ 6 · Σ_{ijk} Σ_{6 neighbors}
+  have hsum_le : sumGrid (fun i j k => (laplacian f i j k) ^ 2) ≤
+      6 * sumGrid (fun i j k =>
+            (f (sp i) j k - f i j k) ^ 2 + (f (sn i) j k - f i j k) ^ 2
+          + (f i (sp j) k - f i j k) ^ 2 + (f i (sn j) k - f i j k) ^ 2
+          + (f i j (sp k) - f i j k) ^ 2 + (f i j (sn k) - f i j k) ^ 2) := by
+    unfold sumGrid
+    rw [show (6 * ∑ i : Fin N, ∑ j : Fin N, ∑ k : Fin N, _)
+        = ∑ i : Fin N, ∑ j : Fin N, ∑ k : Fin N,
+          (6 * ((f (sp i) j k - f i j k) ^ 2 + (f (sn i) j k - f i j k) ^ 2
+              + (f i (sp j) k - f i j k) ^ 2 + (f i (sn j) k - f i j k) ^ 2
+              + (f i j (sp k) - f i j k) ^ 2 + (f i j (sn k) - f i j k) ^ 2))
+        from by simp [Finset.mul_sum]]
+    apply Finset.sum_le_sum; intros i _
+    apply Finset.sum_le_sum; intros j _
+    apply Finset.sum_le_sum; intros k _
+    exact hpt i j k
+  -- The "sn neighbor squared" sums equal the "sp neighbor squared" sums by sumGrid shift invariance
+  have hsn_eq_sp_x :
+      sumGrid (fun i j k => (f (sn i) j k - f i j k) ^ 2) =
+      sumGrid (fun i j k => (f (sp i) j k - f i j k) ^ 2) := by
+    -- (f(sn i) - f)² = (f - f(sp(sn i)))² · ... actually by sn-shift on the whole expr
+    -- Reindex i → sn i' (i.e. i' = sp i, so sn i' = i):
+    --   ∑ (f(sn i) - f(i))² = ∑ over i' of (f(sn(sp i')) - f(sp i'))² = (f(i') - f(sp i'))² = (f(sp i') - f(i'))²
+    rw [← sumGrid_sp_x (fun i j k => (f (sn i) j k - f i j k) ^ 2)]
+    apply Finset.sum_congr rfl; intros i _
+    apply Finset.sum_congr rfl; intros j _
+    apply Finset.sum_congr rfl; intros k _
+    simp only [sn_sp]
+    ring
+  have hsn_eq_sp_y :
+      sumGrid (fun i j k => (f i (sn j) k - f i j k) ^ 2) =
+      sumGrid (fun i j k => (f i (sp j) k - f i j k) ^ 2) := by
+    rw [← sumGrid_sp_y (fun i j k => (f i (sn j) k - f i j k) ^ 2)]
+    apply Finset.sum_congr rfl; intros i _
+    apply Finset.sum_congr rfl; intros j _
+    apply Finset.sum_congr rfl; intros k _
+    simp only [sn_sp]
+    ring
+  have hsn_eq_sp_z :
+      sumGrid (fun i j k => (f i j (sn k) - f i j k) ^ 2) =
+      sumGrid (fun i j k => (f i j (sp k) - f i j k) ^ 2) := by
+    rw [← sumGrid_sp_z (fun i j k => (f i j (sn k) - f i j k) ^ 2)]
+    apply Finset.sum_congr rfl; intros i _
+    apply Finset.sum_congr rfl; intros j _
+    apply Finset.sum_congr rfl; intros k _
+    simp only [sn_sp]
+    ring
+  -- Split the sum of 6 squared diffs into 3 pairs (sp + sn), each pair equals 2 · sp:
+  have hsum_eq : sumGrid (fun i j k =>
+            (f (sp i) j k - f i j k) ^ 2 + (f (sn i) j k - f i j k) ^ 2
+          + (f i (sp j) k - f i j k) ^ 2 + (f i (sn j) k - f i j k) ^ 2
+          + (f i j (sp k) - f i j k) ^ 2 + (f i j (sn k) - f i j k) ^ 2) =
+        2 * gradSqForward f := by
+    unfold sumGrid gradSqForward
+    simp only [Finset.sum_add_distrib]
+    have hsn_x := hsn_eq_sp_x
+    have hsn_y := hsn_eq_sp_y
+    have hsn_z := hsn_eq_sp_z
+    unfold sumGrid at hsn_x hsn_y hsn_z
+    rw [hsn_x, hsn_y, hsn_z]
+    ring
+  -- Combine: Σ (Δf)² ≤ 6 · (2 · gradSqForward f) = 12 · gradSqForward f
+  calc sumGrid (fun i j k => (laplacian f i j k) ^ 2)
+      ≤ 6 * sumGrid (fun i j k =>
+            (f (sp i) j k - f i j k) ^ 2 + (f (sn i) j k - f i j k) ^ 2
+          + (f i (sp j) k - f i j k) ^ 2 + (f i (sn j) k - f i j k) ^ 2
+          + (f i j (sp k) - f i j k) ^ 2 + (f i j (sn k) - f i j k) ^ 2) := hsum_le
+    _ = 6 * (2 * gradSqForward f) := by rw [hsum_eq]
+    _ = 12 * gradSqForward f := by ring
+
 end NSRegularity.HSquared
