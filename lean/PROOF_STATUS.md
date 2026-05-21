@@ -1,6 +1,21 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-20 (post-Wave F). Build status: 8343 jobs clean, exit 0._
+_Last update: 2026-05-20 (post-Wave F.3 — SBP fully proved). Build status: 8343 jobs clean, exit 0._
+
+## New in Wave F.1–F.3 (SBP fully proved)
+
+```
+sbp_self_adjoint_bilinear (f g) : Σ f · Δg = Σ g · Δf                    [PROVED]
+sbp_quadratic (f)              : Σ f · Δf = -Σ |∇⁺f|²                   [PROVED]
+sbp_quadratic_h2 (f)           : Σ Δf · Δ²f = -Σ |∇⁺(Δf)|²              [PROVED]
+```
+
+These foundational identities directly unblock L3.4 (H² monotonicity Resolution A)
+and L4.2 (Aubin-Lions H¹ bound from energy identity). The remaining work for
+L3.4 Resolution A is:
+  1. discrete Poincaré inequality: Σ (Δf)² ≤ K · Σ |∇⁺Δf|² for some K
+  2. strict CFL: K · cv ≤ 2 · NS2
+which together with `sbp_quadratic_h2` give the H² monotonicity.
 
 ## Closure picture
 
