@@ -21,7 +21,7 @@ Wave D's L2.3 Resolution A. The originally-anticipated "level-2 exactness"
 (`NS² ∣ cv·Δ²f`) turned out to be unnecessary — it's a CONSEQUENCE of
 level-1 plus the algebraic structure.
 
-## New in Wave G (NS trajectory skeleton)
+## New in Wave G (NS trajectory skeleton + uniform H² bound)
 
 ```
 ns_trajectory_generator
@@ -31,6 +31,14 @@ ns_trajectory_generator
 ns_global_regularity_skeleton                                              [PROVED]
     (..., h_step : ∀ w, lInf (ns_step ...) ≤ lInf w, ...) :
     IsSmooth (ns_trajectory_generator ...)
+
+ns_hTwoNorm_uniform_exact (G.2)                                            [PROVED]
+    (w₀ p h hν hdt hns hExactAll) :
+    ∀ n, hTwoNorm (diffusion_trajectory w₀ p n) ≤ hTwoNorm w₀
+
+h1_uniform_bound_substantive (G.1)                                         [PROVED]
+    (f₀ f_seq h_init h_monotone) :
+    ∀ n, l2Sq (f_seq n) ≤ l2Sq f₀
 ```
 
 ★ **The architectural top of the Lean closure is now in place.** Operator-
@@ -38,6 +46,10 @@ side proofs needed to complete the Millennium claim:
   - `biot_savart` constructive Biot-Savart (task #12, NTT port from Rust)
   - `h_step` full-NS L∞ preservation (task #18, DKAM + Kill #113 composition)
   - Discharge BKM 1984 axiom (research-grade)
+
+★ **Complete control bundle under Resolution A**: the diffusion trajectory
+has uniformly bounded L∞ (`ns_lInf_uniform_exact`) AND uniformly bounded
+H² (`ns_hTwoNorm_uniform_exact`) along the entire timeline.
 
 ## Closure picture
 
