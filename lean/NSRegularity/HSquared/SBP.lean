@@ -212,4 +212,113 @@ theorem sbp_self_adjoint_bilinear (f g : Grid) :
   rw [e1, e2, e3, e4, e5, e6, e7]
   ring
 
+/-! ## H¹ quadratic form identity -/
+
+/-- Forward-gradient energy: Σ |∇⁺f|² summed over the 3 spatial directions. -/
+def gradSqForward (f : Grid) : Int :=
+  ∑ i : Fin N, ∑ j : Fin N, ∑ k : Fin N,
+    ((f (sp i) j k - f i j k) ^ 2
+   + (f i (sp j) k - f i j k) ^ 2
+   + (f i j (sp k) - f i j k) ^ 2)
+
+/-- **SBP quadratic identity.**
+    `Σ f · Δf = -Σ |∇⁺f|²`.
+
+    The discrete H¹ analogue of the integration-by-parts identity
+    ⟨f, Δf⟩ = −‖∇f‖². Specialization of `sbp_self_adjoint_bilinear`
+    to f = g, combined with the algebraic identity
+    (a−b)² = a² − 2ab + b² and sumGrid shift-invariance. -/
+theorem sbp_quadratic (f : Grid) :
+    sumGrid (fun i j k => f i j k * laplacian f i j k) = -gradSqForward f := by
+  -- 1. Decompose Σ f · Δf into 7 sums (6 cross + 1 diagonal):
+  have hLHS_split : sumGrid (fun i j k => f i j k * laplacian f i j k) =
+        sumGrid (fun i j k => f i j k * f (sp i) j k) +
+        sumGrid (fun i j k => f i j k * f (sn i) j k) +
+        sumGrid (fun i j k => f i j k * f i (sp j) k) +
+        sumGrid (fun i j k => f i j k * f i (sn j) k) +
+        sumGrid (fun i j k => f i j k * f i j (sp k)) +
+        sumGrid (fun i j k => f i j k * f i j (sn k)) -
+        6 * sumGrid (fun i j k => f i j k * f i j k) := by
+    unfold sumGrid laplacian
+    have hdistribute : ∀ i j k : Fin N,
+        f i j k * (f (sp i) j k + f (sn i) j k
+                 + f i (sp j) k + f i (sn j) k
+                 + f i j (sp k) + f i j (sn k)
+                 - 6 * f i j k) =
+        f i j k * f (sp i) j k + f i j k * f (sn i) j k
+      + f i j k * f i (sp j) k + f i j k * f i (sn j) k
+      + f i j k * f i j (sp k) + f i j k * f i j (sn k)
+      - 6 * (f i j k * f i j k) := by
+      intros i j k; ring
+    simp only [hdistribute, Finset.sum_add_distrib, Finset.sum_sub_distrib,
+               ← Finset.mul_sum]
+  -- 2. The "sn" cross terms equal the "sp" cross terms by reindexing + mul_comm:
+  have sn_eq_sp_x : sumGrid (fun i j k => f i j k * f (sn i) j k) =
+                    sumGrid (fun i j k => f i j k * f (sp i) j k) := by
+    rw [cross_x_sn f f]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have sn_eq_sp_y : sumGrid (fun i j k => f i j k * f i (sn j) k) =
+                    sumGrid (fun i j k => f i j k * f i (sp j) k) := by
+    rw [cross_y_sn f f]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have sn_eq_sp_z : sumGrid (fun i j k => f i j k * f i j (sn k)) =
+                    sumGrid (fun i j k => f i j k * f i j (sp k)) := by
+    rw [cross_z_sn f f]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  -- 3. Σ f(sp_d)² = Σ f² for each direction (sumGrid shift-invariance applied to f²):
+  have sq_inv_x : sumGrid (fun i j k => (f (sp i) j k) ^ 2) =
+                  sumGrid (fun i j k => (f i j k) ^ 2) :=
+    sumGrid_sp_x (fun i j k => (f i j k) ^ 2)
+  have sq_inv_y : sumGrid (fun i j k => (f i (sp j) k) ^ 2) =
+                  sumGrid (fun i j k => (f i j k) ^ 2) :=
+    sumGrid_sp_y (fun i j k => (f i j k) ^ 2)
+  have sq_inv_z : sumGrid (fun i j k => (f i j (sp k)) ^ 2) =
+                  sumGrid (fun i j k => (f i j k) ^ 2) :=
+    sumGrid_sp_z (fun i j k => (f i j k) ^ 2)
+  -- 4. Expand gradSqForward into 3 directional terms, each (sp - center)²:
+  have hRHS_split : gradSqForward f =
+        (sumGrid (fun i j k => (f (sp i) j k) ^ 2)
+         - 2 * sumGrid (fun i j k => f i j k * f (sp i) j k)
+         + sumGrid (fun i j k => (f i j k) ^ 2)) +
+        (sumGrid (fun i j k => (f i (sp j) k) ^ 2)
+         - 2 * sumGrid (fun i j k => f i j k * f i (sp j) k)
+         + sumGrid (fun i j k => (f i j k) ^ 2)) +
+        (sumGrid (fun i j k => (f i j (sp k)) ^ 2)
+         - 2 * sumGrid (fun i j k => f i j k * f i j (sp k)) +
+        sumGrid (fun i j k => (f i j k) ^ 2)) := by
+    unfold gradSqForward sumGrid
+    have hexpand : ∀ i j k : Fin N,
+        (f (sp i) j k - f i j k) ^ 2
+       + (f i (sp j) k - f i j k) ^ 2
+       + (f i j (sp k) - f i j k) ^ 2 =
+        ((f (sp i) j k) ^ 2 - 2 * (f i j k * f (sp i) j k) + (f i j k) ^ 2)
+      + ((f i (sp j) k) ^ 2 - 2 * (f i j k * f i (sp j) k) + (f i j k) ^ 2)
+      + ((f i j (sp k)) ^ 2 - 2 * (f i j k * f i j (sp k)) + (f i j k) ^ 2) := by
+      intros i j k; ring
+    simp only [hexpand, Finset.sum_add_distrib, Finset.sum_sub_distrib,
+               ← Finset.mul_sum]
+  -- 5. Combine everything: substitute sq_inv_* and sn_eq_sp_* and ring
+  rw [hLHS_split, hRHS_split]
+  rw [sq_inv_x, sq_inv_y, sq_inv_z, sn_eq_sp_x, sn_eq_sp_y, sn_eq_sp_z]
+  -- Now both sides are polynomials in the same three quantities
+  -- (sumGrid f*f(sp_d) for d ∈ {x,y,z}) plus diagonal sumGrid f²
+  -- Note: sumGrid (fun i j k => f i j k * f i j k) = sumGrid (fun i j k => (f i j k)^2)
+  have hsq_eq : sumGrid (fun i j k => f i j k * f i j k) =
+                sumGrid (fun i j k => (f i j k) ^ 2) := by
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  rw [hsq_eq]
+  ring
+
 end NSRegularity.HSquared
