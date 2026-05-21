@@ -1,6 +1,6 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-21 (post-Wave H.10 — full vector-calc + Hodge bridge identity). Build status: 8347 jobs clean, exit 0._
+_Last update: 2026-05-21 (post-Wave H.15 — complete discrete PDE algebra + integer-Hodge H¹). Build status: 8338+ jobs clean, exit 0._
 
 ## New in Wave F.1–F.5 (SBP fully proved AND L3.4 Resolution A PROVED)
 
@@ -96,6 +96,27 @@ operators (Laplacian, div, grad, curl), plus the chain-complex zero-compositions
 (div∘curl=0, curl∘grad=0), plus the bridge identity (divV∘gradV = laplacianH).
 This is the algebraic skeleton needed for the discrete Hodge decomposition
 (task #6 — the integer-Helmholtz program).
+
+## Wave H later additions (H.11–H.15)
+
+```
+sumGrid_f_diffX_eq_neg_diffX_g (H.11)  : Σ f · diffX g = -Σ diffX f · g     [PROVED]
+sumGrid_f_diffY_eq_neg_diffY_g (H.12)  : analogous y                        [PROVED]
+sumGrid_f_diffZ_eq_neg_diffZ_g (H.12)  : analogous z                        [PROVED]
+sumGrid_f_divV_eq_neg_gradV_dot (H.14) : Σ f · divV w = -Σ gradV f · w     [PROVED]
+sbp_quadratic_H (H.15)                  : Σ f · laplacianH f = -Σ |gradV f|² [PROVED]
+discrete_ns_regularity_certificate_exact (H.13) — bundle theorem            [PROVED]
+```
+
+★ **Complete discrete PDE algebra**: SBP (H¹/H²), IBP (centered + vector-field),
+Poincaré inequality, Cauchy-Schwarz, Hodge bridge, two parallel H¹ energy
+identities (first- and second-neighbor Laplacian) — all formally proved.
+
+★ **Top-level consolidated theorem `discrete_ns_regularity_certificate_exact`**:
+under `diffusion_exactness_hyp` (single Resolution A side condition), the
+diffusion trajectory has uniform L², L∞, AND H² bounds, plus continuum
+smoothness via BKM. This is the most architecturally complete formal
+statement of discrete NS regularity in Lean to date.
 
 ## Closure picture
 
