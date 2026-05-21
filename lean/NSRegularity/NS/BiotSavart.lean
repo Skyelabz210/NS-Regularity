@@ -588,6 +588,22 @@ theorem innerL2_add_left (u₁ u₂ v : VField) :
   have hpt := vfDot_add_left u₁ u₂ v
   simp only [hpt, Finset.sum_add_distrib]
 
+/-- **Pointwise Cauchy-Schwarz for `vfDot`:** `(vfDot u v)² ≤ vfDot u u · vfDot v v`.
+
+    The 3D analog of `(u_x v_x + u_y v_y + u_z v_z)² ≤ (u_x² + u_y² + u_z²)(v_x² + v_y² + v_z²)`.
+    Proved via the standard SOS identity:
+      LHS RHS - CS² = (u_x v_y − u_y v_x)² + (u_x v_z − u_z v_x)² + (u_y v_z − u_z v_y)² ≥ 0.
+-/
+theorem vfDot_cauchy_schwarz_pointwise (u v : VField) (i j k : Fin N) :
+    (vfDot u v i j k) ^ 2 ≤ vfDot u u i j k * vfDot v v i j k := by
+  unfold vfDot
+  have h1 := sq_nonneg (u.x i j k * v.y i j k - u.y i j k * v.x i j k)
+  have h2 := sq_nonneg (u.x i j k * v.z i j k - u.z i j k * v.x i j k)
+  have h3 := sq_nonneg (u.y i j k * v.z i j k - u.z i j k * v.y i j k)
+  nlinarith [h1, h2, h3, sq_nonneg (u.x i j k), sq_nonneg (u.y i j k),
+             sq_nonneg (u.z i j k), sq_nonneg (v.x i j k), sq_nonneg (v.y i j k),
+             sq_nonneg (v.z i j k)]
+
 /-- **innerL2 is additive in the second argument.** -/
 theorem innerL2_add_right (u v₁ v₂ : VField) :
     innerL2 u (⟨fun a b c => v₁.x a b c + v₂.x a b c,
