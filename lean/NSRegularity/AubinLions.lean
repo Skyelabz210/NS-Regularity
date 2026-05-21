@@ -56,4 +56,53 @@ theorem strong_L2_convergence (f_seq : Nat → Grid)
     True := by -- placeholder pending mathlib sequence-convergence definitions
   trivial
 
+-- ═══════════════════════════════════════════════════════════════════════════
+-- Substantive strengthening of M4 sub-lemmas — discrete time-increment
+-- bounds under L∞-preservation. These supplement (do not replace) the
+-- placeholder True statements above.
+-- ═══════════════════════════════════════════════════════════════════════════
+
+/-- **Helper:** for any grid point, `(f i j k).natAbs ≤ gridLInf f` as Int. -/
+theorem natAbs_le_gridLInf (f : Grid) (i j k : Fin N) :
+    ((f i j k).natAbs : Int) ≤ gridLInf f := by
+  unfold gridLInf
+  refine le_trans ?_
+    (Finset.le_sup' (f := fun i' => Finset.univ.sup' _
+        (fun j' => Finset.univ.sup' _
+          (fun k' => ((f i' j' k').natAbs : Int))))
+      (Finset.mem_univ i))
+  refine le_trans ?_
+    (Finset.le_sup' (f := fun j' => Finset.univ.sup' _
+        (fun k' => ((f i j' k').natAbs : Int)))
+      (Finset.mem_univ j))
+  exact Finset.le_sup'
+    (f := fun k' => ((f i j k').natAbs : Int))
+    (Finset.mem_univ k)
+
+/-- **L4.3' (substantive) — Time-step increment L∞ bound under L∞-preservation.**
+
+    If a trajectory `f_seq` has L∞ uniformly bounded by `gridLInf f₀`, then
+    consecutive increments `(f_seq (n+1) − f_seq n)` are bounded pointwise
+    by twice the initial L∞ norm (triangle inequality). This is the
+    discrete analogue of the L²(0,T; H⁻¹) time-derivative bound that
+    Aubin-Lions consumes. -/
+theorem time_step_increment_lInf_bound (f₀ : Grid) (f_seq : Nat → Grid)
+    (hLInf : ∀ n, gridLInf (f_seq n) ≤ gridLInf f₀)
+    (n : Nat) (i j k : Fin N) :
+    ((f_seq (n + 1) i j k - f_seq n i j k).natAbs : Int) ≤ 2 * gridLInf f₀ := by
+  -- bound each term by gridLInf f₀
+  have h_pt_succ : ((f_seq (n + 1) i j k).natAbs : Int) ≤ gridLInf f₀ :=
+    le_trans (natAbs_le_gridLInf (f_seq (n + 1)) i j k) (hLInf (n + 1))
+  have h_pt_n : ((f_seq n i j k).natAbs : Int) ≤ gridLInf f₀ :=
+    le_trans (natAbs_le_gridLInf (f_seq n) i j k) (hLInf n)
+  -- triangle inequality on Int.natAbs
+  have h_tri : (f_seq (n + 1) i j k - f_seq n i j k).natAbs ≤
+               (f_seq (n + 1) i j k).natAbs + (f_seq n i j k).natAbs :=
+    Int.natAbs_sub_le _ _
+  -- coerce to Int and combine
+  have h_tri_int : ((f_seq (n + 1) i j k - f_seq n i j k).natAbs : Int) ≤
+                   ((f_seq (n + 1) i j k).natAbs : Int) +
+                   ((f_seq n i j k).natAbs : Int) := by exact_mod_cast h_tri
+  linarith
+
 end NSRegularity.AubinLions
