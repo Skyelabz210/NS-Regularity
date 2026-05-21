@@ -1,6 +1,6 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-21 (post-Wave H — Biot-Savart skeleton + L² Resolution A + vector-calc identities). Build status: 8347 jobs clean, exit 0._
+_Last update: 2026-05-21 (post-Wave H.10 — full vector-calc + Hodge bridge identity). Build status: 8347 jobs clean, exit 0._
 
 ## New in Wave F.1–F.5 (SBP fully proved AND L3.4 Resolution A PROVED)
 
@@ -74,6 +74,28 @@ all proved for the discrete diffusion step under exact arithmetic.
 
 ★ **Discrete de Rham complex skeleton** PROVED: `div ∘ curl = 0` and
 `curl ∘ grad = 0` follow directly from centered-diff commutativity.
+
+## Wave H sub-waves (full enumeration)
+
+```
+H    : NS/BiotSavart.lean curl, divV, gradV defs + axioms
+H.1  : curl_div_zero                                              [PROVED]
+H.2  : curl_grad_zero + gradV defined                             [PROVED]
+H.3  : l2Sq_diffusion_step_le_exact (L² Resolution A scalar)      [PROVED]
+H.4  : l2NormSq_diffusion_step_le_exact (vector composition)      [PROVED]
+H.5  : ns_l2NormSq_uniform_exact (trajectory L²)                  [PROVED]
+H.6  : generic_global_regularity_uniform (most general closure)   [PROVED]
+H.7  : laplacian_add, laplacian_smul, laplacian_zero              [PROVED]
+H.8  : divV_add, gradV_add                                        [PROVED]
+H.9  : curlX_add, curlY_add, curlZ_add                            [PROVED]
+H.10 : laplacianH + divV_gradV_eq_laplacianH bridge identity      [PROVED]
+```
+
+★ **Integer-Hodge foundation in place**: linearity of all discrete differential
+operators (Laplacian, div, grad, curl), plus the chain-complex zero-compositions
+(div∘curl=0, curl∘grad=0), plus the bridge identity (divV∘gradV = laplacianH).
+This is the algebraic skeleton needed for the discrete Hodge decomposition
+(task #6 — the integer-Helmholtz program).
 
 ## Closure picture
 
