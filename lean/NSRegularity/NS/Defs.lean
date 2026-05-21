@@ -44,4 +44,20 @@ def diffusion_step (f : Grid) (p : NsParams) : Grid :=
   fun i j k =>
     f i j k + p.nu_scaled * p.dt_latt * laplacian f i j k / ((N : Int) ^ 2 * p.ns_scale ^ 2)
 
+/-- **Laplacian linearity (additive).** -/
+theorem laplacian_add (f g : Grid) (i j k : Fin N) :
+    laplacian (fun a b c => f a b c + g a b c) i j k =
+    laplacian f i j k + laplacian g i j k := by
+  unfold laplacian; ring
+
+/-- **Laplacian linearity (scalar multiplication).** -/
+theorem laplacian_smul (c : Int) (f : Grid) (i j k : Fin N) :
+    laplacian (fun a b c' => c * f a b c') i j k = c * laplacian f i j k := by
+  unfold laplacian; ring
+
+/-- **Laplacian linearity (zero grid).** -/
+theorem laplacian_zero (i j k : Fin N) :
+    laplacian (fun _ _ _ => (0 : Int)) i j k = 0 := by
+  unfold laplacian; ring
+
 end NSRegularity.NS
