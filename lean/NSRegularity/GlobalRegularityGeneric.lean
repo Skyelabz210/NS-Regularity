@@ -83,6 +83,40 @@ theorem generic_global_regularity
     (by positivity)
     (generic_ns_lInfGrid_uniform step hStep w₀)
 
+/-- **Generic global regularity with uniform bound (most general form).**
+
+    The maximally general closure: given ONLY a uniform L∞ bound by some
+    constant `M ≥ 0` along the trajectory, BKM gives smoothness. The
+    bound `M` does not need to come from L∞ non-increasing — any source
+    (DKAM winding analysis, Kill #113 energy, a-priori estimates) works.
+
+    This is the right form for the full NS step, where L∞ is uniformly
+    BOUNDED (not non-increasing) due to advection + stretching being only
+    perturbatively controlled by diffusion. -/
+theorem generic_global_regularity_uniform
+    (step : VField → VField)
+    (w₀ : VField)
+    (M : Int) (hM : 0 ≤ M)
+    (h_uniform : ∀ n, lInf (generic_trajectory step w₀ n) ≤ M)
+    (T : ℕ) :
+    NSRegularity.BKM.IsSmooth (generic_trajectory step w₀) := by
+  apply NSRegularity.BKM.bkm_regularity_criterion (generic_trajectory step w₀) T
+  refine ⟨T * (3 * (N : Int) ^ 3 * M), ?_⟩
+  -- Σ lInfGrid(traj n) ≤ T · (3 N³ M) using lInfGrid_le_proxy + h_uniform
+  have hLInfGrid_bound : ∀ n, lInfGrid (generic_trajectory step w₀ n) ≤
+                              3 * (N : Int) ^ 3 * M := by
+    intro n
+    exact le_trans (lInfGrid_le_proxy _)
+      (by
+        have hN3 : 0 ≤ 3 * (N : Int) ^ 3 := by positivity
+        exact mul_le_mul_of_nonneg_left (h_uniform n) hN3)
+  exact NSRegularity.BKM.bkm_integral_finite
+    (generic_trajectory step w₀)
+    (3 * (N : Int) ^ 3 * M)
+    T
+    (by positivity)
+    hLInfGrid_bound
+
 -- ═══════════════════════════════════════════════════════════════════════════
 -- Specialisation: pure diffusion (recovers the original global_regularity)
 -- ═══════════════════════════════════════════════════════════════════════════
