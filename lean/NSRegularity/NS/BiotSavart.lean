@@ -588,6 +588,28 @@ theorem innerL2_add_left (u₁ u₂ v : VField) :
   have hpt := vfDot_add_left u₁ u₂ v
   simp only [hpt, Finset.sum_add_distrib]
 
+/-- **Non-degeneracy at point: `vfDot u u = 0 ↔ u = 0` pointwise.** -/
+theorem vfDot_self_eq_zero_iff (u : VField) (i j k : Fin N) :
+    vfDot u u i j k = 0 ↔
+      u.x i j k = 0 ∧ u.y i j k = 0 ∧ u.z i j k = 0 := by
+  unfold vfDot
+  constructor
+  · intro h
+    -- u_x² + u_y² + u_z² = 0 over Int, each squared term ≥ 0
+    have h1 : 0 ≤ u.x i j k * u.x i j k := mul_self_nonneg _
+    have h2 : 0 ≤ u.y i j k * u.y i j k := mul_self_nonneg _
+    have h3 : 0 ≤ u.z i j k * u.z i j k := mul_self_nonneg _
+    have hx : u.x i j k * u.x i j k = 0 := by linarith
+    have hy : u.y i j k * u.y i j k = 0 := by linarith
+    have hz : u.z i j k * u.z i j k = 0 := by linarith
+    refine ⟨?_, ?_, ?_⟩
+    · exact (mul_self_eq_zero.mp hx)
+    · exact (mul_self_eq_zero.mp hy)
+    · exact (mul_self_eq_zero.mp hz)
+  · rintro ⟨hx, hy, hz⟩
+    rw [hx, hy, hz]
+    ring
+
 /-- **Pointwise Cauchy-Schwarz for `vfDot`:** `(vfDot u v)² ≤ vfDot u u · vfDot v v`.
 
     The 3D analog of `(u_x v_x + u_y v_y + u_z v_z)² ≤ (u_x² + u_y² + u_z²)(v_x² + v_y² + v_z²)`.
