@@ -1,6 +1,6 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-20 (post-Wave F.5 — L3.4 Resolution A PROVED). Build status: 8344 jobs clean, exit 0._
+_Last update: 2026-05-20 (post-Wave G — NS trajectory skeleton). Build status: 8345 jobs clean, exit 0._
 
 ## New in Wave F.1–F.5 (SBP fully proved AND L3.4 Resolution A PROVED)
 
@@ -20,6 +20,24 @@ monotonicity claim under the SAME single-level exactness hypothesis as
 Wave D's L2.3 Resolution A. The originally-anticipated "level-2 exactness"
 (`NS² ∣ cv·Δ²f`) turned out to be unnecessary — it's a CONSEQUENCE of
 level-1 plus the algebraic structure.
+
+## New in Wave G (NS trajectory skeleton)
+
+```
+ns_trajectory_generator
+    (biot_savart, stretching_{x,y,z}, w₀, p) : ℕ → VField
+    -- The full-NS trajectory via operator-supplied Biot-Savart and stretching.
+
+ns_global_regularity_skeleton                                              [PROVED]
+    (..., h_step : ∀ w, lInf (ns_step ...) ≤ lInf w, ...) :
+    IsSmooth (ns_trajectory_generator ...)
+```
+
+★ **The architectural top of the Lean closure is now in place.** Operator-
+side proofs needed to complete the Millennium claim:
+  - `biot_savart` constructive Biot-Savart (task #12, NTT port from Rust)
+  - `h_step` full-NS L∞ preservation (task #18, DKAM + Kill #113 composition)
+  - Discharge BKM 1984 axiom (research-grade)
 
 ## Closure picture
 
@@ -134,6 +152,7 @@ is covered. After (1)+(2)+(3)+(4), the proof is fully constructive end-to-end.
 | #5 | Wave D — prove L2.3 Resolution A (diffusion_max_preserving under exact division) | open |
 | #6 | Wave E — Generic L∞-step closure + Full NS step defs + AubinLions strengthening | open |
 | #7 | Wave F — Discrete SBP foundations (SumGrid + cross-term reindex) | open |
+| #8 | Wave G — NS trajectory generator + ns_global_regularity_skeleton | open |
 
 ## New top-level theorems exposed in Wave E
 
