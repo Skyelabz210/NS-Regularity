@@ -92,4 +92,124 @@ theorem cross_z_sn (f g : Grid) :
   apply Finset.sum_congr rfl; intros k _
   simp only [sn_sp]
 
+/-! ## Bilinear self-adjointness — composition of the 6 reindex lemmas -/
+
+/-- **SBP / self-adjointness (bilinear).**
+    `Σ f · Δg = Σ g · Δf`.
+
+    Proved by:
+    1. Expanding both sides via `laplacian` definition,
+    2. Splitting each sum-of-products into 7 component sumGrids
+       (6 cross-terms + diagonal),
+    3. Reindexing each cross-term on LHS to match RHS via
+       the `cross_*` lemmas + `mul_comm`. -/
+theorem sbp_self_adjoint_bilinear (f g : Grid) :
+    sumGrid (fun i j k => f i j k * laplacian g i j k) =
+    sumGrid (fun i j k => g i j k * laplacian f i j k) := by
+  -- Both sides decompose to: cross-x-sp + cross-x-sn + cross-y-sp + cross-y-sn
+  --                        + cross-z-sp + cross-z-sn - 6 · diag
+  -- Helper: distribute the sumGrid over the 7-way decomposition.
+  have hsplit : ∀ (h₁ h₂ : Grid),
+      sumGrid (fun i j k => h₁ i j k * (h₂ (sp i) j k + h₂ (sn i) j k
+                                       + h₂ i (sp j) k + h₂ i (sn j) k
+                                       + h₂ i j (sp k) + h₂ i j (sn k)
+                                       - 6 * h₂ i j k)) =
+        sumGrid (fun i j k => h₁ i j k * h₂ (sp i) j k) +
+        sumGrid (fun i j k => h₁ i j k * h₂ (sn i) j k) +
+        sumGrid (fun i j k => h₁ i j k * h₂ i (sp j) k) +
+        sumGrid (fun i j k => h₁ i j k * h₂ i (sn j) k) +
+        sumGrid (fun i j k => h₁ i j k * h₂ i j (sp k)) +
+        sumGrid (fun i j k => h₁ i j k * h₂ i j (sn k)) -
+        6 * sumGrid (fun i j k => h₁ i j k * h₂ i j k) := by
+    intros h₁ h₂
+    unfold sumGrid
+    -- Step 1: pointwise distribute the multiplication
+    have hdistribute : ∀ i j k : Fin N,
+        h₁ i j k * (h₂ (sp i) j k + h₂ (sn i) j k
+                  + h₂ i (sp j) k + h₂ i (sn j) k
+                  + h₂ i j (sp k) + h₂ i j (sn k)
+                  - 6 * h₂ i j k) =
+        h₁ i j k * h₂ (sp i) j k + h₁ i j k * h₂ (sn i) j k
+      + h₁ i j k * h₂ i (sp j) k + h₁ i j k * h₂ i (sn j) k
+      + h₁ i j k * h₂ i j (sp k) + h₁ i j k * h₂ i j (sn k)
+      - 6 * (h₁ i j k * h₂ i j k) := by
+      intros i j k; ring
+    simp only [hdistribute, Finset.sum_add_distrib, Finset.sum_sub_distrib,
+               ← Finset.mul_sum]
+  -- Apply hsplit to LHS (with h₁ = f, h₂ = g) and to RHS (with h₁ = g, h₂ = f)
+  have hLHS_eq : sumGrid (fun i j k => f i j k * laplacian g i j k) =
+        sumGrid (fun i j k => f i j k * g (sp i) j k) +
+        sumGrid (fun i j k => f i j k * g (sn i) j k) +
+        sumGrid (fun i j k => f i j k * g i (sp j) k) +
+        sumGrid (fun i j k => f i j k * g i (sn j) k) +
+        sumGrid (fun i j k => f i j k * g i j (sp k)) +
+        sumGrid (fun i j k => f i j k * g i j (sn k)) -
+        6 * sumGrid (fun i j k => f i j k * g i j k) := by
+    unfold laplacian; exact hsplit f g
+  have hRHS_eq : sumGrid (fun i j k => g i j k * laplacian f i j k) =
+        sumGrid (fun i j k => g i j k * f (sp i) j k) +
+        sumGrid (fun i j k => g i j k * f (sn i) j k) +
+        sumGrid (fun i j k => g i j k * f i (sp j) k) +
+        sumGrid (fun i j k => g i j k * f i (sn j) k) +
+        sumGrid (fun i j k => g i j k * f i j (sp k)) +
+        sumGrid (fun i j k => g i j k * f i j (sn k)) -
+        6 * sumGrid (fun i j k => g i j k * f i j k) := by
+    unfold laplacian; exact hsplit g f
+  rw [hLHS_eq, hRHS_eq]
+  -- Now use cross-term reindex (LHS sum) = (RHS sum, mul_commuted)
+  -- Each pairing:
+  --   LHS cross_x_sp: Σ f·g(sp_x) = Σ f(sn_x)·g  by cross_x_sp
+  --   RHS cross_x_sn: Σ g·f(sn_x) = Σ f(sn_x)·g  by mul_comm
+  -- So LHS_term_x_sp = RHS_term_x_sn (swapped).
+  have e1 : sumGrid (fun i j k => f i j k * g (sp i) j k) =
+            sumGrid (fun i j k => g i j k * f (sn i) j k) := by
+    rw [cross_x_sp]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have e2 : sumGrid (fun i j k => f i j k * g (sn i) j k) =
+            sumGrid (fun i j k => g i j k * f (sp i) j k) := by
+    rw [cross_x_sn]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have e3 : sumGrid (fun i j k => f i j k * g i (sp j) k) =
+            sumGrid (fun i j k => g i j k * f i (sn j) k) := by
+    rw [cross_y_sp]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have e4 : sumGrid (fun i j k => f i j k * g i (sn j) k) =
+            sumGrid (fun i j k => g i j k * f i (sp j) k) := by
+    rw [cross_y_sn]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have e5 : sumGrid (fun i j k => f i j k * g i j (sp k)) =
+            sumGrid (fun i j k => g i j k * f i j (sn k)) := by
+    rw [cross_z_sp]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have e6 : sumGrid (fun i j k => f i j k * g i j (sn k)) =
+            sumGrid (fun i j k => g i j k * f i j (sp k)) := by
+    rw [cross_z_sn]
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  have e7 : sumGrid (fun i j k => f i j k * g i j k) =
+            sumGrid (fun i j k => g i j k * f i j k) := by
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    apply Finset.sum_congr rfl; intros _ _
+    ring
+  rw [e1, e2, e3, e4, e5, e6, e7]
+  ring
+
 end NSRegularity.HSquared
