@@ -2,6 +2,7 @@ import NSRegularity.NS.Defs
 import NSRegularity.Kill113.Ops
 import NSRegularity.Shift.SpSn
 import NSRegularity.Shift.SnSp
+import NSRegularity.Shift.SumGrid
 import NSRegularity.HSquared.SBP
 
 /-!
@@ -432,5 +433,62 @@ theorem divV_const_eq_zero (cx cy cz : Int) :
   unfold divV
   unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
   ring
+
+/-! ## Discrete divergence theorem on the torus -/
+
+open NSRegularity.Shift in
+/-- **Σ diffX f = 0 over the torus** (zero-boundary). -/
+theorem sumGrid_diffX_eq_zero (f : Grid) :
+    sumGrid (fun i j k => NSRegularity.Kill113.diffX f i j k) = 0 := by
+  unfold sumGrid NSRegularity.Kill113.diffX
+  have hSplit : ∀ i j k : Fin N,
+      f (sp i) j k - f (sn i) j k =
+      f (sp i) j k - f (sn i) j k := fun _ _ _ => rfl
+  simp only [Finset.sum_sub_distrib]
+  have h_sp : sumGrid (fun i j k => f (sp i) j k) = sumGrid f := sumGrid_sp_x f
+  have h_sn : sumGrid (fun i j k => f (sn i) j k) = sumGrid f := sumGrid_sn_x f
+  unfold sumGrid at h_sp h_sn
+  rw [h_sp, h_sn]
+  ring
+
+open NSRegularity.Shift in
+/-- **Σ diffY f = 0 over the torus**. -/
+theorem sumGrid_diffY_eq_zero (f : Grid) :
+    sumGrid (fun i j k => NSRegularity.Kill113.diffY f i j k) = 0 := by
+  unfold sumGrid NSRegularity.Kill113.diffY
+  simp only [Finset.sum_sub_distrib]
+  have h_sp : sumGrid (fun i j k => f i (sp j) k) = sumGrid f := sumGrid_sp_y f
+  have h_sn : sumGrid (fun i j k => f i (sn j) k) = sumGrid f := sumGrid_sn_y f
+  unfold sumGrid at h_sp h_sn
+  rw [h_sp, h_sn]
+  ring
+
+open NSRegularity.Shift in
+/-- **Σ diffZ f = 0 over the torus**. -/
+theorem sumGrid_diffZ_eq_zero (f : Grid) :
+    sumGrid (fun i j k => NSRegularity.Kill113.diffZ f i j k) = 0 := by
+  unfold sumGrid NSRegularity.Kill113.diffZ
+  simp only [Finset.sum_sub_distrib]
+  have h_sp : sumGrid (fun i j k => f i j (sp k)) = sumGrid f := sumGrid_sp_z f
+  have h_sn : sumGrid (fun i j k => f i j (sn k)) = sumGrid f := sumGrid_sn_z f
+  unfold sumGrid at h_sp h_sn
+  rw [h_sp, h_sn]
+  ring
+
+/-- **Discrete divergence theorem on the torus: `Σ divV w = 0`.**
+
+    On the periodic 3-torus (no boundary), the integral of any divergence
+    vanishes. Discrete version: sum over all grid points of `divV w` is
+    identically zero, proved by decomposing into component sums each of
+    which telescopes to zero by `sumGrid_{sp,sn}_{x,y,z}` invariance. -/
+theorem sumGrid_divV_eq_zero (w : VField) :
+    sumGrid (fun i j k => divV w i j k) = 0 := by
+  unfold sumGrid divV
+  simp only [Finset.sum_add_distrib]
+  have hX := sumGrid_diffX_eq_zero w.x
+  have hY := sumGrid_diffY_eq_zero w.y
+  have hZ := sumGrid_diffZ_eq_zero w.z
+  unfold sumGrid at hX hY hZ
+  linarith
 
 end NSRegularity.NS
