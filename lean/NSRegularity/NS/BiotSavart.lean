@@ -275,6 +275,10 @@ theorem sumGrid_f_diffY_eq_neg_diffY_g (f g : Grid) :
   rw [hLHS_split, hCy_sp, hCy_sn, hRHS_split]
   ring
 
+/-- **Pointwise vector-field dot product on grids.** -/
+def vfDot (u v : VField) (i j k : Fin N) : Int :=
+  u.x i j k * v.x i j k + u.y i j k * v.y i j k + u.z i j k * v.z i j k
+
 /-- **IBP for the z-component centered difference.** -/
 theorem sumGrid_f_diffZ_eq_neg_diffZ_g (f g : Grid) :
     sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffZ g i j k) =
@@ -299,6 +303,47 @@ theorem sumGrid_f_diffZ_eq_neg_diffZ_g (f g : Grid) :
   have hCz_sp := NSRegularity.HSquared.cross_z_sp f g
   have hCz_sn := NSRegularity.HSquared.cross_z_sn f g
   rw [hLHS_split, hCz_sp, hCz_sn, hRHS_split]
+  ring
+
+/-- **Vector-field integration-by-parts: `Σ f · divV w = -Σ gradV f · w`.**
+
+    The discrete Green's identity for the centered-difference div/grad pair.
+    Direct composition of the three component-wise IBPs (Wave H.11-H.12). -/
+theorem sumGrid_f_divV_eq_neg_gradV_dot (f : Grid) (w : VField) :
+    sumGrid (fun i j k => f i j k * divV w i j k) =
+    -sumGrid (fun i j k => vfDot (gradV f) w i j k) := by
+  have hLHS_split : sumGrid (fun i j k => f i j k * divV w i j k) =
+      sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffX w.x i j k) +
+      sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffY w.y i j k) +
+      sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffZ w.z i j k) := by
+    unfold sumGrid divV
+    have hpt : ∀ i j k : Fin N,
+        f i j k * (NSRegularity.Kill113.diffX w.x i j k +
+                   NSRegularity.Kill113.diffY w.y i j k +
+                   NSRegularity.Kill113.diffZ w.z i j k) =
+        f i j k * NSRegularity.Kill113.diffX w.x i j k +
+        f i j k * NSRegularity.Kill113.diffY w.y i j k +
+        f i j k * NSRegularity.Kill113.diffZ w.z i j k := by intros; ring
+    simp only [hpt, Finset.sum_add_distrib]
+  have hRHS_split : sumGrid (fun i j k => vfDot (gradV f) w i j k) =
+      sumGrid (fun i j k => (gradV f).x i j k * w.x i j k) +
+      sumGrid (fun i j k => (gradV f).y i j k * w.y i j k) +
+      sumGrid (fun i j k => (gradV f).z i j k * w.z i j k) := by
+    unfold sumGrid vfDot
+    simp only [Finset.sum_add_distrib]
+  have hX := sumGrid_f_diffX_eq_neg_diffX_g f w.x
+  have hY := sumGrid_f_diffY_eq_neg_diffY_g f w.y
+  have hZ := sumGrid_f_diffZ_eq_neg_diffZ_g f w.z
+  rw [hLHS_split, hX, hY, hZ, hRHS_split]
+  -- The three sumGrid (diffX f · w.x), etc. on the LHS equal the sumGrid (gradV f).c · w.c on RHS
+  -- by definition of gradV: (gradV f).x = diffX f, etc.
+  show -sumGrid (fun i j k => NSRegularity.Kill113.diffX f i j k * w.x i j k) +
+       -sumGrid (fun i j k => NSRegularity.Kill113.diffY f i j k * w.y i j k) +
+       -sumGrid (fun i j k => NSRegularity.Kill113.diffZ f i j k * w.z i j k)
+     = -(sumGrid (fun i j k => (gradV f).x i j k * w.x i j k) +
+         sumGrid (fun i j k => (gradV f).y i j k * w.y i j k) +
+         sumGrid (fun i j k => (gradV f).z i j k * w.z i j k))
+  unfold gradV
   ring
 
 end NSRegularity.NS
