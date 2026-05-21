@@ -61,7 +61,17 @@ def gridMod (p : ℤ) (g : Grid) : Grid :=
 
     This is the operational content of the adelic identification.
     Stated as an axiom pending formalization of "polynomial grid operator"
-    as a concrete inductive type over Grid → Grid. -/
+    as a concrete inductive type over Grid → Grid.
+
+    **SUPERSEDED for the NS operator class:** The constructive inductive
+    type `PolyGridOp` (below) covers all NS discrete operators (Laplacian,
+    advection, stretching, conservative). For these, the descent statement
+    is proved (not assumed) as `polyGridOp_mod_descent` /
+    `polyGridOp_mod_descent_pointwise`. The Laplacian instance is worked
+    out in `Adelic/LaplacianAsPolyOp.lean`.
+
+    This axiom remains only for documentation / legacy reference; **no Lean
+    file in the library still depends on it** for the actual NS operators. -/
 axiom polynomial_grid_op_commutes
     (F : Grid → Grid)
     (p_val : ℤ) (g : Grid) :
