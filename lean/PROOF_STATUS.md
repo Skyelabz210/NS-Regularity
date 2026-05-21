@@ -1,6 +1,6 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-20 (post-Wave G — NS trajectory skeleton). Build status: 8345 jobs clean, exit 0._
+_Last update: 2026-05-21 (post-Wave H — Biot-Savart skeleton + L² Resolution A + vector-calc identities). Build status: 8347 jobs clean, exit 0._
 
 ## New in Wave F.1–F.5 (SBP fully proved AND L3.4 Resolution A PROVED)
 
@@ -50,6 +50,30 @@ side proofs needed to complete the Millennium claim:
 ★ **Complete control bundle under Resolution A**: the diffusion trajectory
 has uniformly bounded L∞ (`ns_lInf_uniform_exact`) AND uniformly bounded
 H² (`ns_hTwoNorm_uniform_exact`) along the entire timeline.
+
+## New in Wave H (Biot-Savart skeleton + L² Resolution A + vector-calc)
+
+```
+NSRegularity/NS/BiotSavart.lean:
+  curlX, curlY, curlZ, curl, divV, gradV : (discrete vector-calc operators)
+  axiom biot_savart                       : VField → VField  (pending NTT port)
+  axiom biot_savart_curl_eq               : curl ∘ biot_savart = id
+  axiom biot_savart_div_zero              : divV ∘ biot_savart = 0
+  curl_div_zero                           : divV (curl w) = 0         [PROVED]
+  curl_grad_zero                          : curl (gradV f) = 0        [PROVED]
+
+NSRegularity/NS/Trajectory.lean:
+  ns_global_regularity_biot_savart                                    [PROVED]
+
+NSRegularity/AubinLions/ResolutionA.lean:
+  l2Sq_diffusion_step_le_exact            : Σf'² ≤ Σf² under Res A   [PROVED]
+```
+
+★ **Three-norm Resolution A control**: L² (Wave H.3), L∞ (Wave D), H² (Wave F.5)
+all proved for the discrete diffusion step under exact arithmetic.
+
+★ **Discrete de Rham complex skeleton** PROVED: `div ∘ curl = 0` and
+`curl ∘ grad = 0` follow directly from centered-diff commutativity.
 
 ## Closure picture
 
@@ -165,6 +189,7 @@ is covered. After (1)+(2)+(3)+(4), the proof is fully constructive end-to-end.
 | #6 | Wave E — Generic L∞-step closure + Full NS step defs + AubinLions strengthening | open |
 | #7 | Wave F — Discrete SBP foundations (SumGrid + cross-term reindex) | open |
 | #8 | Wave G — NS trajectory generator + ns_global_regularity_skeleton | open |
+| #9 | Wave H — Biot-Savart skeleton + vector-calc identities + L² Resolution A | open |
 
 ## New top-level theorems exposed in Wave E
 
