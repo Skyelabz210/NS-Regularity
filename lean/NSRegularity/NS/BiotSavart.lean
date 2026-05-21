@@ -94,6 +94,12 @@ axiom biot_savart_div_zero (ω : VField) :
 
 /-! ## Vector-calculus identities — provable from definitions (not axiomatic) -/
 
+/-- Discrete gradient of a scalar field: `(grad f)_d = ∂_d f`. -/
+def gradV (f : Grid) : VField :=
+  ⟨fun i j k => NSRegularity.Kill113.diffX f i j k,
+   fun i j k => NSRegularity.Kill113.diffY f i j k,
+   fun i j k => NSRegularity.Kill113.diffZ f i j k⟩
+
 /-- **`div ∘ curl = 0`** — the standard vector-calculus identity holds for
     the discrete operators via centered differences. Provable directly from
     the definitions: each second-difference term `∂_a ∂_b w_c` cancels with
@@ -104,5 +110,29 @@ theorem curl_div_zero (w : VField) :
   unfold divV curl curlX curlY curlZ
   unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
   ring
+
+/-- **`curl ∘ grad = 0`** — second standard vector-calc identity.
+    Each curl component `∂_a ∂_b f - ∂_b ∂_a f` vanishes by commutativity
+    of centered differences. -/
+theorem curl_grad_zero (f : Grid) :
+    curl (gradV f) =
+      ⟨fun _ _ _ => 0, fun _ _ _ => 0, fun _ _ _ => 0⟩ := by
+  have hx : curlX (gradV f) = fun _ _ _ => 0 := by
+    funext i j k
+    unfold curlX gradV
+    unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+    ring
+  have hy : curlY (gradV f) = fun _ _ _ => 0 := by
+    funext i j k
+    unfold curlY gradV
+    unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+    ring
+  have hz : curlZ (gradV f) = fun _ _ _ => 0 := by
+    funext i j k
+    unfold curlZ gradV
+    unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+    ring
+  unfold curl
+  rw [hx, hy, hz]
 
 end NSRegularity.NS
