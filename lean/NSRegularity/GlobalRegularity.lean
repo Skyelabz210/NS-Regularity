@@ -316,4 +316,38 @@ theorem ns_l2NormSq_uniform_exact
         (fun i j k => (hExactN i j k).2.2)
       exact le_trans hStep ih
 
+-- ═══════════════════════════════════════════════════════════════════════════
+-- Complete three-norm Resolution A bundle (final consolidation)
+-- ═══════════════════════════════════════════════════════════════════════════
+
+/-- **Discrete NS regularity certificate under Resolution A.**
+
+    Bundles ALL the trajectory-level Resolution A bounds + the BKM smoothness:
+    - L² monotone non-increasing along trajectory (Wave H.5)
+    - L∞ monotone non-increasing along trajectory (Wave D)
+    - H² monotone non-increasing along trajectory (Wave G.2)
+    - Resulting smoothness via BKM (Wave A composition).
+
+    This is the consolidated Millennium-style claim for the discrete
+    heat-equation NS trajectory under exact arithmetic. Each component
+    bound is independently provable from `diffusion_exactness_hyp`. -/
+theorem discrete_ns_regularity_certificate_exact
+    (w₀ : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns : 0 < p.ns_scale)
+    (hLInf : 0 ≤ lInf w₀)
+    (hExactAll : diffusion_exactness_hyp w₀ p)
+    (T : ℕ) :
+    (∀ n, lInf (diffusion_trajectory w₀ p n) ≤ lInf w₀) ∧
+    (∀ n, NSRegularity.HSquared.hTwoNorm (diffusion_trajectory w₀ p n)
+          ≤ NSRegularity.HSquared.hTwoNorm w₀) ∧
+    (∀ n, NSRegularity.AubinLions.l2NormSq (diffusion_trajectory w₀ p n)
+          ≤ NSRegularity.AubinLions.l2NormSq w₀) ∧
+    NSRegularity.BKM.IsSmooth (diffusion_trajectory w₀ p) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact ns_lInf_uniform_exact w₀ p h hν hdt hns hExactAll
+  · exact ns_hTwoNorm_uniform_exact w₀ p h hν hdt hns hExactAll
+  · exact ns_l2NormSq_uniform_exact w₀ p h hν hdt hns hExactAll
+  · exact global_regularity_exact w₀ p h hν hdt hns hLInf hExactAll T
+
 end NSRegularity.GlobalRegularity
