@@ -321,4 +321,21 @@ theorem sbp_quadratic (f : Grid) :
   rw [hsq_eq]
   ring
 
+/-! ## H² corollary -/
+
+/-- The iterated discrete Laplacian as a grid function. -/
+def laplacian2 (f : Grid) : Grid := fun i j k => laplacian (laplacian f) i j k
+
+/-- **H² SBP identity.**
+    `Σ Δf · Δ²f = -Σ |∇⁺(Δf)|²`.
+
+    Direct corollary of `sbp_quadratic` specialised to `f := laplacian f` — the
+    Laplacian of a grid is again a grid, and the H¹ identity applies. This is
+    the foundational identity needed for L3.4 Resolution A
+    (`hTwoSeminorm (diffusion_step f p) ≤ hTwoSeminorm f` under stronger CFL). -/
+theorem sbp_quadratic_h2 (f : Grid) :
+    sumGrid (fun i j k => laplacian f i j k * laplacian (laplacian f) i j k) =
+    -gradSqForward (laplacian f) :=
+  sbp_quadratic (laplacian f)
+
 end NSRegularity.HSquared
