@@ -157,4 +157,34 @@ theorem gradV_add (f g : Grid) :
   unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
   congr <;> (funext i j k; ring)
 
+/-- **Discrete curl is linear (additive, component x).** -/
+theorem curlX_add (w v : VField) (i j k : Fin N) :
+    curlX (⟨fun a b c => w.x a b c + v.x a b c,
+            fun a b c => w.y a b c + v.y a b c,
+            fun a b c => w.z a b c + v.z a b c⟩) i j k =
+    curlX w i j k + curlX v i j k := by
+  unfold curlX
+  unfold NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  ring
+
+/-- **Discrete curl is linear (additive, component y).** -/
+theorem curlY_add (w v : VField) (i j k : Fin N) :
+    curlY (⟨fun a b c => w.x a b c + v.x a b c,
+            fun a b c => w.y a b c + v.y a b c,
+            fun a b c => w.z a b c + v.z a b c⟩) i j k =
+    curlY w i j k + curlY v i j k := by
+  unfold curlY
+  unfold NSRegularity.Kill113.diffZ NSRegularity.Kill113.diffX
+  ring
+
+/-- **Discrete curl is linear (additive, component z).** -/
+theorem curlZ_add (w v : VField) (i j k : Fin N) :
+    curlZ (⟨fun a b c => w.x a b c + v.x a b c,
+            fun a b c => w.y a b c + v.y a b c,
+            fun a b c => w.z a b c + v.z a b c⟩) i j k =
+    curlZ w i j k + curlZ v i j k := by
+  unfold curlZ
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY
+  ring
+
 end NSRegularity.NS
