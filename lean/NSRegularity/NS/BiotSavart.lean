@@ -92,4 +92,17 @@ axiom biot_savart_curl_eq (ω : VField) : curl (biot_savart ω) = ω
 axiom biot_savart_div_zero (ω : VField) :
     divV (biot_savart ω) = fun _ _ _ => 0
 
+/-! ## Vector-calculus identities — provable from definitions (not axiomatic) -/
+
+/-- **`div ∘ curl = 0`** — the standard vector-calculus identity holds for
+    the discrete operators via centered differences. Provable directly from
+    the definitions: each second-difference term `∂_a ∂_b w_c` cancels with
+    its commuted counterpart `∂_b ∂_a w_c` (centered diffs commute pointwise). -/
+theorem curl_div_zero (w : VField) :
+    divV (curl w) = fun _ _ _ => 0 := by
+  funext i j k
+  unfold divV curl curlX curlY curlZ
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  ring
+
 end NSRegularity.NS
