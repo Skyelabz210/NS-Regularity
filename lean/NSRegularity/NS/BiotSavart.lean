@@ -346,4 +346,29 @@ theorem sumGrid_f_divV_eq_neg_gradV_dot (f : Grid) (w : VField) :
   unfold gradV
   ring
 
+/-- **H¹ quadratic identity for `laplacianH`** (the second-neighbor Laplacian).
+    `Σ f · laplacianH f = -Σ |gradV f|²`.
+
+    Composes the vector-field IBP (Wave H.14) with the bridge identity
+    `divV ∘ gradV = laplacianH` (Wave H.10). This is the discrete H¹
+    energy identity for the centered-difference composed Laplacian. -/
+theorem sbp_quadratic_H (f : Grid) :
+    sumGrid (fun i j k => f i j k * laplacianH f i j k) =
+    -sumGrid (fun i j k => vfDot (gradV f) (gradV f) i j k) := by
+  -- Σ f · laplacianH f = Σ f · divV (gradV f) (by bridge identity)
+  --                   = -Σ gradV f · gradV f (by vector-field IBP)
+  have hbridge : ∀ i j k : Fin N,
+      f i j k * laplacianH f i j k = f i j k * divV (gradV f) i j k := by
+    intros i j k
+    rw [divV_gradV_eq_laplacianH]
+  have hstep1 : sumGrid (fun i j k => f i j k * laplacianH f i j k) =
+                sumGrid (fun i j k => f i j k * divV (gradV f) i j k) := by
+    unfold sumGrid
+    apply Finset.sum_congr rfl; intros i _
+    apply Finset.sum_congr rfl; intros j _
+    apply Finset.sum_congr rfl; intros k _
+    exact hbridge i j k
+  rw [hstep1]
+  exact sumGrid_f_divV_eq_neg_gradV_dot f (gradV f)
+
 end NSRegularity.NS
