@@ -521,6 +521,42 @@ theorem sumGrid_curlZ_eq_zero (w : VField) :
   unfold sumGrid at hX hY
   linarith
 
+/-! ## Pointwise vector dot-product properties -/
+
+/-- **`vfDot` is symmetric:** `vfDot u v = vfDot v u`. -/
+theorem vfDot_comm (u v : VField) (i j k : Fin N) :
+    vfDot u v i j k = vfDot v u i j k := by
+  unfold vfDot; ring
+
+/-- **`vfDot` is additive in the first argument.** -/
+theorem vfDot_add_left (u₁ u₂ v : VField) (i j k : Fin N) :
+    vfDot (⟨fun a b c => u₁.x a b c + u₂.x a b c,
+            fun a b c => u₁.y a b c + u₂.y a b c,
+            fun a b c => u₁.z a b c + u₂.z a b c⟩) v i j k =
+    vfDot u₁ v i j k + vfDot u₂ v i j k := by
+  unfold vfDot; ring
+
+/-- **`vfDot` is additive in the second argument.** -/
+theorem vfDot_add_right (u v₁ v₂ : VField) (i j k : Fin N) :
+    vfDot u (⟨fun a b c => v₁.x a b c + v₂.x a b c,
+              fun a b c => v₁.y a b c + v₂.y a b c,
+              fun a b c => v₁.z a b c + v₂.z a b c⟩) i j k =
+    vfDot u v₁ i j k + vfDot u v₂ i j k := by
+  unfold vfDot; ring
+
+/-- **`vfDot u u ≥ 0`** — non-negativity of the pointwise self-product. -/
+theorem vfDot_self_nonneg (u : VField) (i j k : Fin N) :
+    0 ≤ vfDot u u i j k := by
+  unfold vfDot
+  have h1 : 0 ≤ (u.x i j k) ^ 2 := sq_nonneg _
+  have h2 : 0 ≤ (u.y i j k) ^ 2 := sq_nonneg _
+  have h3 : 0 ≤ (u.z i j k) ^ 2 := sq_nonneg _
+  have ex1 : u.x i j k * u.x i j k = (u.x i j k) ^ 2 := by ring
+  have ex2 : u.y i j k * u.y i j k = (u.y i j k) ^ 2 := by ring
+  have ex3 : u.z i j k * u.z i j k = (u.z i j k) ^ 2 := by ring
+  rw [ex1, ex2, ex3]
+  linarith
+
 /-- **`Σ gradV f`** — gradient integrates to zero (componentwise) on torus. -/
 theorem sumGrid_gradV_eq_zero (f : Grid) :
     sumGrid (fun i j k => (gradV f).x i j k) = 0 ∧
