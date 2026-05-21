@@ -371,4 +371,15 @@ theorem sbp_quadratic_H (f : Grid) :
   rw [hstep1]
   exact sumGrid_f_divV_eq_neg_gradV_dot f (gradV f)
 
+/-- **H² quadratic identity for `laplacianH`.**
+    `Σ laplacianH f · laplacianH(laplacianH f) = -Σ |gradV(laplacianH f)|²`.
+
+    Direct corollary of `sbp_quadratic_H` specialised to `f := laplacianH f`.
+    The iterated second-neighbor Laplacian satisfies its own H² energy
+    identity, analogous to `sbp_quadratic_h2` for the first-neighbor case. -/
+theorem sbp_quadratic_H_h2 (f : Grid) :
+    sumGrid (fun i j k => laplacianH f i j k * laplacianH (laplacianH f) i j k) =
+    -sumGrid (fun i j k => vfDot (gradV (laplacianH f)) (gradV (laplacianH f)) i j k) :=
+  sbp_quadratic_H (laplacianH f)
+
 end NSRegularity.NS
