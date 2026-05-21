@@ -130,4 +130,31 @@ theorem l2Sq_diffusion_step_le_exact
     linarith
   exact le_of_mul_le_mul_left hgoal_scaled hNS2_sq_pos
 
+/-- Vector-field L² seminorm: sum of L² seminorms of the three components. -/
+def l2NormSq (w : VField) : Int := l2Sq w.x + l2Sq w.y + l2Sq w.z
+
+/-- **Vector-field L² Resolution A — vector-field L² monotonicity under
+    exact diffusion.** Composition: apply scalar `l2Sq_diffusion_step_le_exact`
+    per component and sum. -/
+theorem l2NormSq_diffusion_step_le_exact
+    (w : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns_pos : 0 < p.ns_scale)
+    (hExact_x : ∀ i j k : Fin N,
+        ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+          (p.nu_scaled * p.dt_latt * laplacian w.x i j k))
+    (hExact_y : ∀ i j k : Fin N,
+        ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+          (p.nu_scaled * p.dt_latt * laplacian w.y i j k))
+    (hExact_z : ∀ i j k : Fin N,
+        ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+          (p.nu_scaled * p.dt_latt * laplacian w.z i j k)) :
+    l2NormSq (⟨diffusion_step w.x p, diffusion_step w.y p, diffusion_step w.z p⟩)
+    ≤ l2NormSq w := by
+  unfold l2NormSq
+  have hx := l2Sq_diffusion_step_le_exact w.x p h hν hdt hns_pos hExact_x
+  have hy := l2Sq_diffusion_step_le_exact w.y p h hν hdt hns_pos hExact_y
+  have hz := l2Sq_diffusion_step_le_exact w.z p h hν hdt hns_pos hExact_z
+  linarith
+
 end NSRegularity.AubinLions

@@ -3,6 +3,7 @@ import NSRegularity.Continuum
 import NSRegularity.BKM
 import NSRegularity.Kill113
 import NSRegularity.HSquared.ResolutionA
+import NSRegularity.AubinLions.ResolutionA
 
 /-!
 # Global Regularity — top-level composition (Millennium claim)
@@ -276,6 +277,39 @@ theorem ns_hTwoNorm_uniform_exact
       have hExactN := hExactAll n
       let wn := diffusion_trajectory w₀ p n
       have hStep := NSRegularity.HSquared.hTwoNorm_diffusion_step_le_exact
+        wn p h hν hdt hns
+        (fun i j k => (hExactN i j k).1)
+        (fun i j k => (hExactN i j k).2.1)
+        (fun i j k => (hExactN i j k).2.2)
+      exact le_trans hStep ih
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- L² uniform bound along trajectory (parallel to L∞ and H² versions)
+-- ═══════════════════════════════════════════════════════════════════════════
+
+/-- **L² uniform bound under Resolution A.**
+
+    Under the same exactness hypothesis as `ns_lInf_uniform_exact` and
+    `ns_hTwoNorm_uniform_exact`, the vector L² seminorm is also uniformly
+    bounded along the trajectory.
+
+    The diffusion trajectory under Resolution A now has uniformly bounded
+    L², L∞, AND H² — a complete three-scale control bundle. -/
+theorem ns_l2NormSq_uniform_exact
+    (w₀ : VField) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns : 0 < p.ns_scale)
+    (hExactAll : diffusion_exactness_hyp w₀ p) :
+    ∀ n, NSRegularity.AubinLions.l2NormSq (diffusion_trajectory w₀ p n)
+         ≤ NSRegularity.AubinLions.l2NormSq w₀ := by
+  intro n
+  induction n with
+  | zero => exact le_refl _
+  | succ n ih =>
+      unfold diffusion_trajectory
+      have hExactN := hExactAll n
+      let wn := diffusion_trajectory w₀ p n
+      have hStep := NSRegularity.AubinLions.l2NormSq_diffusion_step_le_exact
         wn p h hν hdt hns
         (fun i j k => (hExactN i j k).1)
         (fun i j k => (hExactN i j k).2.1)
