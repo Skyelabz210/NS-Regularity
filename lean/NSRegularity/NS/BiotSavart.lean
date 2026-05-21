@@ -491,4 +491,47 @@ theorem sumGrid_divV_eq_zero (w : VField) :
   unfold sumGrid at hX hY hZ
   linarith
 
+/-- **`Σ curlX w = 0`** — x-component of curl integrates to zero on torus. -/
+theorem sumGrid_curlX_eq_zero (w : VField) :
+    sumGrid (fun i j k => curlX w i j k) = 0 := by
+  unfold sumGrid curlX
+  simp only [Finset.sum_sub_distrib]
+  have hY := sumGrid_diffY_eq_zero w.z
+  have hZ := sumGrid_diffZ_eq_zero w.y
+  unfold sumGrid at hY hZ
+  linarith
+
+/-- **`Σ curlY w = 0`**. -/
+theorem sumGrid_curlY_eq_zero (w : VField) :
+    sumGrid (fun i j k => curlY w i j k) = 0 := by
+  unfold sumGrid curlY
+  simp only [Finset.sum_sub_distrib]
+  have hZ := sumGrid_diffZ_eq_zero w.x
+  have hX := sumGrid_diffX_eq_zero w.z
+  unfold sumGrid at hZ hX
+  linarith
+
+/-- **`Σ curlZ w = 0`**. -/
+theorem sumGrid_curlZ_eq_zero (w : VField) :
+    sumGrid (fun i j k => curlZ w i j k) = 0 := by
+  unfold sumGrid curlZ
+  simp only [Finset.sum_sub_distrib]
+  have hX := sumGrid_diffX_eq_zero w.y
+  have hY := sumGrid_diffY_eq_zero w.x
+  unfold sumGrid at hX hY
+  linarith
+
+/-- **`Σ gradV f`** — gradient integrates to zero (componentwise) on torus. -/
+theorem sumGrid_gradV_eq_zero (f : Grid) :
+    sumGrid (fun i j k => (gradV f).x i j k) = 0 ∧
+    sumGrid (fun i j k => (gradV f).y i j k) = 0 ∧
+    sumGrid (fun i j k => (gradV f).z i j k) = 0 := by
+  refine ⟨?_, ?_, ?_⟩
+  · show sumGrid (fun i j k => NSRegularity.Kill113.diffX f i j k) = 0
+    exact sumGrid_diffX_eq_zero f
+  · show sumGrid (fun i j k => NSRegularity.Kill113.diffY f i j k) = 0
+    exact sumGrid_diffY_eq_zero f
+  · show sumGrid (fun i j k => NSRegularity.Kill113.diffZ f i j k) = 0
+    exact sumGrid_diffZ_eq_zero f
+
 end NSRegularity.NS
