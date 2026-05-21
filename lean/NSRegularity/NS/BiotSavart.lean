@@ -2,6 +2,7 @@ import NSRegularity.NS.Defs
 import NSRegularity.Kill113.Ops
 import NSRegularity.Shift.SpSn
 import NSRegularity.Shift.SnSp
+import NSRegularity.HSquared.SBP
 
 /-!
 # NS/BiotSavart — Biot-Savart inversion skeleton
@@ -215,6 +216,37 @@ theorem divV_gradV_eq_laplacianH (f : Grid) (i j k : Fin N) :
   unfold divV gradV laplacianH
   unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
   simp only [NSRegularity.Shift.sn_sp, NSRegularity.Shift.sp_sn]
+  ring
+
+/-! ## Integration by parts (centered-difference form) -/
+
+/-- **IBP for the x-component centered difference:** `Σ f · diffX g = -Σ diffX f · g`.
+
+    Proved by composing the SBP cross-term reindex lemmas `cross_x_sp` and
+    `cross_x_sn` (Wave F) with linearity of `sumGrid` and `diffX`. -/
+theorem sumGrid_f_diffX_eq_neg_diffX_g (f g : Grid) :
+    sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffX g i j k) =
+    -sumGrid (fun i j k => NSRegularity.Kill113.diffX f i j k * g i j k) := by
+  have hLHS_split : sumGrid (fun i j k => f i j k * NSRegularity.Kill113.diffX g i j k) =
+                    sumGrid (fun i j k => f i j k * g (sp i) j k) -
+                    sumGrid (fun i j k => f i j k * g (sn i) j k) := by
+    unfold sumGrid NSRegularity.Kill113.diffX
+    have hpt : ∀ i j k : Fin N,
+        f i j k * (g (sp i) j k - g (sn i) j k) =
+        f i j k * g (sp i) j k - f i j k * g (sn i) j k := by intros; ring
+    simp only [hpt, Finset.sum_sub_distrib]
+  have hRHS_split : sumGrid (fun i j k =>
+                      NSRegularity.Kill113.diffX f i j k * g i j k) =
+                    sumGrid (fun i j k => f (sp i) j k * g i j k) -
+                    sumGrid (fun i j k => f (sn i) j k * g i j k) := by
+    unfold sumGrid NSRegularity.Kill113.diffX
+    have hpt : ∀ i j k : Fin N,
+        (f (sp i) j k - f (sn i) j k) * g i j k =
+        f (sp i) j k * g i j k - f (sn i) j k * g i j k := by intros; ring
+    simp only [hpt, Finset.sum_sub_distrib]
+  have hCx_sp := NSRegularity.HSquared.cross_x_sp f g
+  have hCx_sn := NSRegularity.HSquared.cross_x_sn f g
+  rw [hLHS_split, hCx_sp, hCx_sn, hRHS_split]
   ring
 
 end NSRegularity.NS
