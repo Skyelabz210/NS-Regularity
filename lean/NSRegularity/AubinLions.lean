@@ -79,6 +79,20 @@ theorem natAbs_le_gridLInf (f : Grid) (i j k : Fin N) :
     (f := fun k' => ((f i j k').natAbs : Int))
     (Finset.mem_univ k)
 
+/-- **L4.2' (substantive) — Uniform L² bound from per-step monotonicity.**
+
+    Strengthens the tautological L4.2 with an inductive composition:
+    given that each step does not increase the L² seminorm, the
+    trajectory's L² is bounded by the initial value. -/
+theorem h1_uniform_bound_substantive (f₀ : Grid) (f_seq : Nat → Grid)
+    (h_init : f_seq 0 = f₀)
+    (h_monotone : ∀ n, l2Sq (f_seq (n + 1)) ≤ l2Sq (f_seq n)) :
+    ∀ n, l2Sq (f_seq n) ≤ l2Sq f₀ := by
+  intro n
+  induction n with
+  | zero => rw [h_init]
+  | succ n ih => exact le_trans (h_monotone n) ih
+
 /-- **L4.3' (substantive) — Time-step increment L∞ bound under L∞-preservation.**
 
     If a trajectory `f_seq` has L∞ uniformly bounded by `gridLInf f₀`, then
