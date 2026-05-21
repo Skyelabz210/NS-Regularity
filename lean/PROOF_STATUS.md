@@ -1,6 +1,6 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-20 (post-Wave E). Build status: 8341 jobs clean, exit 0._
+_Last update: 2026-05-20 (post-Wave F). Build status: 8343 jobs clean, exit 0._
 
 ## Closure picture
 
@@ -114,6 +114,7 @@ is covered. After (1)+(2)+(3)+(4), the proof is fully constructive end-to-end.
 | #4 | Wave C — L9.2 corrected sibling + M3 composition reduction to L3.4 | open |
 | #5 | Wave D — prove L2.3 Resolution A (diffusion_max_preserving under exact division) | open |
 | #6 | Wave E — Generic L∞-step closure + Full NS step defs + AubinLions strengthening | open |
+| #7 | Wave F — Discrete SBP foundations (SumGrid + cross-term reindex) | open |
 
 ## New top-level theorems exposed in Wave E
 
