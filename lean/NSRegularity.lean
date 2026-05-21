@@ -17,3 +17,4 @@ import NSRegularity.NS.FullStep  -- full NS step (diffusion + advection + stretc
 import NSRegularity.Adelic.LaplacianAsPolyOp  -- worked example: Laplacian descent
 import NSRegularity.Shift.SumGrid  -- 3D shift-sum invariance lemmas
 import NSRegularity.HSquared.SBP  -- 3D SBP cross-term reindex lemmas
+import NSRegularity.HSquared.ResolutionA  -- L3.4 Resolution A H² monotonicity
