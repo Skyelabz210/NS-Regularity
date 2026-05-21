@@ -416,4 +416,21 @@ theorem isHarmonic_smul (c : Int) (f : Grid) (hf : isHarmonic f) :
   rw [hf]
   ring
 
+/-- **`gradV` of a constant is the zero vector field.** -/
+theorem gradV_const_eq_zero (c : Int) :
+    gradV (fun _ _ _ => c) =
+      ⟨fun _ _ _ => 0, fun _ _ _ => 0, fun _ _ _ => 0⟩ := by
+  unfold gradV
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  congr <;> (funext i j k; ring)
+
+/-- **`divV` of a constant vector field is zero.** -/
+theorem divV_const_eq_zero (cx cy cz : Int) :
+    divV (⟨fun _ _ _ => cx, fun _ _ _ => cy, fun _ _ _ => cz⟩) =
+      fun _ _ _ => 0 := by
+  funext i j k
+  unfold divV
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  ring
+
 end NSRegularity.NS
