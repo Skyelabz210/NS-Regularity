@@ -18,4 +18,5 @@ import NSRegularity.Adelic.LaplacianAsPolyOp  -- worked example: Laplacian desce
 import NSRegularity.Shift.SumGrid  -- 3D shift-sum invariance lemmas
 import NSRegularity.HSquared.SBP  -- 3D SBP cross-term reindex lemmas
 import NSRegularity.HSquared.ResolutionA  -- L3.4 Resolution A H² monotonicity
+import NSRegularity.NS.BiotSavart  -- discrete curl + Biot-Savart skeleton (axiomatic)
 import NSRegularity.NS.Trajectory  -- NS trajectory generator + global regularity skeleton

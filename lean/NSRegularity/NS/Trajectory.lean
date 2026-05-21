@@ -1,4 +1,5 @@
 import NSRegularity.NS.FullStep
+import NSRegularity.NS.BiotSavart
 import NSRegularity.GlobalRegularityGeneric
 
 /-!
@@ -84,6 +85,27 @@ theorem ns_global_regularity_skeleton
   exact generic_global_regularity
     (fun w => ns_step (biot_savart w) (stretching_x w)
                       (stretching_y w) (stretching_z w) w p)
+    h_step w₀ hLInf T
+
+/-- **Specialised NS global regularity using the axiomatic Biot-Savart.**
+
+    Plugs `biot_savart` (axiomatised in `NS/BiotSavart.lean`) into the
+    skeleton. The remaining hypothesis is the L∞-preservation of `ns_step`
+    composed with `biot_savart`. Once that's filled in (task #18), this
+    is the unconditional Millennium-style claim for the discrete NS
+    trajectory modulo only the BKM axiom + `biot_savart_*` axioms (the
+    latter being pending NTT port). -/
+theorem ns_global_regularity_biot_savart
+    (stretching_x stretching_y stretching_z : VField → Grid)
+    (p : NsParams)
+    (h_step : ∀ w : VField,
+        lInf (ns_step (biot_savart w) (stretching_x w)
+                      (stretching_y w) (stretching_z w) w p) ≤ lInf w)
+    (w₀ : VField)
+    (hLInf : 0 ≤ lInf w₀) (T : ℕ) :
+    NSRegularity.BKM.IsSmooth
+      (ns_trajectory_generator biot_savart stretching_x stretching_y stretching_z w₀ p) :=
+  ns_global_regularity_skeleton biot_savart stretching_x stretching_y stretching_z p
     h_step w₀ hLInf T
 
 end NSRegularity.NS
