@@ -60,10 +60,12 @@ def SatisfiesDistribNS (traj : Trajectory) : Prop :=
   True
 
 /-- **L7.1** — Biot-Savart maps L² vorticity to H¹ velocity (bounded linear).
-    Spectral bound: ‖u‖_{H¹} ≤ C‖ω‖_{L²}. -/
-axiom bs_bounded_linear : ∀ (ω : VField), ∃ C : ℤ, C > 0
-  -- ∧ ‖BS(ω)‖_{H¹} ≤ C * ‖ω‖_{L²}
-  -- Requires H¹ norm definition on VField; deferred.
+    Spectral bound: ‖u‖_{H¹} ≤ C‖ω‖_{L²}.
+
+    The current statement is degenerate (just `∃ C > 0`); discharged with
+    witness C = 1. Strengthening requires an H¹ norm definition on VField
+    and the actual spectral bound ‖BS(ω)‖_{H¹} ≤ C·‖ω‖_{L²}. -/
+theorem bs_bounded_linear : ∀ (ω : VField), ∃ C : ℤ, C > 0 := fun _ => ⟨1, by decide⟩
 
 /-- **M7 — Nonlinear passage to distributional NS.**
 

@@ -25,14 +25,27 @@ theorem stretching_degree_eq : stretchingDegree = 2 := by rfl
 
 /-- L2.5 — resonance order ≥ 3. -/
 theorem resonance_ge_three : resonanceOrder ≥ 3 := by
-  sorry
+  decide
 
 /-- L2.6 — DKAM subcriticality: deg < ρ. -/
 theorem dkam_subcritical : stretchingDegree < resonanceOrder := by
-  sorry
+  decide
 
-/-- L2.7 — contraction factor B(N) ≤ 90/1001. Exact rational. -/
+/-- L2.7 — contraction factor B(N) ≤ 90/1001. Exact rational.
+    **Statement flagged for operator review:** as written the first conjunct
+    evaluates to `720 ≤ 90` which is false. The intended bound — captured
+    in `contraction_bound_intended` below — uses the centered self-coefficient
+    factor `(p−1)/(2p)` so the numerator is `3·5·6 = 90` (not `6·10·12 = 720`).
+    The product `3·5·6 / (7·11·13) = 90/1001` is the actual B(N) bound. -/
 theorem contraction_bound : (6 : Rat) * 10 * 12 ≤ 90 ∧ (7 : Rat) * 11 * 13 = 1001 := by
   sorry
+
+/-- L2.7' (corrected intent) — exact factorization `B(N) = 90/1001` from
+    `(p−1)/(2p)` over the discriminating primes `{7,11,13}`:
+    `(3/7)·(5/11)·(6/13) = 90/1001`. -/
+theorem contraction_bound_intended :
+    (3 : Rat) * 5 * 6 = 90 ∧ (7 : Rat) * 11 * 13 = 1001 ∧
+    ((3 : Rat) / 7) * (5 / 11) * (6 / 13) = 90 / 1001 := by
+  refine ⟨?_, ?_, ?_⟩ <;> norm_num
 
 end NSRegularity.DKAM.Stretching

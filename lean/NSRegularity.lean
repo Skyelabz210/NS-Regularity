@@ -11,3 +11,7 @@ import NSRegularity.Continuum         -- M6
 import NSRegularity.NonlinearPassage  -- M7
 import NSRegularity.BKM               -- M8
 import NSRegularity.ThreeStream       -- M9
+import NSRegularity.GlobalRegularity  -- top-level composition
+import NSRegularity.GlobalRegularityGeneric  -- generic L∞-preserving step closure
+import NSRegularity.NS.FullStep  -- full NS step (diffusion + advection + stretching)
+import NSRegularity.Adelic.LaplacianAsPolyOp  -- worked example: Laplacian descent
