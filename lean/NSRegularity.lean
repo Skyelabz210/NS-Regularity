@@ -15,3 +15,9 @@ import NSRegularity.GlobalRegularity  -- top-level composition
 import NSRegularity.GlobalRegularityGeneric  -- generic L∞-preserving step closure
 import NSRegularity.NS.FullStep  -- full NS step (diffusion + advection + stretching)
 import NSRegularity.Adelic.LaplacianAsPolyOp  -- worked example: Laplacian descent
+import NSRegularity.Shift.SumGrid  -- 3D shift-sum invariance lemmas
+import NSRegularity.HSquared.SBP  -- 3D SBP cross-term reindex lemmas
+import NSRegularity.HSquared.ResolutionA  -- L3.4 Resolution A H² monotonicity
+import NSRegularity.AubinLions.ResolutionA  -- L4.2 Resolution A L² monotonicity
+import NSRegularity.NS.BiotSavart  -- discrete curl + Biot-Savart skeleton (axiomatic)
+import NSRegularity.NS.Trajectory  -- NS trajectory generator + global regularity skeleton
