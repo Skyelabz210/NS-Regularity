@@ -1,90 +1,59 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for AI agents working in this repository.
 
-## Project Overview
+## Route-first workflow
 
-A Rust-based computational attempt at proving global regularity of the 3D incompressible Navier-Stokes equations (Clay Millennium Prize Problem). The core innovation is exact-integer arithmetic via Chinese Remainder Theorem (CRT) to avoid floating-point errors and provide mathematically rigorous bounds.
+Historical status labels are route hints. This repository contains nested child formations with follow-up work for earlier labels. Start with:
 
-## Commands
+1. `SYNC_STATUS.md`
+2. `ROUTING_MAP.md`
+3. `AUDIT_LEDGER.md`
+4. `NS_REGULARITY_COMPLETE (1)/crates/ns_v5/docs/OPEN_SEAMS.md`
+5. `lean/PROOF_STATUS.md`
 
-The main crate lives at `NS_REGULARITY_COMPLETE (1)/crates/ns_v5`.
+Then continue from the child owner. Nested work is build-lineage material.
+
+## Main commands
 
 ```bash
 cd "NS_REGULARITY_COMPLETE (1)/crates/ns_v5"
-
-cargo test                        # Run all ~147 tests (expect 0 failures)
-cargo test <test_name> -- --nocapture  # Run single test with output
-cargo build                       # Debug build
-cargo build --release             # Optimized build
-cargo check                       # Syntax/type check only
-cargo doc --open                  # Generate and view docs
+cargo test
+cargo build
+cargo check
 ```
 
-## Architecture
-
-### Three-Layer Stack
-
-**Executor Layer** (exact arithmetic substrate):
-- `qmnf_crtbigint/src/lib.rs` — CRTBigInt v3.1: eight 63-bit prime lanes (~504-bit capacity), Montgomery multiplication, K-Elimination exact division, Garner mixed-radix reconstruction, `integer_sine` (Bhaskara I, zero-float), `ExactRational`
-- `src/recumbent.rs` — Tiered exact integer: primary corridor + overflow + hot lane; split/promotion/demotion; exact value preservation
-- `src/wassan.rs` — WASSAN holographic key-value persistence for Recumbent state
-
-**Discrete Scheme Layer** (3D N=8 periodic grid):
-- `src/ns3d.rs` — Core 3D solver: NTT-based Biot-Savart (4 primes: 73, 89, 97, 113), centered finite-difference Laplacian, skew-symmetric advection, vortex stretching, time stepper, diagnostics
-- `src/ns3d_energy.rs` — Kill #113 (exact zero advection inner product), Kill #121 (topological energy), Aubin-Lions conditions (H¹ bound, time-derivative bound in H⁻¹), BKM chain
-- `src/ns3d_sobolev.rs` — Discrete H¹/H² seminorms (exact i128 via summation-by-parts), Sobolev embedding (sharp constant: `51979095679759/546264947916800`), stretching measurement
-- `src/ns3d_wassan.rs` — WASSAN-backed persistent vorticity; checkpoint/restore; CRTBigInt-backed H² norm
-
-**Continuum Layer**: Scaffolded but not fully proved — Aubin-Lions compactness, nonlinear passage, Leray-Hopf weak solution.
-
-**Theorem Verification** (`src/lib.rs`): Theorems T1-T10 (contraction bounds B ≤ 90/1001), N-independence proof, discrete maximum principle, winding decomposition.
-
-### Key Types & Constants
-
-```rust
-pub const N: usize = 8;           // Periodic lattice (ℤ/8ℤ)³
-pub const NS_SCALE: i64 = 10_000; // Physical scale factor
-pub const NTT_PRIMES: [u64; 4] = [73, 89, 97, 113];
-
-pub struct Vort3D { pub data: [[[i64; N]; N]; N] }
-pub struct Vel3D  { pub data: [[[i64; N]; N]; N] }
+```bash
+cd lean
+lake build
 ```
 
-### Data Flow
+## Active roots
 
-1. Divergence-free initial condition on ℤ³_N (integer-valued or Bhaskara-sine-approximated)
-2. Biot-Savart: vorticity → velocity via 4-prime NTT + Garner reconstruction (exact)
-3. Time step: diffusion (Laplacian) → advection (skew-symmetric) → stretching (DKAM subcritical)
-4. Norm tracking: H¹, H² (exact summation-by-parts), L∞, enstrophy
-5. Overflow management: Recumbent tiers track exact values beyond primary corridor
-6. WASSAN persistence: checkpoint full tiered state for long-time evolution
+- `NS_REGULARITY_COMPLETE (1)/crates/ns_v5` — main Rust executor and theorem harness.
+- `lean/` — Lean formalization line.
+- `Skyelabz210/ns3d-n32-ntt6` — N32 six-prime spectral satellite.
+- `fall_of_regularity/`, `fp2_nttns/`, `qtc_continuum/`, `recumbant_crt/` — bridge and CRT formations.
 
-## Proof Status (Three Tiers)
+## Main Rust lanes
 
-**Tier 1 — Discrete Proved** (verified by `cargo test`): NTT exactness, Kill #113 energy identity, Kill #121 topological energy, L∞ non-increasing (DKAM), H² stability with sharp Sobolev constant, Aubin-Lions conditions, Recumbent invariance, WASSAN roundtrip.
+- `src/ns3d.rs` — core 3D solver and NTT Biot-Savart lineage.
+- `src/ns3d_energy.rs` — Kill #113, Kill #121, energy identities.
+- `src/ns3d_sobolev.rs` — H1/H2 seminorms and Sobolev route.
+- `src/ns3d_d030.rs` — D-030 winding-energy route.
+- `src/ns3d_aubin_lions.rs` — compactness route.
+- `src/recumbent.rs`, `src/wassan.rs`, `src/ns3d_wassan.rs` — Recumbent/WASSAN route.
 
-**Tier 2 — Continuum Scaffolded** (N→∞ transfer pending): Aubin-Lions compactness, nonlinear term convergence, Leray-Hopf existence, BKM regularity corollary.
+## Lean lanes
 
-**Tier 3 — Open Gaps**: Super-threshold stretching bounds for arbitrary-amplitude 3D data; uniform-in-N transfer (N=16/32 solvers exist but NTT prime sets untested); T_FK(N) favorable scaling.
+- `lean/NSRegularity/Kill113*`
+- `lean/NSRegularity/DKAM/`
+- `lean/NSRegularity/HSquared/ResolutionA.lean`
+- `lean/NSRegularity/NS/BiotSavart.lean`
+- `lean/NSRegularity/NS/FullStep.lean`
+- `lean/NSRegularity/NS/Trajectory.lean`
+- `lean/NSRegularity/BKM.lean`
 
-## Documentation Index
+## Execution posture
 
-- `STATUS.md` — Canonical claim structure: which theorems are proved vs. scaffolded vs. open; test inventory; file manifest
-- `NS_REGULARITY_PROOF_COMPLETE.md` — Compact 7-step proof outline
-- `NS_REGULARITY_COMPLETE_PACKET.md` — Full formal manuscript (~100K words)
-- `DEEP_RESEARCH_FRAMEWORK.md` — Three-layer architecture and Theorems A-I
-- `BLUEPRINT.md` — Tao Blueprint DAG (PFR 2023 methodology)
-
-## In-Code Annotation Convention
-
-```
-[CODE FACT]       — verified arithmetic, passes cargo test
-[DISCRETE THEOREM] — proved for lifted N=8 scheme
-[SCAFFOLDED]      — infrastructure ready, pending N→∞ transfer
-[OPEN]            — honest gap (not yet proved)
-```
-
-## Dependencies
-
-Only one external crate: `lazy_static` v1 (precomputed NTT constant tables). All arithmetic is handcrafted exact-integer — no floating-point anywhere in the core.
+Use the route files to locate the child owner, then wire forward through the correct workspace, feature path, or adapter. Top-level docs should prefer `ROUTED`, `ACTIVE`, or `CHILD OWNER` language when a child formation exists.
