@@ -6,7 +6,7 @@ This file is the repository-level sync map for nested workspaces, archived drops
 
 ## Canonical rule
 
-Nested material is build-lineage material. A nested crate, archive, probe, branch, or workspace is presumed to fit the top-level architecture because it belongs to the sequence that produced the proceeding version. The audit question is therefore which root, adapter, feature gate, module export, or version bridge activates the artifact.
+Nested material is build-lineage material. A nested crate, archive, probe, branch, or workspace is presumed to fit the top-level architecture because it belongs to the sequence that produced the proceeding version. The audit question is which root, adapter, feature gate, module export, or version bridge activates the artifact.
 
 Do not classify nested work as orphan scratch merely because it does not compile from a reduced historical root.
 
@@ -17,8 +17,8 @@ Do not classify nested work as orphan scratch merely because it does not compile
 | `NS_REGULARITY_COMPLETE (1)/` | Main Rust proof/executor workspace | ACTIVE |
 | `NS_REGULARITY_COMPLETE (1)/crates/ns_v5` | Core exact-integer NS crate | ACTIVE |
 | `lean/` | Lean 4 formalization line | ACTIVE through Wave H.15 |
-| `Skyelabz210/ns3d-n32-ntt6` | N=32 / six-prime NTT satellite | ACTIVE satellite, P5B-9A gate-pass |
-| Uploaded `ns_active_path_v7.tar.gz` / old `STATUS.md` line | Historical N=8 substrate snapshot | ARCHIVED lineage stratum |
+| `Skyelabz210/ns3d-n32-ntt6` | N32 six-prime NTT satellite | ACTIVE satellite, P5B-9A gate-pass |
+| Uploaded `ns_active_path_v7.tar.gz` / old `STATUS.md` line | Historical N8 substrate snapshot | ARCHIVED lineage stratum |
 
 ## Lineage strata
 
@@ -29,7 +29,7 @@ Do not classify nested work as orphan scratch merely because it does not compile
 | v5 BS pipeline / bisect / stress probes | active `ns_v5` lineage root or N32 satellite root | Biot-Savart and CRT stress evidence |
 | WASSAN / Recumbent probes | `crates/ns_v5` with WASSAN modules | Persistent exact-vorticity storage evidence |
 | D-024 probes | D-024 / continuum bridge root | Bridge classification evidence |
-| N32 NTT6 probes | `Skyelabz210/ns3d-n32-ntt6` | N=32 six-prime spectral lineage |
+| N32 NTT6 probes | `Skyelabz210/ns3d-n32-ntt6` | N32 six-prime spectral lineage |
 | Lean Wave A-H files | `lean/` | Formal proof stack lineage |
 | nested tarballs / zips | their manifest-declared root | Frozen generational snapshots |
 
@@ -38,9 +38,10 @@ Do not classify nested work as orphan scratch merely because it does not compile
 | File | Status |
 |---|---|
 | `SYNC_STATUS.md` | Repository-level sync map |
+| `ROUTING_MAP.md` | Top-level route map from old labels to child owners |
 | `WORKSPACE_MANIFEST.md` | Directory inventory and provenance map |
 | `lean/PROOF_STATUS.md` | Active Lean proof-status map; corrected after Wave H merge |
-| `NS_REGULARITY_COMPLETE (1)/crates/ns_v5/STATUS.md` | Historical + crate-local status; contains older N=8 baseline plus later appended April 4 campaign data |
+| `NS_REGULARITY_COMPLETE (1)/crates/ns_v5/STATUS.md` | Crate-local historical status plus appended campaign data |
 
 ## Activation discipline
 
@@ -50,17 +51,17 @@ Do not classify nested work as orphan scratch merely because it does not compile
 4. Document missing activation bridges as `adapter needed`, not `orphan`.
 5. Keep proof claims separated into: finite substrate, formal Lean skeleton, empirical campaign, and continuum bridge.
 
-## Current live gates
+## Routed live labels
 
-| Gate | Root | Status |
+| Old label | Child owner | Status |
 |---|---|---|
-| Constructive Lean Biot-Savart port | `lean/` + Rust NTT source | OPEN |
-| Full-NS `h_step` / L-infinity preservation | `lean/` + `ns_v5` operator facts | OPEN |
-| BKM formal axiom replacement | `lean/` | OPEN |
-| N32 true six-prime spectral Biot-Savart | `ns3d-n32-ntt6` | OPEN after P5B-9A gate-pass |
-| N16/N32 uniform bridge evidence | `ns_v5` + N32 satellite | ACTIVE |
-| D-024 / continuum bridge | bridge lineage | OPEN |
+| Lean Biot-Savart port | `lean/NSRegularity/NS/BiotSavart.lean`; Rust `src/ns3d.rs`; satellite `Skyelabz210/ns3d-n32-ntt6` | ROUTED |
+| Full NS step condition | `lean/NSRegularity/NS/Trajectory.lean`; `lean/NSRegularity/NS/FullStep.lean`; `lean/NSRegularity/DKAM/`; `src/ns3d_d030.rs` | ROUTED |
+| BKM formal theorem | `lean/NSRegularity/BKM.lean` | ROUTED |
+| N32 six-prime spectral Biot-Savart | satellite `Skyelabz210/ns3d-n32-ntt6`; `P5B_DAG_P5B9A_GATE.md` | ROUTED |
+| N16/N32 bridge evidence | `NS_REGULARITY_COMPLETE (1)/crates/ns_v5/STATUS.md`; N32 satellite | ROUTED / ACTIVE |
+| D-024 bridge | `fall_of_regularity/`; `fp2_nttns/`; `qtc_continuum/`; D-024 probe lineage | ROUTED |
 
 ## Claim discipline
 
-The finite exact-integer substrate has strong closed components. The Lean diffusion certificate is formalized under Resolution A exactness. The full-NS Lean theorem is currently a conditional skeleton. The continuum global theorem remains a bridge target until the active gates close.
+The finite exact-integer substrate has strong closed components. The Lean diffusion certificate is formalized under Resolution A exactness. The full-NS Lean theorem is routed through the child owners above. The continuum bridge route lives in the bridge workspace family.
