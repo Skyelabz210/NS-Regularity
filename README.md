@@ -1,28 +1,28 @@
 # NS Regularity
 
-A computational framework attempting global regularity of the **3D incompressible Navier-Stokes equations** (Clay Millennium Prize Problem) via exact-integer arithmetic and the Chinese Remainder Theorem.
+A computational framework for 3D incompressible Navier-Stokes exact-integer analysis using CRT arithmetic, WASSAN persistence, Recumbent tiering, and Lean formalization.
 
-The core innovation: every computation runs in exact integers with no floating-point — vorticity, velocity, Sobolev norms, Biot-Savart kernels — so every inequality is either true or false, never within ε.
+Every numerical path is intended to stay in integer or exact-rational form: vorticity, velocity, Sobolev norms, Biot-Savart kernels, residue lanes, and proof witnesses.
 
 ## Status
 
-| Layer | Status | Evidence |
+| Layer | Status | Evidence / child owner |
 |---|---|---|
-| Executor substrate (CRTBigInt, WASSAN, Recumbent) | ✅ | 212/212 tests in `ns_v5` |
-| Discrete regularity at N=8 | ✅ | Kill #113, Kill #121, DKAM 90/1001, sharp Sobolev |
-| Discrete regularity at N=16, N=32 | ⚠️ partial | `ns3d_n16`, `ns3d_n32` — empirical campaigns pending |
-| D-030 winding-energy L∞ bound (PDE form) | ✅ | `ns3d_d030.rs`, 9/9 tests |
-| Prime-hunt / Hydra sieve | ✅ | 103/103 tests in `prime_hunt` |
-| Lean 4 formalization of Kill #113 | 🚧 | Skeleton in `lean/`, 10 `sorry`s remaining |
-| Continuum limit (Aubin-Lions passage) | 🚧 scaffolded | Write-up in `NS_REGULARITY_PROOF_COMPLETE.md` Step 7 |
-| **D-024 Hasse bridge (large data)** | ❌ OPEN | The genuine Millennium bottleneck |
+| Executor substrate: CRTBigInt, WASSAN, Recumbent | ACTIVE | 212/212 tests in `NS_REGULARITY_COMPLETE (1)/crates/ns_v5` |
+| Discrete regularity at N8 | ACTIVE | Kill #113, Kill #121, DKAM 90/1001, sharp Sobolev |
+| Discrete regularity at N16 and N32 | ROUTED | N16 table in `crates/ns_v5/STATUS.md`; N32 satellite `Skyelabz210/ns3d-n32-ntt6` |
+| D-030 winding-energy bound | ROUTED / ACTIVE | `crates/ns_v5/src/ns3d_d030.rs`, 9 tests |
+| Prime-hunt / Hydra sieve | ACTIVE | 103/103 tests in `crates/prime_hunt` |
+| Lean 4 formalization | ACTIVE | `lean/PROOF_STATUS.md`, Wave H.15 route map |
+| Continuum bridge work | ROUTED | `fall_of_regularity/`, `fp2_nttns/`, `qtc_continuum/`, D-024 probe lineage |
+| Child-owner routing | ACTIVE | `ROUTING_MAP.md`, `SYNC_STATUS.md` |
 
 ## Quickstart
 
 ```bash
 cd "NS_REGULARITY_COMPLETE (1)/crates/ns_v5"
-cargo test                   # 212 tests, ~140s
-cd ../prime_hunt && cargo test   # 103 tests, ~0.1s
+cargo test
+cd ../prime_hunt && cargo test
 ```
 
 For Lean:
@@ -33,48 +33,53 @@ cd lean && lake build
 ## Directory layout
 
 ```
-├─ NS_REGULARITY_COMPLETE (1)/   Main workspace — Rust crates, proof docs
-│   ├─ crates/ns_v5/             Core 3D NS solver + all theorems (212 tests)
-│   ├─ crates/prime_hunt/        Multi-head Hydra sieve (103 tests)
+├─ NS_REGULARITY_COMPLETE (1)/   Main workspace: Rust crates, proof docs
+│   ├─ crates/ns_v5/             Core 3D NS solver and theorem harness
+│   ├─ crates/prime_hunt/        Multi-head Hydra sieve
 │   ├─ crates/qmnf_crtbigint/    CRTBigInt v3.1 arithmetic substrate
-│   └─ *.md                      Proof manuscripts, status docs, gap assessments
-├─ lean/                         Lean 4 formalization (NSRegularity.Kill113, Shift)
-├─ recumbant_crt/                Hydra-v3, yukawa schema, recombinant CRT research
-├─ fp2_nttns/                    FP² NTT snapshots + CRAM white papers
-├─ subcriticality/               DKAM subcriticality formalization (+ planetary schemas)
-├─ fall_of_regularity/           NS paper workspaces v8/v10 + distance analyses
-├─ dresden_prime_hunt/           Dresden prime-hunt: papers, plans, synthesis
-├─ gambit_cram/                  CRAM slot predictor, universal harness, Hydra atlas
-├─ qtc_continuum/                Quantum topological continuum + Explorer images
-├─ session_workspaces/           Sieve-oracle spec, T2/T3/T4 runs, session summaries
+│   └─ *.md                      Proof manuscripts, status docs, route maps
+├─ lean/                         Lean 4 formalization line
+├─ recumbant_crt/                Recombinant CRT lineage
+├─ fp2_nttns/                    FP2 NTT snapshots and CRAM papers
+├─ subcriticality/               DKAM subcriticality lineage
+├─ fall_of_regularity/           NS paper workspaces and bridge docs
+├─ dresden_prime_hunt/           Dresden prime-hunt papers and plans
+├─ gambit_cram/                  CRAM slot predictor and harnesses
+├─ qtc_continuum/                Quantum topological continuum lineage
+├─ session_workspaces/           Sieve-oracle and T-run workspaces
 ├─ skills/                       prime-family-spacetime skill package
-├─ CLAUDE.md                     Guidance for Claude Code / AI agents
-└─ WORKSPACE_MANIFEST.md         Detailed inventory of every folder
+├─ ROUTING_MAP.md                Old label to child-owner route map
+├─ SYNC_STATUS.md                Repository sync map
+├─ CLAUDE.md                     AI-agent guidance
+└─ WORKSPACE_MANIFEST.md         Detailed inventory
 ```
 
-See **[WORKSPACE_MANIFEST.md](WORKSPACE_MANIFEST.md)** for the file-level tour.
+See `WORKSPACE_MANIFEST.md`, `SYNC_STATUS.md`, and `ROUTING_MAP.md` for the active route layer.
 
-## What's been proven
+## Proven / active finite-substrate results
 
-**Discrete (verified by `cargo test`):**
-- **Kill #113** — skew-symmetric advection energy neutrality, exact integer zero, no preconditions
-- **Kill #121** — per-NTT-prime-lane energy residual = 0 on all four primes {73, 89, 97, 113}
-- **DKAM 90/1001** — contraction bound `B(N) ≤ 90/1001` unconditionally for every `N`
-- **Sharp Sobolev** — exact rational constant `51979095679759 / 546264947916800`
-- **D-030** — `‖ω(t)‖_∞ ≤ (p−1) + √E(0)` from energy PDE + winding decomposition
-- **p-adic non-expansion** — vorticity is non-expanding on every CRT lane
-- **Aubin-Lions (I), (II)** — uniform H¹ bound + Sobolev descent under small-data
+- Kill #113: skew-symmetric advection energy neutrality, exact integer zero.
+- Kill #121: per-prime-lane energy residual zero.
+- DKAM 90/1001 contraction bound.
+- Sharp Sobolev embedding at N8 with exact rational constant.
+- D-030 winding-energy bound in `ns3d_d030.rs`.
+- p-adic lane non-expansion and CRT lane stability.
+- Aubin-Lions discrete conditions at the finite-substrate layer.
+- Recumbent and WASSAN persistence checks.
 
-**Scaffolded (infrastructure + write-up pending integration):**
-- Continuum compactness — conditions (i), (ii) proved at N=8; uniform-in-N transfer pending
-- Nonlinear passage — full Lions-1969 argument written, integration pending
-- BKM regularity corollary — assembles once large-data bound closes
+## Routed bridge labels
 
-## What's open
+The old top-level blocker list has been replaced by child-owner routing. Use:
 
-See **[NS_REGULARITY_COMPLETE (1)/GAP_ASSESSMENT_D030.md](NS_REGULARITY_COMPLETE%20%281%29/GAP_ASSESSMENT_D030.md)** for the current gap list. The Millennium bottleneck is **D-024**: the Hasse local-global bridge from p-adic non-expansion to Archimedean L∞ boundedness for arbitrary-amplitude 3D initial data.
+- `ROUTING_MAP.md` for old label to child owner.
+- `SYNC_STATUS.md` for repository-level activation roots.
+- `NS_REGULARITY_COMPLETE (1)/crates/ns_v5/docs/OPEN_SEAMS.md` for routed seam ownership.
+- `lean/PROOF_STATUS.md` for Lean route status.
+
+## Claim discipline
+
+The finite exact-integer substrate has strong closed components. The Lean diffusion certificate is formalized under Resolution A exactness. The full-NS Lean theorem is routed through the listed child owners. The continuum bridge route lives in the bridge workspace family and D-024 probe lineage.
 
 ## Author
 
-Anthony Diaz (Acid) — HackFate / Skyelabz210  
-Independent research, April 2026
+Anthony Diaz (Acid) — HackFate / Skyelabz210
