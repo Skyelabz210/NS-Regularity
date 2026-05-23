@@ -1,252 +1,119 @@
 # NS-Regularity Lean Proof Status
 
-_Last update: 2026-05-21 (post-Wave H.15 — complete discrete PDE algebra + integer-Hodge H¹). Build status: 8338+ jobs clean, exit 0._
+_Last corrected: 2026-05-23. Sync correction after Wave H merge. Build status recorded by merged Wave H line: 8338+ lake jobs clean, exit 0._
 
-## New in Wave F.1–F.5 (SBP fully proved AND L3.4 Resolution A PROVED)
+This file is the active Lean proof-status index. It supersedes older contradictory status blocks inside prior wave reports.
 
+## Current closure posture
+
+The Lean workspace is synchronized through Wave H.15. The discrete PDE algebra and the Resolution-A diffusion control stack are active. The full Navier-Stokes claim remains conditional on the operator-side full-NS step gate and the Biot-Savart port.
+
+### Closed / active Lean results
+
+```lean
+sbp_self_adjoint_bilinear              -- Σ f · Δg = Σ g · Δf
+sbp_quadratic                          -- Σ f · Δf = -Σ |∇⁺f|²
+sbp_quadratic_h2                       -- Σ Δf · Δ²f = -Σ |∇⁺(Δf)|²
+laplacian_sq_le_12_gradSqForward       -- Σ (Δf)² ≤ 12 · Σ |∇⁺f|²
+cauchy_schwarz_6                       -- six-term Cauchy-Schwarz
+h2_seminorm_per_component_exact        -- H² monotonicity under Resolution A exactness
+ns_hTwoNorm_uniform_exact              -- trajectory H² bound under Resolution A
+l2Sq_diffusion_step_le_exact           -- L² monotonicity under Resolution A
+l2NormSq_diffusion_step_le_exact       -- vector L² composition
+ns_l2NormSq_uniform_exact              -- trajectory L² bound under Resolution A
+diffusion_max_preserving_exact         -- L∞ monotonicity under Resolution A
+generic_global_regularity_uniform      -- generic closure from uniform L∞ bound
+ns_global_regularity_skeleton          -- full-NS trajectory skeleton under h_step
+ns_global_regularity_biot_savart       -- skeleton using axiomatic Biot-Savart
+curl_div_zero                          -- div ∘ curl = 0
+curl_grad_zero                         -- curl ∘ grad = 0
+laplacian_add, laplacian_smul, laplacian_zero
+divV_add, gradV_add
+curlX_add, curlY_add, curlZ_add
+divV_gradV_eq_laplacianH
+sumGrid_f_diffX_eq_neg_diffX_g
+sumGrid_f_diffY_eq_neg_diffY_g
+sumGrid_f_diffZ_eq_neg_diffZ_g
+sumGrid_f_divV_eq_neg_gradV_dot
+sbp_quadratic_H
+discrete_ns_regularity_certificate_exact
+polyGridOp_mod_descent_pointwise
+polyGridOp_mod_descent
+laplacian_mod_descent
 ```
-sbp_self_adjoint_bilinear (f g)          : Σ f · Δg = Σ g · Δf            [PROVED]
-sbp_quadratic (f)                        : Σ f · Δf = -Σ |∇⁺f|²            [PROVED]
-sbp_quadratic_h2 (f)                     : Σ Δf · Δ²f = -Σ |∇⁺(Δf)|²       [PROVED]
-laplacian_sq_le_12_gradSqForward (f)     : Σ (Δf)² ≤ 12 · Σ |∇⁺f|²         [PROVED]
-cauchy_schwarz_6 (a b c d e f)           : (a+b+c+d+e+f)² ≤ 6·(a²+...+f²)  [PROVED]
-h2_seminorm_per_component_exact (...)    : hTwoSeminorm (diffusion f p)    [PROVED]
-                                            ≤ hTwoSeminorm f
-                                            (under hExact1 + cfl_ok + CFL)
+
+### Resolution-A control bundle
+
+Under the single exact-division side condition used by the CRT / ExactRational arithmetic substrate, the diffusion trajectory has the following proved bounds:
+
+```lean
+∀ n, l2NormSq  (diffusion_trajectory w₀ p n) ≤ l2NormSq  w₀
+∀ n, lInf      (diffusion_trajectory w₀ p n) ≤ lInf      w₀
+∀ n, hTwoNorm  (diffusion_trajectory w₀ p n) ≤ hTwoNorm  w₀
 ```
 
-★ **L3.4 Resolution A is now FULLY PROVED** — Wave F.5 closes the H²
-monotonicity claim under the SAME single-level exactness hypothesis as
-Wave D's L2.3 Resolution A. The originally-anticipated "level-2 exactness"
-(`NS² ∣ cv·Δ²f`) turned out to be unnecessary — it's a CONSEQUENCE of
-level-1 plus the algebraic structure.
+`discrete_ns_regularity_certificate_exact` bundles L², L∞, H², and smoothness via the BKM axiom. This is a diffusion-trajectory certificate, not an unconditional full-NS continuum theorem.
 
-## New in Wave G (NS trajectory skeleton + uniform H² bound)
+## Full-NS skeleton
 
-```
+The active full-NS skeleton is:
+
+```lean
 ns_trajectory_generator
-    (biot_savart, stretching_{x,y,z}, w₀, p) : ℕ → VField
-    -- The full-NS trajectory via operator-supplied Biot-Savart and stretching.
+  (biot_savart : VField → VField)
+  (stretching_x stretching_y stretching_z : VField → Grid)
+  (w₀ : VField) (p : NsParams) : ℕ → VField
 
-ns_global_regularity_skeleton                                              [PROVED]
-    (..., h_step : ∀ w, lInf (ns_step ...) ≤ lInf w, ...) :
-    IsSmooth (ns_trajectory_generator ...)
+ns_global_regularity_skeleton
+  (..., h_step : ∀ w, lInf (ns_step ...) ≤ lInf w, ...) :
+  IsSmooth (ns_trajectory_generator ...)
 
-ns_hTwoNorm_uniform_exact (G.2)                                            [PROVED]
-    (w₀ p h hν hdt hns hExactAll) :
-    ∀ n, hTwoNorm (diffusion_trajectory w₀ p n) ≤ hTwoNorm w₀
-
-h1_uniform_bound_substantive (G.1)                                         [PROVED]
-    (f₀ f_seq h_init h_monotone) :
-    ∀ n, l2Sq (f_seq n) ≤ l2Sq f₀
+ns_global_regularity_biot_savart
+  (..., h_step : ∀ w, lInf (ns_step (biot_savart w) ...) ≤ lInf w, ...) :
+  IsSmooth (ns_trajectory_generator biot_savart ...)
 ```
 
-★ **The architectural top of the Lean closure is now in place.** Operator-
-side proofs needed to complete the Millennium claim:
-  - `biot_savart` constructive Biot-Savart (task #12, NTT port from Rust)
-  - `h_step` full-NS L∞ preservation (task #18, DKAM + Kill #113 composition)
-  - Discharge BKM 1984 axiom (research-grade)
+This is the correct architectural top: the theorem is proved conditional on `h_step` and the BKM axiom, with `biot_savart` currently axiomatized pending the NTT port.
 
-★ **Complete control bundle under Resolution A**: the diffusion trajectory
-has uniformly bounded L∞ (`ns_lInf_uniform_exact`) AND uniformly bounded
-H² (`ns_hTwoNorm_uniform_exact`) along the entire timeline.
+## Active gates
 
-## New in Wave H (Biot-Savart skeleton + L² Resolution A + vector-calc)
-
-```
-NSRegularity/NS/BiotSavart.lean:
-  curlX, curlY, curlZ, curl, divV, gradV : (discrete vector-calc operators)
-  axiom biot_savart                       : VField → VField  (pending NTT port)
-  axiom biot_savart_curl_eq               : curl ∘ biot_savart = id
-  axiom biot_savart_div_zero              : divV ∘ biot_savart = 0
-  curl_div_zero                           : divV (curl w) = 0         [PROVED]
-  curl_grad_zero                          : curl (gradV f) = 0        [PROVED]
-
-NSRegularity/NS/Trajectory.lean:
-  ns_global_regularity_biot_savart                                    [PROVED]
-
-NSRegularity/AubinLions/ResolutionA.lean:
-  l2Sq_diffusion_step_le_exact            : Σf'² ≤ Σf² under Res A   [PROVED]
-```
-
-★ **Three-norm Resolution A control**: L² (Wave H.3), L∞ (Wave D), H² (Wave F.5)
-all proved for the discrete diffusion step under exact arithmetic.
-
-★ **Discrete de Rham complex skeleton** PROVED: `div ∘ curl = 0` and
-`curl ∘ grad = 0` follow directly from centered-diff commutativity.
-
-## Wave H sub-waves (full enumeration)
-
-```
-H    : NS/BiotSavart.lean curl, divV, gradV defs + axioms
-H.1  : curl_div_zero                                              [PROVED]
-H.2  : curl_grad_zero + gradV defined                             [PROVED]
-H.3  : l2Sq_diffusion_step_le_exact (L² Resolution A scalar)      [PROVED]
-H.4  : l2NormSq_diffusion_step_le_exact (vector composition)      [PROVED]
-H.5  : ns_l2NormSq_uniform_exact (trajectory L²)                  [PROVED]
-H.6  : generic_global_regularity_uniform (most general closure)   [PROVED]
-H.7  : laplacian_add, laplacian_smul, laplacian_zero              [PROVED]
-H.8  : divV_add, gradV_add                                        [PROVED]
-H.9  : curlX_add, curlY_add, curlZ_add                            [PROVED]
-H.10 : laplacianH + divV_gradV_eq_laplacianH bridge identity      [PROVED]
-```
-
-★ **Integer-Hodge foundation in place**: linearity of all discrete differential
-operators (Laplacian, div, grad, curl), plus the chain-complex zero-compositions
-(div∘curl=0, curl∘grad=0), plus the bridge identity (divV∘gradV = laplacianH).
-This is the algebraic skeleton needed for the discrete Hodge decomposition
-(task #6 — the integer-Helmholtz program).
-
-## Wave H later additions (H.11–H.15)
-
-```
-sumGrid_f_diffX_eq_neg_diffX_g (H.11)  : Σ f · diffX g = -Σ diffX f · g     [PROVED]
-sumGrid_f_diffY_eq_neg_diffY_g (H.12)  : analogous y                        [PROVED]
-sumGrid_f_diffZ_eq_neg_diffZ_g (H.12)  : analogous z                        [PROVED]
-sumGrid_f_divV_eq_neg_gradV_dot (H.14) : Σ f · divV w = -Σ gradV f · w     [PROVED]
-sbp_quadratic_H (H.15)                  : Σ f · laplacianH f = -Σ |gradV f|² [PROVED]
-discrete_ns_regularity_certificate_exact (H.13) — bundle theorem            [PROVED]
-```
-
-★ **Complete discrete PDE algebra**: SBP (H¹/H²), IBP (centered + vector-field),
-Poincaré inequality, Cauchy-Schwarz, Hodge bridge, two parallel H¹ energy
-identities (first- and second-neighbor Laplacian) — all formally proved.
-
-★ **Top-level consolidated theorem `discrete_ns_regularity_certificate_exact`**:
-under `diffusion_exactness_hyp` (single Resolution A side condition), the
-diffusion trajectory has uniform L², L∞, AND H² bounds, plus continuum
-smoothness via BKM. This is the most architecturally complete formal
-statement of discrete NS regularity in Lean to date.
-
-## Closure picture
-
-```
-TOP-LEVEL Millennium-style claims:
-
-  NSRegularity.GlobalRegularity.global_regularity_exact      [PROVED mod {BKM axiom only}] ★
-    ⇐ ns_lInf_uniform_exact (PROVED via Wave D)
-    ⇐ diffusion_max_preserving_exact (Wave D, PROVED)
-    ⇐ hExactAll : ∀ n i j k, NS²S² | νΔt · Δ(fₙ)         ← Resolution A side-condition
-                                                              (satisfied by CRT/ExactRational
-                                                               arithmetic substrate)
-
-  NSRegularity.GlobalRegularity.global_regularity            [PROVED mod {L2.3, BKM axiom}]
-    ⇐ NSRegularity.DKAM.l_inf_non_increasing (M2)            [PROVED mod L2.3]
-    ⇐ NSRegularity.BKM.bkm_integral_finite (L8.1)             [PROVED]
-    ⇐ NSRegularity.BKM.bkm_regularity_criterion (BKM 1984)    [axiom — deep PDE]
-
-  Per-module M1..M9:
-    M1 Kill #113 advection energy        — PROVED (component_residual_zero + SBP_{x,y,z})
-    M2 DKAM L∞ non-increasing            — PROVED mod L2.3
-    M3 Uniform H² bound                  — PROVED mod {L3.3, L3.4}
-    M4 Aubin-Lions compactness           — placeholder True (research-grade)
-    M5 Adelic ring-hom descent           — PROVED (polyGridOp_mod_descent)
-    M6 L∞ passes to continuum            — PROVED via trivial bounds
-    M7 Nonlinear passage                  — placeholder True (research-grade);
-                                            bs_bounded_linear discharged
-    M8 BKM regularity criterion          — composition PROVED mod axiom
-    M9 Three-stream reinforcement        — L9.1, L9.3, L9.4 PROVED;
-                                            L9.2 has statement bug
-```
-
-## Remaining open content
-
-### Substantive (5 items)
-
-| ID | Statement | Status | Resolution path |
-|---|---|---|---|
-| **L2.3** | `diffusion_max_preserving` strict L∞ bound | Resolution A PROVED (exact division) | Apply A unconditionally via {Rust CRT, ExactRational redefinition} |
-| **L3.4** | `h2_seminorm_per_component` H² monotonicity | open (mirrors L2.3) | Same resolution path as L2.3 |
-| **L3.3** | `sobolev_embedding` sharp constant `51979095679759/546264947916800` | research-grade | Eigenvalue computation on (Z/8Z)³ Laplacian |
-| **L9.2** | `ultrametric_nonexpansion` v_p(F(x))≥v_p(x) for F(0)=0 | statement bug + open | Operator review (see `ultrametric_nonexpansion_intended`) |
-| **L9.2 corrected** | `ultrametric_nonexpansion_intended` | open | Polynomial F(x)=x·G(x) decomposition + p-adic multiplicativity |
-
-### Axioms (2 items)
-
-| Axiom | Status | Notes |
+| Gate | Status | Required closure |
 |---|---|---|
-| `bkm_regularity_criterion` (BKM 1984) | OPEN — deep PDE | Not in Mathlib; requires formal regularity theory for NS on 𝕋³ |
-| `polynomial_grid_op_commutes` | superseded for NS class | `polyGridOp_mod_descent` discharges the constructive case |
+| `biot_savart` constructive port | OPEN | Port Rust NTT / CRT Biot-Savart into Lean and replace axioms |
+| `biot_savart_curl_eq` | OPEN axiom | Prove `curl (biot_savart ω) = ω` for the exact discrete operator |
+| `biot_savart_div_zero` | OPEN axiom | Prove `divV (biot_savart ω) = 0` |
+| `h_step` full-NS L∞ preservation | OPEN | Compose diffusion + advection + stretching control for `ns_step` |
+| `bkm_regularity_criterion` | OPEN axiom | Formal PDE library / imported theorem for the BKM criterion |
+| `L3.3` sharp Sobolev embedding | OPEN / research-grade | Formal eigenvalue computation on `(Z/8Z)^3` |
+| `L9.2 corrected` ultrametric non-expansion | OPEN | Prove corrected p-adic polynomial decomposition statement |
 
-### Statement bugs (2 items)
+## Corrected status of formerly contradictory entries
 
-| ID | Defect | Corrected sibling |
-|---|---|---|
-| **L2.7** | `(6 : Rat) * 10 * 12 ≤ 90` reads `720 ≤ 90` (false) | `contraction_bound_intended` — PROVED |
-| **L9.2** | hypothesis `F(x)=0 → x=0` should be `F(0)=0` | `ultrametric_nonexpansion_intended` — open |
+| Item | Corrected status |
+|---|---|
+| `L2.3 diffusion_max_preserving` | Resolution A PROVED under exact-division side condition |
+| `L3.4 h2_seminorm_per_component` | Resolution A PROVED under exact-division side condition |
+| `L2.7 contraction_bound` | Original statement BUG; corrected sibling `contraction_bound_intended` PROVED |
+| `L9.2 ultrametric_nonexpansion` | Original statement BUG; corrected sibling remains OPEN |
+| `polynomial_grid_op_commutes` | Superseded for NS class by constructive `PolyGridOp` descent |
+| Aubin-Lions / nonlinear passage placeholders | Not Clay-level closure; retained as scaffold until analytic bridge is formalized |
 
-## Closure chain detail
-
-### Resolution A for L2.3 (PROVED, in DiffusionMaxPreserving.lean)
-
-```
-diffusion_max_preserving_exact (f p h hν hdt hns_pos hExact i j k) :
-    |diffusion_step f p i j k| ≤ gridLInf f
-```
-
-with hypothesis `hExact : ∀ i j k, (N²S²) ∣ (νΔt · Δf i j k)`.
-
-This is naturally satisfied when the diffusion arithmetic uses CRT / ExactRational, since those pipelines produce exact integer quotients by construction. Operator decision: select A as the live resolution → drop the rounding-based `Int.ediv` in `diffusion_step` and replace with the exact form.
-
-### Adelic descent (PROVED, in Adelic.lean + Adelic/LaplacianAsPolyOp.lean)
-
-```
-polyGridOp_mod_descent_pointwise op p g i j k :
-    op.eval g i j k % p = op.eval (gridMod p g) i j k % p
-
-polyGridOp_mod_descent op p g :
-    gridMod p (op.eval g) = gridMod p (op.eval (gridMod p g))
-```
-
-over the inductive class `PolyGridOp` covering id, all 6 shifts, +/−/×. The 7-point Laplacian is expressed as a concrete `laplacianOp : PolyGridOp` with corresponding descent (`laplacian_mod_descent`).
-
-## What's needed to close the Clay Millennium claim end-to-end
-
-**Status:** `global_regularity_exact` is the closed (mod BKM only) Millennium-style
-theorem for the discrete heat-equation trajectory under Resolution A arithmetic.
-The remaining work to close the full NS claim:
-
-1. **Discharge the BKM 1984 axiom** — requires a formal PDE library for NS on 𝕋³
-   (deep PDE; out of scope for finite-N discrete proofs)
-2. **Extend from `diffusion_trajectory` to a `full_ns_trajectory`** that includes:
-   - Advection (energy-neutral by Kill #113, already PROVED)
-   - Stretching (DKAM-subcritical by L2.6, already PROVED)
-   - Biot-Savart inversion (NTT-based, not yet Lean-ported — task #12)
-3. **L3.4** — H² monotonicity under Resolution A (mirrors L2.3, requires stronger
-   CFL and a discrete Poincaré inequality)
-4. **L3.3 sharp Sobolev** — eigenvalue computation; verifiable for N=8 fixed
-5. **Statement bugs L2.7, L9.2** — operator-level review/repair
-
-After (1), the **Resolution-A** closure `global_regularity_exact` becomes
-unconditionally true. After (2), the full NS (not just diffusion) trajectory
-is covered. After (1)+(2)+(3)+(4), the proof is fully constructive end-to-end.
-
-## PR history
+## PR merge history
 
 | PR | Title | Status |
 |---|---|---|
-| #2 | Wave A — close 10 sorries + global regularity composition | open |
-| #3 | Wave B — discharge bs_bounded_linear, constructive PolyGridOp + descent, L2.7 corrected sibling | open |
-| #4 | Wave C — L9.2 corrected sibling + M3 composition reduction to L3.4 | open |
-| #5 | Wave D — prove L2.3 Resolution A (diffusion_max_preserving under exact division) | open |
-| #6 | Wave E — Generic L∞-step closure + Full NS step defs + AubinLions strengthening | open |
-| #7 | Wave F — Discrete SBP foundations (SumGrid + cross-term reindex) | open |
-| #8 | Wave G — NS trajectory generator + ns_global_regularity_skeleton | open |
-| #9 | Wave H — Biot-Savart skeleton + vector-calc identities + L² Resolution A | open |
+| #2 | Wave A — close 10 sorries + global regularity composition | MERGED into Wave H line |
+| #3 | Wave B — discharge `bs_bounded_linear`, constructive `PolyGridOp` + descent | MERGED into Wave H line |
+| #4 | Wave C — L9.2 corrected sibling + M3 composition reduction | MERGED into Wave H line |
+| #5 | Wave D — prove L2.3 Resolution A | MERGED into Wave H line |
+| #6 | Wave E — generic L∞ closure + full NS step defs + Aubin-Lions strengthening | MERGED into Wave H line |
+| #7 | Wave F — discrete SBP foundations | MERGED into Wave H line |
+| #8 | Wave G — NS trajectory generator + skeleton | MERGED into Wave H line |
+| #9 | Wave H — Biot-Savart skeleton + vector-calc identities + L² Resolution A | MERGED 2026-05-22 |
 
-## New top-level theorems exposed in Wave E
+## Claim discipline
 
-```
-generic_global_regularity (step hStep w₀ hLInf T) : IsSmooth (generic_trajectory step w₀)
-    [PROVED unconditionally — modulo BKM axiom]
-
-  ↑ parametric on ANY step preserving L∞ ↑
-
-  Existing specialisation:
-    diffusion_vstep + diffusion_vstep_preserves_lInf_exact (Resolution A)
-    ⟹ recovers global_regularity_exact for the diffusion trajectory
-
-  Future specialisation:
-    ns_step (defined in NS/FullStep.lean) + L∞-preservation of full NS
-    ⟹ full NS global regularity once advection+stretching L∞ behavior is proved
-```
+1. The discrete diffusion certificate is formalized under Resolution A exactness.
+2. The full-NS Lean theorem is a skeleton conditional on `h_step`, Biot-Savart axioms, and BKM.
+3. The continuum Clay-level theorem is not marked closed by this file.
+4. Nested Lean/Rust artifacts are lineage strata. They are presumed part of the build history and must be activated by their correct root, adapter, or feature gate rather than classified as orphan scratch.
