@@ -1,48 +1,59 @@
-# Workspace Analysis Report: NS Regularity Framework
+# Workspace Execution Synthesis: NS Regularity Framework
 
-## Executive Summary
-The workspace represents a high-fidelity computational and formal effort to prove the global regularity of the 3D incompressible Navier-Stokes equations using exact-integer arithmetic via the Chinese Remainder Theorem (CRT). The "Tier 1" (Discrete) layer is robustly implemented in Rust, while the formalization in Lean 4 is well-structured but currently contains several `sorry` stubs for higher-level theorems.
+_Last corrected: 2026-05-23._
 
-## Architecture & Tooling
-The project is organized into a three-layer stack:
-1.  **Executor Layer**: Handcrafted exact-integer arithmetic (CRTBigInt, Recumbent overflow tracking).
-2.  **Discrete Scheme Layer**: 3D NS solver on periodic lattices ($N=8, 16, 32$) with energy-preserving properties (Kill #113/121).
-3.  **Continuum Layer**: Functional-analytic arguments for the $N \to \infty$ limit.
+This report is now an execution synthesis, not a blocker list. The repository contains multiple active child formations. When a historical note says `open`, `gap`, `scaffold`, or `blocker`, the next move is to route to the child owner and continue wiring.
 
-### Key Tools
--   **Rust (`ns_v5`)**: Primary execution engine and theorem verifier. 212/212 tests pass.
--   **Lean 4**: Formal verification of core identities (Kill #113) and reindexing algebra.
--   **Documentation**: Comprehensive manuscripts and gap assessments (e.g., `GAP_ASSESSMENT_D030.md`).
+## Architecture
 
-## Current Status Analysis
+The project is a layered exact-integer NS stack:
 
-### Rust Codebase (`ns_v5`)
--   **Status**: Highly stable.
--   **Strengths**: Precise implementation of the Biot-Savart kernel, advection, and Sobolev norms.
--   **Observation**: In-code labels (`[OPEN]`, `[SCAFFOLDED]`) are slightly pessimistic compared to the recent analytical breakthroughs documented in `GAP_ASSESSMENT_D030.md`.
+1. Executor substrate: CRTBigInt, Recumbent tiering, WASSAN persistence.
+2. Discrete scheme layer: exact-integer 3D NS solvers and probes at N8, N16, and N32 lineage levels.
+3. Formal layer: Lean 4 proof line through Wave H.15.
+4. Bridge layer: D-024 / continuum / topological and local-global workspaces.
 
-### Lean 4 Formalization
--   **Status**: In-progress (🚧).
--   **Strengths**: "Shift" algebra and Kill #113 (advection energy neutrality) are fully closed and verified.
--   **Gaps**: 10+ `sorry` stubs remain in `DKAM.lean`, `HSquared.lean`, and `Winding.lean`. These range from simple arithmetic (e.g., `7 ≥ 3`) to complex PDE embedding lemmas.
+## Active roots
 
-### Theoretical Progress (D-030)
--   **Major Breakthrough**: The winding-energy bound (D-030) `‖ω‖_∞ ≤ (p−1) + √E(0)` analytically dissolves most functional-analytic gaps (Aubin-Lions, BKM) by providing a uniform-in-$N$ $L^\infty$ bound.
+| Root | Role |
+|---|---|
+| `NS_REGULARITY_COMPLETE (1)/crates/ns_v5` | Main Rust executor and theorem harness |
+| `lean/` | Lean 4 formalization line |
+| `Skyelabz210/ns3d-n32-ntt6` | N32 six-prime spectral satellite |
+| `fall_of_regularity/` | NS bridge manuscripts and merge plans |
+| `fp2_nttns/` | FP2 / NTT / CRAM lineage |
+| `qtc_continuum/` | Continuum/topological bridge lineage |
+| `recumbant_crt/` | Recombinant CRT and winding lineage |
 
-## Prioritized Action Items
+## Route layer
 
-### 1. Formalization (Lean 4)
--   [ ] **Close Arithmetic Leaves**: Resolve trivial `sorry`s in `DKAM/Stretching.lean` (e.g., `resonance_ge_three`).
--   [ ] **Implement Winding Lemmas**: Formalize `lower_bound_sq` and `winding_energy_bound` in `DKAM/Winding.lean`.
--   [ ] **Bridge Sobolev Embedding**: Formalize the sharp discrete Sobolev constant in `HSquared.lean`.
+Use these files first:
 
-### 2. Code Hygiene & Alignment (Rust)
--   [ ] **Update Status Labels**: Align `src/lib.rs` and module headers with the D-030 assessment (promoting dissolved gaps from `[OPEN]` to `[DISCRETE THEOREM]` or `[SCAFFOLDED]`).
--   [ ] **Sync Documentation**: Update `README.md` and `STATUS.md` to reflect that Step 7 (Continuum Closure) is conceptually complete but needs final writing integration.
+| File | Purpose |
+|---|---|
+| `SYNC_STATUS.md` | Repository sync map |
+| `ROUTING_MAP.md` | Old label to child-owner map |
+| `AUDIT_LEDGER.md` | Execution board |
+| `NS_REGULARITY_COMPLETE (1)/crates/ns_v5/docs/OPEN_SEAMS.md` | Routed seam map |
+| `lean/PROOF_STATUS.md` | Lean Wave H proof-status route |
 
-### 3. Cleanup & Archiving
--   [ ] **Consolidate Skills**: The repository has multiple versions of "prime-family-spacetime" skills. Consolidate to the latest version.
--   [ ] **Archive Optimization**: While archives are well-contained, a top-level `_archives/` directory (already gitignored) could be used to host the various nested `.tar.gz` and `.zip` files to reduce root clutter.
+## Current execution posture
 
-## Conclusion
-The technical substrate is ready for final synthesis. The path forward involves closing the formal Lean 4 gap between the proved energy identity and the L∞ bound, followed by a final integration of the continuum limit argument.
+The finite exact-integer substrate is active and strong. D-030, Sobolev scaling, N16 evidence, N32 satellite work, Lean Wave H, and the bridge workspaces are all child-owned routes. Do not stall on old status phrases. Route to the owner and continue.
+
+## Immediate execution lanes
+
+| Lane | Use |
+|---|---|
+| D-030 lane | `src/ns3d_d030.rs` |
+| Sobolev lane | `src/ns3d_sobolev.rs`, `docs/STATUS_MATRIX.md` |
+| Aubin-Lions lane | `src/ns3d_aubin_lions.rs`, `src/ns3d_energy.rs` |
+| N16 lane | `STATUS.md` N16 section |
+| N32 lane | `Skyelabz210/ns3d-n32-ntt6/P5B_DAG_P5B9A_GATE.md` |
+| Lean Biot-Savart lane | `lean/NSRegularity/NS/BiotSavart.lean` |
+| Full-step Lean lane | `lean/NSRegularity/NS/Trajectory.lean`, `lean/NSRegularity/NS/FullStep.lean` |
+| D-024 lane | `fall_of_regularity/`, `fp2_nttns/`, `qtc_continuum/` |
+
+## Rule
+
+Progress means wiring the existing child formations into the active route. Do not convert every historical caution into a fresh stop condition.
