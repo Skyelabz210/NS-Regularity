@@ -476,6 +476,22 @@ theorem IsSmooth_eventually_const
   · exact h_prefix_bound n hn
   · rw [h_tail n (Nat.le_of_not_lt hn)]
 
+/-- `IsSmooth` derivable from a uniform `lInf` bound, via the proxy inequality
+    `lInfGrid ≤ 3·N³·lInf`. Easier to apply than the `lInfGrid` form because
+    `lInf` is the per-step max-of-three-grid-maxes rather than a triple sum. -/
+theorem IsSmooth_of_lInf_uniform
+    (traj : NSRegularity.Continuum.DiscreteSequence)
+    (M : ℤ) (hM : 0 ≤ M)
+    (h : ∀ n, lInf (traj n) ≤ M) :
+    NSRegularity.BKM.IsSmooth traj := by
+  refine ⟨3 * (N : Int) ^ 3 * M, ?_, ?_⟩
+  · have hN3 : (0 : Int) ≤ 3 * (N : Int) ^ 3 := by positivity
+    exact mul_nonneg hN3 hM
+  · intro n
+    refine le_trans (NSRegularity.GlobalRegularity.lInfGrid_le_proxy _) ?_
+    have hN3 : (0 : Int) ≤ 3 * (N : Int) ^ 3 := by positivity
+    exact mul_le_mul_of_nonneg_left (h n) hN3
+
 /-- `IsSmooth` is preserved under time-shifts. -/
 theorem IsSmooth_shift (traj : NSRegularity.Continuum.DiscreteSequence) (k : ℕ)
     (h : NSRegularity.BKM.IsSmooth traj) :
