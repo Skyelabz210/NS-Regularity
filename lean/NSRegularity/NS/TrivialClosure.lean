@@ -386,13 +386,30 @@ theorem lInfGrid_unbounded_traj (n : ℕ) :
   rw [abs_of_nonneg (Int.natCast_nonneg n)]
   ring
 
-/-- **The strengthened `IsSmooth` rejects unbounded trajectories.**
+/-- Explicit value of the discrete BKM integral over `T` steps of the constant
+    trajectory: `T · N³ · (|cx| + |cy| + |cz|)`. Used internally by
+    `bkm_integral_finite`; here we record the closed form for the trivial
+    family. -/
+theorem bkmIntegral_const_trajectory (cx cy cz : Int) (p : NsParams) (T : ℕ) :
+    NSRegularity.BKM.bkmIntegral
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching (const_vfield cx cy cz) p) T
+    = (T : Int) * ((N : Int) ^ 3 * (|cx| + |cy| + |cz|)) := by
+  unfold NSRegularity.BKM.bkmIntegral
+  have hpt : ∀ n,
+      NSRegularity.Continuum.lInfGrid
+        (ns_trajectory_generator trivial_biot_savart zero_stretching
+          zero_stretching zero_stretching (const_vfield cx cy cz) p n)
+      = (N : Int) ^ 3 * (|cx| + |cy| + |cz|) := by
+    intro n
+    rw [trajectory_const_eq, lInfGrid_const_vfield]
+  rw [show (fun n => NSRegularity.Continuum.lInfGrid (ns_trajectory_generator
+        trivial_biot_savart zero_stretching zero_stretching zero_stretching
+        (const_vfield cx cy cz) p n)) =
+      (fun _ => (N : Int) ^ 3 * (|cx| + |cy| + |cz|)) from by
+        funext n; exact hpt n]
+  simp [Finset.sum_const, Finset.card_range]
 
-    The prior `IsSmooth := True` accepted every trajectory. The new
-    definition `∃ M, 0 ≤ M ∧ ∀ n, lInfGrid (traj n) ≤ M` is strictly
-    stronger: no `M : ℤ` bounds the trajectory whose `lInfGrid` grows as
-    `3·N³·n`. This certifies that the strengthening introduced in the
-    earlier "tighten IsSmooth" commit is not a no-op. -/
 theorem unbounded_traj_not_IsSmooth :
     ¬ NSRegularity.BKM.IsSmooth unbounded_traj := by
   rintro ⟨M, _, hM⟩
