@@ -8,8 +8,8 @@ This document used to list top-level open seams. Those labels are now routed to 
 
 | Seam | Child owner | Routed status |
 |---|---|---|
-| Super-threshold stretching bound | `../src/ns3d_d030.rs` | Routed to D-030 winding-energy bound and trajectory tests |
-| Uniform-in-N limit transfer | `STATUS_MATRIX.md`, `../src/ns3d_sobolev.rs`, `../src/ns3d_aubin_lions.rs` | Routed to Sobolev scaling, N16 table, and Aubin-Lions child checks |
+| Super-threshold stretching bound | `../src/ns3d_d030.rs` | Routed to D-030 winding-energy bound and trajectory tests; algebraic bound `‖ω‖_∞ ≤ (p−1) + ⌈√E(0)⌉` witnessed at N ∈ {8, 16, 32} (`d030_bound_holds_n16`, `d030_bound_holds_n32`); `winding_bound_from_energy` is now Axiom-A1 compliant (no f64 on the trajectory hot path) |
+| Uniform-in-N limit transfer | `STATUS_MATRIX.md`, `../src/ns3d_sobolev.rs`, `../src/ns3d_aubin_lions.rs`, `../src/ns3d_n16.rs`, `../src/ns3d_n32.rs` | Routed to Sobolev scaling, N16 table, Aubin-Lions child checks, and N ∈ {8, 16, 32} D-030 witnesses |
 | T_FK(N) scaling | `../STATUS.md`, N32 satellite `Skyelabz210/ns3d-n32-ntt6` | Routed to N8 measurement, N16 prime-set readiness, and N32 satellite path |
 | N^6 Biot-Savart normalization | `../src/ns3d.rs`, `../src/ns3d_sobolev.rs`, N32 satellite | Routed to exact NTT-BS lineage and wider spectral path |
 | N16 verification | `../STATUS.md`, `STATUS_MATRIX.md` | Routed to final-session N16 prime-set and uniform property table |
