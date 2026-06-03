@@ -476,6 +476,35 @@ theorem IsSmooth_eventually_const
   · exact h_prefix_bound n hn
   · rw [h_tail n (Nat.le_of_not_lt hn)]
 
+/-- `IsSmooth` is preserved under time-shifts. -/
+theorem IsSmooth_shift (traj : NSRegularity.Continuum.DiscreteSequence) (k : ℕ)
+    (h : NSRegularity.BKM.IsSmooth traj) :
+    NSRegularity.BKM.IsSmooth (fun n => traj (n + k)) := by
+  obtain ⟨M, hM, h⟩ := h
+  exact ⟨M, hM, fun n => h (n + k)⟩
+
+/-- `IsSmooth` is preserved under arbitrary subsequence selection. -/
+theorem IsSmooth_subseq (traj : NSRegularity.Continuum.DiscreteSequence)
+    (f : ℕ → ℕ)
+    (h : NSRegularity.BKM.IsSmooth traj) :
+    NSRegularity.BKM.IsSmooth (fun n => traj (f n)) := by
+  obtain ⟨M, hM, h⟩ := h
+  exact ⟨M, hM, fun n => h (f n)⟩
+
+/-- The maximum of two `IsSmooth` witnesses gives an `IsSmooth` witness for
+    any trajectory bounded by either of the two. -/
+theorem IsSmooth_of_le_or
+    (traj : NSRegularity.Continuum.DiscreteSequence)
+    (M₁ M₂ : ℤ) (h₁ : 0 ≤ M₁) (h₂ : 0 ≤ M₂)
+    (h : ∀ n, NSRegularity.Continuum.lInfGrid (traj n) ≤ M₁ ∨
+              NSRegularity.Continuum.lInfGrid (traj n) ≤ M₂) :
+    NSRegularity.BKM.IsSmooth traj := by
+  refine ⟨max M₁ M₂, le_max_of_le_left h₁, ?_⟩
+  intro n
+  rcases h n with hL | hL
+  · exact le_trans hL (le_max_left _ _)
+  · exact le_trans hL (le_max_right _ _)
+
 /-- **Unified trivial-skeleton closure.**
 
     Discharges `IsSmooth (ns_trajectory_generator trivial_biot_savart ...)`
