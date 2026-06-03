@@ -451,6 +451,31 @@ theorem ns_global_regularity_zero_nu (w₀ : VField) (p : NsParams)
     exact mul_nonneg hN3 hLInf
   · intro n; exact lInfGrid_const_traj_bound w₀ p hν n
 
+/-- **Any constant trajectory satisfies `IsSmooth`** — the most general
+    "trivially regular" case. The witness is `M = lInfGrid w₀`. -/
+theorem IsSmooth_const_traj (w₀ : VField) :
+    NSRegularity.BKM.IsSmooth (fun _ : ℕ => w₀) :=
+  ⟨NSRegularity.Continuum.lInfGrid w₀,
+   NSRegularity.Continuum.lInfGrid_nonneg w₀,
+   fun _ => le_refl _⟩
+
+/-- A trajectory that is constant after some time `n₀` satisfies `IsSmooth`,
+    using the max of the values up to `n₀` and the constant tail. -/
+theorem IsSmooth_eventually_const
+    (traj : NSRegularity.Continuum.DiscreteSequence)
+    (n₀ : ℕ) (w_tail : VField)
+    (h_tail : ∀ n, n₀ ≤ n → traj n = w_tail)
+    (h_prefix_bound : ∀ n, n < n₀ →
+      NSRegularity.Continuum.lInfGrid (traj n) ≤
+        NSRegularity.Continuum.lInfGrid w_tail) :
+    NSRegularity.BKM.IsSmooth traj := by
+  refine ⟨NSRegularity.Continuum.lInfGrid w_tail,
+          NSRegularity.Continuum.lInfGrid_nonneg w_tail, ?_⟩
+  intro n
+  by_cases hn : n < n₀
+  · exact h_prefix_bound n hn
+  · rw [h_tail n (Nat.le_of_not_lt hn)]
+
 /-- **Unified trivial-skeleton closure.**
 
     Discharges `IsSmooth (ns_trajectory_generator trivial_biot_savart ...)`
