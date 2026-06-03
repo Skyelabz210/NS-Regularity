@@ -22,4 +22,5 @@ import NSRegularity.AubinLions.ResolutionA  -- L4.2 Resolution A L² monotonicit
 import NSRegularity.NS.BiotSavart  -- discrete curl + Biot-Savart skeleton (axiomatic)
 import NSRegularity.NS.Trajectory  -- NS trajectory generator + global regularity skeleton
 import NSRegularity.NS.TrivialClosure  -- fully discharged IsSmooth instances (zero/const w₀)
+import NSRegularity.NS.AdvectionBound  -- pointwise Lipschitz bound for discrete advection
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
