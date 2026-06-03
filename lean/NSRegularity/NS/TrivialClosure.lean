@@ -41,6 +41,27 @@ open NSRegularity NSRegularity.NS NSRegularity.GlobalRegularity
 def trivial_biot_savart : VField → VField :=
   fun _ => ⟨fun _ _ _ => 0, fun _ _ _ => 0, fun _ _ _ => 0⟩
 
+/-- `divV (trivial_biot_savart ω) = 0` — the discharged form of the
+    `biot_savart_div_zero` axiom for this constructive choice. -/
+theorem trivial_biot_savart_div_zero (ω : VField) :
+    divV (trivial_biot_savart ω) = fun (_ _ _ : Fin N) => (0 : Int) := by
+  funext i j k
+  unfold trivial_biot_savart divV
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  ring
+
+/-- For `ω = 0`, the trivial Biot-Savart satisfies the curl-inverse
+    property `curl (trivial_biot_savart ω) = ω`. This is the discharged
+    form of `biot_savart_curl_eq` on the zero subspace, with the
+    `divV ω = 0` precondition trivially satisfied. -/
+theorem trivial_biot_savart_curl_eq_on_zero :
+    curl (trivial_biot_savart ⟨fun _ _ _ => 0, fun _ _ _ => 0, fun _ _ _ => 0⟩)
+      = ⟨fun _ _ _ => 0, fun _ _ _ => 0, fun _ _ _ => 0⟩ := by
+  unfold trivial_biot_savart curl curlX curlY curlZ
+  unfold NSRegularity.Kill113.diffX NSRegularity.Kill113.diffY NSRegularity.Kill113.diffZ
+  refine VField.mk.injEq .. |>.mpr ⟨?_, ?_, ?_⟩ <;>
+    (funext i j k; ring)
+
 /-- Zero stretching gradient. Independent of `w`. -/
 def zero_stretching : VField → Grid :=
   fun _ => fun _ _ _ => 0
