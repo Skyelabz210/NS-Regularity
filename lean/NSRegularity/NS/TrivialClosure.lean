@@ -177,4 +177,95 @@ theorem ns_global_regularity_zero_initial
   exact ns_global_regularity_trivial_exact
     zero_vfield p h hν hdt hns hLInf (diffusion_exactness_hyp_zero p) T
 
+/-- `gridLInf` is always non-negative: it is a `Finset.sup'` of non-negative
+    integer-cast `.natAbs` values. -/
+theorem gridLInf_nonneg (f : Grid) : 0 ≤ gridLInf f := by
+  unfold gridLInf
+  -- Bound below by the value at (0,0,0), which is ↑(f 0 0 0).natAbs ≥ 0.
+  have h1 : ((f 0 0 0).natAbs : Int) ≤
+      Finset.univ.sup' gridLInf._proof_1
+        (fun k => ((f 0 0 k).natAbs : Int)) :=
+    Finset.le_sup' (s := (Finset.univ : Finset (Fin N)))
+      (f := fun k => ((f 0 0 k).natAbs : Int))
+      (Finset.mem_univ (0 : Fin N))
+  -- Chain through the j and i levels.
+  have h2 : Finset.univ.sup' gridLInf._proof_1
+      (fun k => ((f 0 0 k).natAbs : Int)) ≤
+      Finset.univ.sup' gridLInf._proof_1 (fun j =>
+        Finset.univ.sup' gridLInf._proof_1 (fun k => ((f 0 j k).natAbs : Int))) :=
+    Finset.le_sup' (s := (Finset.univ : Finset (Fin N)))
+      (f := fun j => Finset.univ.sup' gridLInf._proof_1
+        (fun k => ((f 0 j k).natAbs : Int)))
+      (Finset.mem_univ (0 : Fin N))
+  have h3 : Finset.univ.sup' gridLInf._proof_1 (fun j =>
+        Finset.univ.sup' gridLInf._proof_1 (fun k => ((f 0 j k).natAbs : Int))) ≤
+      Finset.univ.sup' gridLInf._proof_1 (fun i =>
+        Finset.univ.sup' gridLInf._proof_1 (fun j =>
+          Finset.univ.sup' gridLInf._proof_1
+            (fun k => ((f i j k).natAbs : Int)))) :=
+    Finset.le_sup' (s := (Finset.univ : Finset (Fin N)))
+      (f := fun i => Finset.univ.sup' gridLInf._proof_1 (fun j =>
+        Finset.univ.sup' gridLInf._proof_1 (fun k => ((f i j k).natAbs : Int))))
+      (Finset.mem_univ (0 : Fin N))
+  have h0 : (0 : Int) ≤ ((f 0 0 0).natAbs : Int) := Int.natCast_nonneg _
+  exact le_trans h0 (le_trans h1 (le_trans h2 h3))
+
+/-- `lInf` is always non-negative. -/
+theorem lInf_nonneg (w : VField) : 0 ≤ lInf w := by
+  unfold lInf
+  exact le_max_of_le_left (gridLInf_nonneg w.x)
+
+/-- Constant vector field with components `(cx, cy, cz)`. -/
+def const_vfield (cx cy cz : Int) : VField :=
+  ⟨fun _ _ _ => cx, fun _ _ _ => cy, fun _ _ _ => cz⟩
+
+/-- Constants are harmonic: `laplacian (fun _ _ _ => c) = 0`. -/
+theorem laplacian_const (c : Int) (i j k : Fin N) :
+    NSRegularity.NS.laplacian (fun _ _ _ => c) i j k = 0 := by
+  unfold NSRegularity.NS.laplacian
+  ring
+
+/-- The diffusion exactness hypothesis holds for any constant initial
+    vorticity: the laplacian vanishes everywhere along the trajectory. -/
+theorem diffusion_exactness_hyp_const (cx cy cz : Int) (p : NsParams) :
+    diffusion_exactness_hyp (const_vfield cx cy cz) p := by
+  intro n i j k
+  -- The trajectory starting at any constant field is constant (laplacian = 0).
+  have htraj : ∀ n,
+      diffusion_trajectory (const_vfield cx cy cz) p n = const_vfield cx cy cz := by
+    intro n
+    induction n with
+    | zero => rfl
+    | succ n ih =>
+        unfold diffusion_trajectory
+        rw [ih]
+        unfold const_vfield diffusion_step
+        refine VField.mk.injEq .. |>.mpr ⟨?_, ?_, ?_⟩ <;>
+          (funext i j k; rw [laplacian_const]; simp)
+  rw [htraj n]
+  refine ⟨?_, ?_, ?_⟩ <;>
+    (unfold const_vfield; rw [laplacian_const]; simp)
+
+/-- **Hypothesis-free closed NS trajectory at any constant initial data.**
+
+    Extends `ns_global_regularity_zero_initial` to all constant initial
+    vorticity fields. The trajectory is again constant (constants are
+    harmonic, so the diffusion step is the identity), and `IsSmooth`
+    holds with `M = max(|cx|, max(|cy|, |cz|))`.
+
+    Together with the zero case, this gives a 3-parameter family of
+    closed `IsSmooth (ns_trajectory_generator ...)` instances - more
+    than just the degenerate origin point. -/
+theorem ns_global_regularity_const_initial
+    (cx cy cz : Int)
+    (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) (hns : 0 < p.ns_scale)
+    (T : ℕ) :
+    NSRegularity.BKM.IsSmooth
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching (const_vfield cx cy cz) p) := by
+  exact ns_global_regularity_trivial_exact
+    (const_vfield cx cy cz) p h hν hdt hns (lInf_nonneg _)
+    (diffusion_exactness_hyp_const cx cy cz p) T
+
 end NSRegularity.NS.TrivialClosure
