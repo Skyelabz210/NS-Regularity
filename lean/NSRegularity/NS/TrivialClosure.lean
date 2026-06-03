@@ -299,4 +299,18 @@ theorem trajectory_zero_eq (p : NsParams) (n : ℕ) :
   have := trajectory_const_eq 0 0 0 p n
   simpa [const_vfield, zero_vfield] using this
 
+/-- The L¹-proxy `lInfGrid` of the zero vorticity is zero. -/
+theorem lInfGrid_zero_vfield : NSRegularity.Continuum.lInfGrid zero_vfield = 0 := by
+  unfold NSRegularity.Continuum.lInfGrid zero_vfield
+  simp
+
+/-- The L¹-proxy `lInfGrid` of a constant vorticity is
+    `N³ · (|cx| + |cy| + |cz|)`. -/
+theorem lInfGrid_const_vfield (cx cy cz : Int) :
+    NSRegularity.Continuum.lInfGrid (const_vfield cx cy cz) =
+    (N : Int) ^ 3 * (|cx| + |cy| + |cz|) := by
+  unfold NSRegularity.Continuum.lInfGrid const_vfield
+  simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+  ring
+
 end NSRegularity.NS.TrivialClosure
