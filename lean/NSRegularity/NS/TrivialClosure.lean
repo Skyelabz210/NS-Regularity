@@ -339,4 +339,51 @@ theorem ns_global_regularity_const_initial_tight (cx cy cz : Int) (p : NsParams)
   · intro n
     rw [trajectory_const_eq, lInfGrid_const_vfield]
 
+/-! ## Strengthened `IsSmooth` is strictly stronger than the prior `True` placeholder. -/
+
+/-- An explicit unbounded trajectory: `traj n` has all three components equal
+    to the constant `n` everywhere. -/
+def unbounded_traj : NSRegularity.Continuum.DiscreteSequence :=
+  fun n => const_vfield (n : Int) (n : Int) (n : Int)
+
+/-- `lInfGrid (unbounded_traj n) = 3 · N³ · n`. -/
+theorem lInfGrid_unbounded_traj (n : ℕ) :
+    NSRegularity.Continuum.lInfGrid (unbounded_traj n) = 3 * (N : Int) ^ 3 * (n : Int) := by
+  unfold unbounded_traj
+  rw [lInfGrid_const_vfield]
+  rw [abs_of_nonneg (Int.natCast_nonneg n)]
+  ring
+
+/-- **The strengthened `IsSmooth` rejects unbounded trajectories.**
+
+    The prior `IsSmooth := True` accepted every trajectory. The new
+    definition `∃ M, 0 ≤ M ∧ ∀ n, lInfGrid (traj n) ≤ M` is strictly
+    stronger: no `M : ℤ` bounds the trajectory whose `lInfGrid` grows as
+    `3·N³·n`. This certifies that the strengthening introduced in the
+    earlier "tighten IsSmooth" commit is not a no-op. -/
+theorem unbounded_traj_not_IsSmooth :
+    ¬ NSRegularity.BKM.IsSmooth unbounded_traj := by
+  rintro ⟨M, _, hM⟩
+  -- Specialise at n = M.natAbs + 1 (a natural number whose Int cast exceeds M).
+  -- Then `lInfGrid (unbounded_traj n) = 3·N³·n ≥ n > M` contradicts `hM n`.
+  set n : ℕ := M.natAbs + 1 with hn
+  have hM_n := hM n
+  rw [lInfGrid_unbounded_traj] at hM_n
+  -- (n : Int) > M because n.natAbs = n (for Nat → Int) and natAbs grows past M.
+  have hn_gt : M < (n : Int) := by
+    have h1 : M ≤ (M.natAbs : Int) := Int.le_natAbs
+    have h2 : (M.natAbs : Int) < ((M.natAbs + 1 : ℕ) : Int) := by
+      push_cast; linarith
+    exact lt_of_le_of_lt h1 h2
+  -- Now `3·N³·n ≥ n > M`, contradicting `3·N³·n ≤ M`.
+  have hN3_pos : (0 : Int) < (N : Int) ^ 3 := by positivity
+  have hN3_ge_one : (1 : Int) ≤ (N : Int) ^ 3 := by
+    have : (N : Int) = 8 := by decide
+    rw [this]; decide
+  have h3N3 : (1 : Int) ≤ 3 * (N : Int) ^ 3 := by linarith
+  have hn_nonneg : (0 : Int) ≤ (n : Int) := Int.natCast_nonneg _
+  have : (n : Int) ≤ 3 * (N : Int) ^ 3 * (n : Int) := by
+    nlinarith [hn_nonneg, h3N3]
+  linarith
+
 end NSRegularity.NS.TrivialClosure
