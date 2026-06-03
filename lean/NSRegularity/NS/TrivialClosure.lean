@@ -268,4 +268,35 @@ theorem ns_global_regularity_const_initial
     (const_vfield cx cy cz) p h hν hdt hns (lInf_nonneg _)
     (diffusion_exactness_hyp_const cx cy cz p) T
 
+/-- **Explicit trajectory: constant initial data ⇒ constant trajectory.**
+
+    For any constant initial vorticity, the NS trajectory under the
+    trivial Biot-Savart / zero-stretching choices is the constant
+    sequence equal to the initial data. This is the explicit form
+    underlying `ns_global_regularity_const_initial`.
+
+    Used in the closure proof and made externally accessible here so
+    downstream consumers can rewrite trajectory references. -/
+theorem trajectory_const_eq (cx cy cz : Int) (p : NsParams) (n : ℕ) :
+    ns_trajectory_generator trivial_biot_savart zero_stretching
+      zero_stretching zero_stretching (const_vfield cx cy cz) p n =
+    const_vfield cx cy cz := by
+  rw [ns_trajectory_trivial_eq]
+  -- Reduce diffusion_trajectory at constant init to the constant.
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+      unfold diffusion_trajectory
+      rw [ih]
+      unfold const_vfield diffusion_step
+      refine VField.mk.injEq .. |>.mpr ⟨?_, ?_, ?_⟩ <;>
+        (funext i j k; rw [laplacian_const]; simp)
+
+/-- **Specialisation to the zero trajectory.** -/
+theorem trajectory_zero_eq (p : NsParams) (n : ℕ) :
+    ns_trajectory_generator trivial_biot_savart zero_stretching
+      zero_stretching zero_stretching zero_vfield p n = zero_vfield := by
+  have := trajectory_const_eq 0 0 0 p n
+  simpa [const_vfield, zero_vfield] using this
+
 end NSRegularity.NS.TrivialClosure
