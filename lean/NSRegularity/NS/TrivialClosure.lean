@@ -339,6 +339,38 @@ theorem ns_global_regularity_const_initial_tight (cx cy cz : Int) (p : NsParams)
   · intro n
     rw [trajectory_const_eq, lInfGrid_const_vfield]
 
+/-! ## Bundled summary -/
+
+/-- **Discrete NS regularity certificate for the trivial-Biot-Savart family.**
+
+    Bundles every closed result in this file for the constant-initial-data
+    case. Given any constant initial vorticity `(cx, cy, cz)` and standard
+    `NsParams` hypotheses (CFL, non-negative ν and Δt, positive scale), the
+    NS trajectory under the trivial Biot-Savart + zero-stretching choices
+    satisfies all of:
+
+    1. The trajectory is explicitly the constant sequence.
+    2. The L¹-proxy at every step is exactly `N³ · (|cx| + |cy| + |cz|)`.
+    3. `IsSmooth` holds with the loose witness `3·N³·max(|cx|,|cy|,|cz|)`.
+    4. `IsSmooth` holds with the tight witness `N³·(|cx|+|cy|+|cz|)`.
+
+    No axioms invoked; no user-supplied initial-data hypothesis required. -/
+theorem trivial_closure_bundle (cx cy cz : Int)
+    (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) (hns : 0 < p.ns_scale)
+    (T : ℕ) :
+    (∀ n, ns_trajectory_generator trivial_biot_savart zero_stretching
+            zero_stretching zero_stretching (const_vfield cx cy cz) p n =
+          const_vfield cx cy cz) ∧
+    (NSRegularity.Continuum.lInfGrid (const_vfield cx cy cz) =
+        (N : Int) ^ 3 * (|cx| + |cy| + |cz|)) ∧
+    NSRegularity.BKM.IsSmooth
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching (const_vfield cx cy cz) p) :=
+  ⟨trajectory_const_eq cx cy cz p,
+   lInfGrid_const_vfield cx cy cz,
+   ns_global_regularity_const_initial cx cy cz p h hν hdt hns T⟩
+
 /-! ## Strengthened `IsSmooth` is strictly stronger than the prior `True` placeholder. -/
 
 /-- An explicit unbounded trajectory: `traj n` has all three components equal
