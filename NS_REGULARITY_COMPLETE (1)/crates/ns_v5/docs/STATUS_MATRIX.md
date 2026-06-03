@@ -45,21 +45,28 @@ All items use exactly four status labels:
 
 ## N=16 Verification Results (April 4, 2026 — final session)
 
-| Test | N=8 | N=16 | Uniform? |
-|------|-----|------|----------|
-| NTT roundtrip (1D) | EXACT | EXACT | YES |
-| NTT roundtrip (3D) | EXACT | EXACT | YES |
-| Garner reconstruction | EXACT | EXACT | YES |
-| BS velocity ratio | 1.00 | 1.00 | YES |
-| Kill #113 (TG) | = 0 | = 0 | YES |
-| Kill #113 (ABC) | = 0 | = 0 | YES |
-| Energy non-increasing | YES (10 steps) | YES (10 steps) | YES |
-| TG SIP | = 0 | = 0 | YES |
-| ABC SIP | = 0 | = 0 | YES |
-| Sobolev embedding | HOLDS | HOLDS | YES |
+| Test | N=8 | N=16 | N=32 | Uniform? |
+|------|-----|------|------|----------|
+| NTT roundtrip (1D) | EXACT | EXACT | EXACT | YES |
+| NTT roundtrip (3D) | EXACT | EXACT | EXACT | YES |
+| Garner reconstruction | EXACT | EXACT | EXACT | YES |
+| BS velocity ratio | 1.00 | 1.00 | ~1 | YES |
+| Kill #113 (TG) | = 0 | = 0 | = 0 | YES |
+| Kill #113 (ABC) | = 0 | = 0 | = 0 | YES |
+| Energy non-increasing | YES (10 steps) | YES (10 steps) | YES (5 steps) | YES |
+| TG SIP | = 0 | = 0 | = 0 | YES |
+| ABC SIP | = 0 | = 0 | = 0 | YES |
+| Sobolev embedding | HOLDS | HOLDS | HOLDS | YES |
+| D-030 bound `‖ω‖_∞ ≤ (p−1) + ⌈√E(0)⌉` | HOLDS (`d030_taylor_green_all_primes`) | HOLDS (`d030_bound_holds_n16`) | HOLDS (`d030_bound_holds_n32`) | YES |
 
-All 10 discrete properties verified UNIFORMLY across N=8 and N=16.
-Kill #113 is confirmed algebraic (N-independent).
+All 11 discrete properties verified UNIFORMLY across N ∈ {8, 16, 32}.
+Kill #113 is confirmed algebraic (N-independent). The D-030 bound is
+per-point algebraic so its N-uniformity is a structural consequence;
+the explicit witnesses at three N values pin it as a verified fact
+of the lifted scheme.
+
+The trajectory-path `winding_bound_from_energy` is now Axiom-A1
+compliant (`integer_sqrt_ceil` + integer-ceiling division; no f64).
 
 ## Kill #128 Correction (April 4, 2026)
 
