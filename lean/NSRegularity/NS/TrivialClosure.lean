@@ -128,4 +128,53 @@ theorem ns_global_regularity_trivial_exact
   rw [ns_trajectory_trivial_eq]
   exact global_regularity_exact w₀ p h hν hdt hns hLInf hExactAll T
 
+/-- The zero vector field. -/
+def zero_vfield : VField :=
+  ⟨fun _ _ _ => 0, fun _ _ _ => 0, fun _ _ _ => 0⟩
+
+/-- The diffusion exactness hypothesis holds trivially for `w₀ = 0`. -/
+theorem diffusion_exactness_hyp_zero (p : NsParams) :
+    diffusion_exactness_hyp zero_vfield p := by
+  intro n i j k
+  -- The trajectory starting at zero is constant zero, so laplacian is zero,
+  -- so the divisibility holds with quotient 0.
+  -- Step 1: show `diffusion_trajectory zero_vfield p n = zero_vfield`.
+  have htraj : ∀ n, diffusion_trajectory zero_vfield p n = zero_vfield := by
+    intro n
+    induction n with
+    | zero => rfl
+    | succ n ih =>
+        unfold diffusion_trajectory
+        rw [ih]
+        unfold zero_vfield diffusion_step NSRegularity.NS.laplacian
+        refine VField.mk.injEq .. |>.mpr ⟨?_, ?_, ?_⟩ <;>
+          (funext i j k; simp)
+  rw [htraj n]
+  -- Each component's laplacian on the zero field is zero.
+  refine ⟨?_, ?_, ?_⟩ <;> (unfold zero_vfield NSRegularity.NS.laplacian; simp)
+
+/-- **Hypothesis-free closed NS trajectory: `w₀ = 0`.**
+
+    The all-zero initial vorticity trajectory under the trivial
+    Biot-Savart / zero-stretching choices is a closed instance of
+    `IsSmooth (ns_trajectory_generator ...)` requiring only the
+    standard CFL and non-negativity hypotheses on `NsParams`.
+
+    Mathematically degenerate (the trajectory is constant zero), but
+    the corollary completes the trivial-instantiation closure with no
+    user-supplied initial-data hypothesis. -/
+theorem ns_global_regularity_zero_initial
+    (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) (hns : 0 < p.ns_scale)
+    (T : ℕ) :
+    NSRegularity.BKM.IsSmooth
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching zero_vfield p) := by
+  have hLInf : 0 ≤ lInf zero_vfield := by
+    unfold lInf zero_vfield gridLInf
+    -- The L∞ of the zero grid is `0`, since every entry has `.natAbs = 0`.
+    simp
+  exact ns_global_regularity_trivial_exact
+    zero_vfield p h hν hdt hns hLInf (diffusion_exactness_hyp_zero p) T
+
 end NSRegularity.NS.TrivialClosure
