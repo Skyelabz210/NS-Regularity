@@ -386,6 +386,71 @@ theorem lInfGrid_unbounded_traj (n : ℕ) :
   rw [abs_of_nonneg (Int.natCast_nonneg n)]
   ring
 
+/-! ## Vanishing-viscosity closure: arbitrary initial data when `ν = 0` -/
+
+/-- When the scaled viscosity is exactly zero, the diffusion step is the
+    identity on every field (the laplacian term is multiplied by zero). -/
+theorem diffusion_step_id_of_zero_nu (f : Grid) (p : NsParams) (hν : p.nu_scaled = 0) :
+    diffusion_step f p = f := by
+  funext i j k
+  unfold diffusion_step
+  rw [hν]; ring_nf; simp
+
+/-- With trivial Biot-Savart, zero stretching, AND zero viscosity, the NS
+    step is the identity for ANY field - no monotonicity or boundedness
+    structure is required from `w`. -/
+theorem ns_step_id_of_zero_nu (w : VField) (p : NsParams) (hν : p.nu_scaled = 0) :
+    ns_step (trivial_biot_savart w) (zero_stretching w) (zero_stretching w)
+      (zero_stretching w) w p = w := by
+  rw [ns_step_trivial_eq]
+  unfold diffusion_vstep
+  refine VField.mk.injEq .. |>.mpr ⟨?_, ?_, ?_⟩ <;>
+    exact diffusion_step_id_of_zero_nu _ _ hν
+
+/-- The vanishing-viscosity trajectory is constant at the initial data. -/
+theorem trajectory_id_of_zero_nu (w₀ : VField) (p : NsParams)
+    (hν : p.nu_scaled = 0) (n : ℕ) :
+    ns_trajectory_generator trivial_biot_savart zero_stretching
+      zero_stretching zero_stretching w₀ p n = w₀ := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+      unfold ns_trajectory_generator
+      rw [ih]
+      exact ns_step_id_of_zero_nu w₀ p hν
+
+/-- `lInfGrid_le_proxy` for the constant-`w₀` trajectory: every step is
+    bounded by `3·N³·lInf w₀`. -/
+theorem lInfGrid_const_traj_bound (w₀ : VField) (p : NsParams)
+    (hν : p.nu_scaled = 0) (n : ℕ) :
+    NSRegularity.Continuum.lInfGrid
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching w₀ p n)
+    ≤ 3 * (N : Int) ^ 3 * lInf w₀ := by
+  rw [trajectory_id_of_zero_nu _ _ hν]
+  exact NSRegularity.GlobalRegularity.lInfGrid_le_proxy w₀
+
+/-- **Vanishing-viscosity closure: `IsSmooth` for ANY initial vorticity.**
+
+    With `ν = 0` (zero scaled viscosity), the trivial-Biot-Savart +
+    zero-stretching NS step is the identity, so the trajectory is the
+    constant initial data, and `IsSmooth` holds with the uniform bound
+    `M = 3·N³·lInf w₀`. The only hypotheses are `p.nu_scaled = 0` and
+    `0 ≤ lInf w₀`.
+
+    Unlike the `const_initial` family this works for *arbitrary*
+    (non-constant) initial vorticity: the vanishing-viscosity NS dynamics
+    is the identity, so initial-data structure plays no role. -/
+theorem ns_global_regularity_zero_nu (w₀ : VField) (p : NsParams)
+    (hν : p.nu_scaled = 0) (hLInf : 0 ≤ lInf w₀) (_T : ℕ) :
+    NSRegularity.BKM.IsSmooth
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching w₀ p) := by
+  refine ⟨3 * (N : Int) ^ 3 * lInf w₀, ?_, ?_⟩
+  · have hN3 : (0 : Int) ≤ 3 * (N : Int) ^ 3 := by positivity
+    exact mul_nonneg hN3 hLInf
+  · intro n; exact lInfGrid_const_traj_bound w₀ p hν n
+
 /-- Explicit value of the discrete BKM integral over `T` steps of the constant
     trajectory: `T · N³ · (|cx| + |cy| + |cz|)`. Used internally by
     `bkm_integral_finite`; here we record the closed form for the trivial
