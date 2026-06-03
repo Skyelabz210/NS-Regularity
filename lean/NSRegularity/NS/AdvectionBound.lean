@@ -115,4 +115,37 @@ theorem advective_zero_velocity (f : Grid) (i j k : Fin N) :
   unfold NSRegularity.Kill113.advective
   simp
 
+/-- **Advection-step perturbation bound (pointwise).**
+
+    The single advection sub-step moves each grid value by no more than
+
+      `|Δt| · 2·‖f‖_∞ · (|u_x| + |u_y| + |u_z|)(i,j,k)`.
+
+    Combines `advective_abs_le` with the integer-division contraction
+    `Int.natAbs_ediv_le_natAbs` (dividing by `2·N·S` does not increase the
+    absolute value). This is the discrete "how far can one advection step
+    move the field" estimate — the operator-side input the full-step L∞
+    argument needs to balance against the diffusion contraction. It does
+    NOT by itself give L∞ preservation (the bound is a growth factor, not
+    a contraction); that balance against diffusion under CFL stays open. -/
+theorem advection_step_perturbation_le
+    (u : VField) (f : Grid) (p : NsParams) (i j k : Fin N) :
+    |advection_step u f p i j k - f i j k| ≤
+      |p.dt_latt| * (2 * gridLInf f * (|u.x i j k| + |u.y i j k| + |u.z i j k|)) := by
+  -- The step change is `-(Δt · advective / (2 N S))`.
+  have key : advection_step u f p i j k - f i j k
+      = -(p.dt_latt * NSRegularity.Kill113.advective u f i j k
+            / (2 * (N : Int) * p.ns_scale)) := by
+    simp only [advection_step]; ring
+  rw [key, abs_neg]
+  -- Dividing by `2 N S` does not increase the absolute value.
+  have hdiv : |p.dt_latt * NSRegularity.Kill113.advective u f i j k
+                / (2 * (N : Int) * p.ns_scale)|
+      ≤ |p.dt_latt * NSRegularity.Kill113.advective u f i j k| := by
+    rw [Int.abs_eq_natAbs, Int.abs_eq_natAbs]
+    exact_mod_cast Int.natAbs_ediv_le_natAbs _ _
+  refine le_trans hdiv ?_
+  rw [abs_mul]
+  exact mul_le_mul_of_nonneg_left (advective_abs_le u f i j k) (abs_nonneg _)
+
 end NSRegularity.NS.AdvectionBound
