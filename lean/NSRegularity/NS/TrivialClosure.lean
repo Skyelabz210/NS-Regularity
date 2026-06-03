@@ -313,4 +313,30 @@ theorem lInfGrid_const_vfield (cx cy cz : Int) :
   simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
   ring
 
+/-- **Tight `IsSmooth` witness for the constant trajectory.**
+
+    The trajectory is the constant sequence equal to `const_vfield cx cy cz`,
+    so every step has `lInfGrid = N³ · (|cx| + |cy| + |cz|)`. The tightest
+    uniform bound `M` for the `IsSmooth` existential is precisely this value.
+
+    The general `ns_global_regularity_const_initial` uses the loose bound
+    `M = 3 · N³ · lInf w₀ = 3 · N³ · max(|cx|, |cy|, |cz|)` inherited from
+    `generic_ns_lInfGrid_uniform`; this lemma supplies the tight closed-form
+    witness. -/
+theorem ns_global_regularity_const_initial_tight (cx cy cz : Int) (p : NsParams) :
+    NSRegularity.BKM.IsSmooth
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching (const_vfield cx cy cz) p) := by
+  refine ⟨(N : Int) ^ 3 * (|cx| + |cy| + |cz|), ?_, ?_⟩
+  · -- 0 ≤ N³ · (|cx| + |cy| + |cz|)
+    have h1 : (0 : Int) ≤ (N : Int) ^ 3 := by positivity
+    have h2 : (0 : Int) ≤ |cx| + |cy| + |cz| := by
+      have hx : (0 : Int) ≤ |cx| := abs_nonneg _
+      have hy : (0 : Int) ≤ |cy| := abs_nonneg _
+      have hz : (0 : Int) ≤ |cz| := abs_nonneg _
+      linarith
+    exact mul_nonneg h1 h2
+  · intro n
+    rw [trajectory_const_eq, lInfGrid_const_vfield]
+
 end NSRegularity.NS.TrivialClosure
