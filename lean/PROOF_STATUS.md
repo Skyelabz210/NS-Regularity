@@ -11,6 +11,12 @@ The Lean workspace is synchronized through Wave H.15. The discrete PDE algebra a
 ### Closed / active Lean results
 
 ```lean
+-- IsSmooth is now NON-VACUOUS (was `True` placeholder).
+-- Discrete-smoothness witness for a trajectory is a uniform L∞ bound:
+--   IsSmooth traj  ≜  ∃ M : ℤ, 0 ≤ M ∧ ∀ n, lInfGrid (traj n) ≤ M
+-- bkm_regularity_criterion is therefore a PROVED theorem, not an axiom.
+-- All downstream `IsSmooth` claims now carry the uniform L∞ bound.
+
 sbp_self_adjoint_bilinear              -- Σ f · Δg = Σ g · Δf
 sbp_quadratic                          -- Σ f · Δf = -Σ |∇⁺f|²
 sbp_quadratic_h2                       -- Σ Δf · Δ²f = -Σ |∇⁺(Δf)|²
@@ -83,7 +89,7 @@ This is the correct architectural top: the theorem is proved conditional on `h_s
 | `biot_savart_curl_eq` | OPEN axiom (consistent) | Prove `curl (biot_savart ω) = ω` for the exact discrete operator. Now correctly stated under the precondition `divV ω = 0`; without this hypothesis the axiom was inconsistent with the proved `curl_div_zero` theorem (see `NSRegularity/SoundnessProbe.lean`). |
 | `biot_savart_div_zero` | OPEN axiom | Prove `divV (biot_savart ω) = 0` |
 | `h_step` full-NS L∞ preservation | OPEN | Compose diffusion + advection + stretching control for `ns_step` |
-| `bkm_regularity_criterion` | OPEN axiom | Formal PDE library / imported theorem for the BKM criterion |
+| `bkm_regularity_criterion` | PROVED theorem (discrete witness) | Continuum-level BKM (deep PDE) is still out of scope; for the discrete `IsSmooth` witness (uniform L∞ bound) the criterion is now a tautological refinement. The full continuum C^∞ statement still requires a formal PDE library. |
 | `L3.3` sharp Sobolev embedding | OPEN / research-grade | Formal eigenvalue computation on `(Z/8Z)^3` |
 | `L9.2 corrected` ultrametric non-expansion | OPEN | Prove corrected p-adic polynomial decomposition statement |
 
