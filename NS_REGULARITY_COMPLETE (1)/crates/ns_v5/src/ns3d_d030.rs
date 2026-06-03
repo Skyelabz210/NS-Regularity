@@ -63,10 +63,25 @@ pub fn max_winding(w: &Vort3D, p: u64) -> i64 {
 }
 
 /// Winding bound from energy: K ≤ ceil((√E + (p−1)/2) / p).
+///
+/// Float-free reformulation (Axiom A1 compliant):
+///   ceil((√E + (p−1)/2) / p) = ceil((2·√E + (p−1)) / (2p))
+/// Upper-bounding √E by `integer_sqrt_ceil(E)` keeps the inequality
+/// `K ≤ winding_bound_from_energy(...)` strict-or-equal: the integer
+/// ceiling of √E only over-approximates the real √E, which preserves
+/// the upper-bound direction. Saturated when E is the blow-up sentinel
+/// (`i128::MAX → i64::MAX`).
 pub fn winding_bound_from_energy(energy_sq: i128, p: u64) -> i64 {
-    let sqrt_e = (energy_sq as f64).sqrt();
-    let p_f = p as f64;
-    ((sqrt_e + (p_f - 1.0) / 2.0) / p_f).ceil() as i64
+    let sqrt_ceil = integer_sqrt_ceil(energy_sq);
+    if sqrt_ceil == i64::MAX { return i64::MAX; }
+    let s = sqrt_ceil as i128;
+    let p_i = p as i128;
+    let num = 2 * s + (p_i - 1);
+    let denom = 2 * p_i;
+    // Integer ceiling division: ⌈num/denom⌉ = (num + denom − 1) / denom
+    // (valid for num ≥ 0, denom > 0 — both hold here).
+    let div_ceil = (num + denom - 1) / denom;
+    div_ceil.min(i64::MAX as i128) as i64
 }
 
 #[derive(Debug)]
@@ -261,6 +276,38 @@ mod tests {
                 );
                 w = ns_step(&w, &params());
             }
+        }
+    }
+
+    // ── T-009: winding_bound_from_energy is a true upper bound (no float slack) ─
+
+    #[test]
+    fn winding_bound_from_energy_is_upper_bound() {
+        // For every (E, p), the integer-arithmetic bound must satisfy:
+        //   bound · p ≥ √E + (p−1)/2     [equivalently 2·p·bound ≥ 2·√E + (p−1)]
+        // which is the defining inequality K ≤ (√E + (p−1)/2)/p.
+        // Use E² ≤ bound·p check via squaring to stay in integers.
+        for &p in &[3u64, 5, 7, 11, 13, 17, 73, 89, 97, 113] {
+            for e in [0i128, 1, 2, 16, 100, 9999, 1_000_000,
+                      10_000_000_000, 1_500_000_000_000_000_i128] {
+                let bound = winding_bound_from_energy(e, p) as i128;
+                // 2·p·bound ≥ 2·√E + (p−1)  ⇔  (2·p·bound − (p−1))² ≥ 4·E   (when LHS ≥ 0)
+                let lhs = 2 * (p as i128) * bound - (p as i128 - 1);
+                assert!(lhs >= 0, "lhs negative: E={e} p={p} bound={bound}");
+                assert!(
+                    lhs * lhs >= 4 * e,
+                    "bound not upper: E={e} p={p} bound={bound} (2pb−(p−1))²={} 4E={}",
+                    lhs * lhs, 4 * e
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn winding_bound_from_energy_blowup_saturates() {
+        // The l2_sq blow-up sentinel must propagate, not overflow.
+        for &p in &D030_PRIMES {
+            assert_eq!(winding_bound_from_energy(i128::MAX, p), i64::MAX);
         }
     }
 
