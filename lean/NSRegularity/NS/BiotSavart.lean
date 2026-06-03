@@ -82,17 +82,30 @@ def divV (w : VField) : Grid :=
     signature and the characteristic property as axioms. -/
 axiom biot_savart : VField → VField
 
-/-- **Characteristic property: `curl (biot_savart ω) = ω`.**
+/-- **Characteristic property: `curl (biot_savart ω) = ω` on divergence-free
+    vorticities.**
+
+    The precondition `divV ω = 0` is essential. Without it the axiom is
+    unsound: composing with the proved theorem `curl_div_zero` would force
+    `divV ω = 0` for *every* `ω`, which is false on the discrete torus
+    (see `NSRegularity/SoundnessProbe.lean` for a concrete witness with
+    `divV ω 0 0 0 = −6`). On the NS trajectory the precondition holds
+    automatically: every vorticity field is itself a curl of a velocity,
+    so `divV ω = 0` by `curl_div_zero`.
 
     Once `biot_savart` is implemented constructively via NTT + Garner
     reconstruction, this property becomes a theorem provable by exact
     arithmetic (no axiom needed). Currently axiomatised. -/
-axiom biot_savart_curl_eq (ω : VField) : curl (biot_savart ω) = ω
+axiom biot_savart_curl_eq (ω : VField)
+    (hdiv : divV ω = (fun (_ _ _ : Fin N) => (0 : Int))) :
+    curl (biot_savart ω) = ω
 
 /-- **Characteristic property: `div (biot_savart ω) = 0`.**
 
     The Biot-Savart inverse always produces divergence-free velocity.
-    Constructively this follows from the NTT pipeline; currently axiom. -/
+    Constructively this follows from the NTT pipeline; currently axiom.
+    No precondition is required: any candidate Biot-Savart inverse must
+    map into the divergence-free subspace by construction. -/
 axiom biot_savart_div_zero (ω : VField) :
     divV (biot_savart ω) = fun _ _ _ => 0
 

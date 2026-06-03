@@ -80,7 +80,7 @@ This is the correct architectural top: the theorem is proved conditional on `h_s
 | Gate | Status | Required closure |
 |---|---|---|
 | `biot_savart` constructive port | OPEN | Port Rust NTT / CRT Biot-Savart into Lean and replace axioms |
-| `biot_savart_curl_eq` | OPEN axiom | Prove `curl (biot_savart ω) = ω` for the exact discrete operator |
+| `biot_savart_curl_eq` | OPEN axiom (consistent) | Prove `curl (biot_savart ω) = ω` for the exact discrete operator. Now correctly stated under the precondition `divV ω = 0`; without this hypothesis the axiom was inconsistent with the proved `curl_div_zero` theorem (see `NSRegularity/SoundnessProbe.lean`). |
 | `biot_savart_div_zero` | OPEN axiom | Prove `divV (biot_savart ω) = 0` |
 | `h_step` full-NS L∞ preservation | OPEN | Compose diffusion + advection + stretching control for `ns_step` |
 | `bkm_regularity_criterion` | OPEN axiom | Formal PDE library / imported theorem for the BKM criterion |
