@@ -451,6 +451,37 @@ theorem ns_global_regularity_zero_nu (w₀ : VField) (p : NsParams)
     exact mul_nonneg hN3 hLInf
   · intro n; exact lInfGrid_const_traj_bound w₀ p hν n
 
+/-- **Unified trivial-skeleton closure.**
+
+    Discharges `IsSmooth (ns_trajectory_generator trivial_biot_savart ...)`
+    for either of two regimes:
+
+    (A) **Vanishing viscosity.** `p.nu_scaled = 0` + any initial `w₀`
+        with `0 ≤ lInf w₀`. No CFL or exactness needed - the NS step is
+        the identity, the trajectory is constant `w₀`.
+
+    (B) **Constant initial data.** Any `cx cy cz : Int` with the standard
+        `cfl_ok` + non-negativity + positive scale hypotheses. The
+        trajectory is constant `const_vfield cx cy cz`.
+
+    Together these cover the two structurally-simple regimes in which
+    the trivial NS skeleton is closed under integer-exact dynamics. -/
+theorem ns_global_regularity_trivial_unified
+    (w₀ : VField) (p : NsParams) (T : ℕ)
+    (hLInf : 0 ≤ lInf w₀)
+    (regime :
+      (p.nu_scaled = 0) ∨
+      (∃ cx cy cz : Int,
+        w₀ = const_vfield cx cy cz ∧
+        cfl_ok p ∧ 0 ≤ p.nu_scaled ∧ 0 ≤ p.dt_latt ∧ 0 < p.ns_scale)) :
+    NSRegularity.BKM.IsSmooth
+      (ns_trajectory_generator trivial_biot_savart zero_stretching
+        zero_stretching zero_stretching w₀ p) := by
+  rcases regime with hν | ⟨cx, cy, cz, hwconst, h, hν, hdt, hns⟩
+  · exact ns_global_regularity_zero_nu w₀ p hν hLInf T
+  · rw [hwconst]
+    exact ns_global_regularity_const_initial cx cy cz p h hν hdt hns T
+
 /-- Explicit value of the discrete BKM integral over `T` steps of the constant
     trajectory: `T · N³ · (|cx| + |cy| + |cz|)`. Used internally by
     `bkm_integral_finite`; here we record the closed form for the trivial
