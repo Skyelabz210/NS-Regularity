@@ -54,28 +54,22 @@ theorem mod_sub_comm (a b p : ℤ) :
 def gridMod (p : ℤ) (g : Grid) : Grid :=
   fun i j k => g i j k % p
 
-/-- **M5 — CRT projection commutes with polynomial grid operators.**
-
-    For any ring expression F built from +, −, × applied pointwise,
-    `gridMod p (F g) = F (gridMod p g)` (mod p on each entry).
-
-    This is the operational content of the adelic identification.
-    Stated as an axiom pending formalization of "polynomial grid operator"
-    as a concrete inductive type over Grid → Grid.
-
-    **SUPERSEDED for the NS operator class:** The constructive inductive
-    type `PolyGridOp` (below) covers all NS discrete operators (Laplacian,
-    advection, stretching, conservative). For these, the descent statement
-    is proved (not assumed) as `polyGridOp_mod_descent` /
-    `polyGridOp_mod_descent_pointwise`. The Laplacian instance is worked
-    out in `Adelic/LaplacianAsPolyOp.lean`.
-
-    This axiom remains only for documentation / legacy reference; **no Lean
-    file in the library still depends on it** for the actual NS operators. -/
-axiom polynomial_grid_op_commutes
-    (F : Grid → Grid)
-    (p_val : ℤ) (g : Grid) :
-    gridMod p_val (F g) = F (gridMod p_val g)
+-- ─── M5 — CRT projection commutes with polynomial grid operators ───────────
+-- The original axiom shape
+--   gridMod p (F g) = F (gridMod p g)
+-- for an arbitrary F : Grid → Grid is false in general: an F that introduces
+-- a constant exceeding p_val breaks the equality. The operational content of
+-- the adelic identification is the *descent* statement
+--   gridMod p (op.eval g) = gridMod p (op.eval (gridMod p g))
+-- for the constructive `PolyGridOp` class below, which is proved (not
+-- axiomatised) as `polyGridOp_mod_descent` and
+-- `polyGridOp_mod_descent_pointwise`. The Laplacian instance is worked out in
+-- `Adelic/LaplacianAsPolyOp.lean`.
+--
+-- The original `axiom polynomial_grid_op_commutes` is therefore removed from
+-- this file. It was never invoked by any other module in the library (only
+-- mentioned by name in a doc comment), so removal is inert at the
+-- type-checking level and tightens the trust base.
 
 -- ═══════════════════════════════════════════════════════════════════════════
 -- Constructive supersession of the M5 axiom — for the inductive class
