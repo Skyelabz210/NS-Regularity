@@ -21,3 +21,5 @@ import NSRegularity.HSquared.ResolutionA  -- L3.4 Resolution A H² monotonicity
 import NSRegularity.AubinLions.ResolutionA  -- L4.2 Resolution A L² monotonicity
 import NSRegularity.NS.BiotSavart  -- discrete curl + Biot-Savart skeleton (axiomatic)
 import NSRegularity.NS.Trajectory  -- NS trajectory generator + global regularity skeleton
+import NSRegularity.NS.TrivialClosure  -- fully discharged IsSmooth instances (zero/const w₀)
+import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
