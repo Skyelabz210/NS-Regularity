@@ -555,7 +555,37 @@ mod tests {
         println!("N=16 Sobolev ratio (permyriad): {} (C(16)≈1809 permyriad)", ratio);
         assert!(ratio <= 1810, "Sobolev embedding violated at N=16");
     }
-}
+
+    /// D-030 winding-energy bound verification at N=16.
+    ///
+    /// The bound `‖ω(t)‖_∞ ≤ (p−1) + ⌈√E(0)⌉` is structurally N-independent
+    /// (per-point algebraic identity), so verifying it at N=16 in addition to
+    /// the N=8 trajectory tests in `ns3d_d030::tests` provides direct
+    /// uniform-in-N evidence for the D-030 child owner of the
+    /// `Super-threshold stretching bound` open seam (see
+    /// `docs/OPEN_SEAMS.md`). Reuses the N=8 `winding_energy_bound` helper —
+    /// only the field/trajectory are N=16-specific.
+    #[test]
+    fn d030_bound_holds_n16() {
+        use crate::ns3d_d030::{winding_energy_bound, D030_PRIMES};
+        let params = NsParams::cfl_max(NS_SCALE * NS_SCALE / 6);
+        for &p in &D030_PRIMES {
+            let w0 = Vort3D::taylor_green(NS_SCALE / 100);
+            let e0 = l2_sq(&w0);
+            let bound = winding_energy_bound(e0, p);
+            let mut w = w0;
+            for step in 0..10 {
+                let linf = l_inf(&w);
+                let e = l2_sq(&w);
+                if e == i128::MAX { break; } // blow-up sentinel
+                assert!(
+                    linf <= bound,
+                    "D-030 N=16 step {step} p={p}: ‖ω‖_∞={linf} > bound={bound} (E={e})"
+                );
+                w = ns_step(&w, &params);
+            }
+        }
+    }
 
     #[test]
     fn bs_calibration() {
@@ -588,3 +618,4 @@ mod tests {
         println!("  Correct normalization: {} (N^6={}, ratio={})", 
             correct_factor, n6, correct_factor as f64 / n6 as f64);
     }
+}

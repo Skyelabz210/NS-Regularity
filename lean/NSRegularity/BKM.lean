@@ -59,30 +59,54 @@ theorem bkm_integral_finite (traj : Continuum.DiscreteSequence) (C : ℤ) (T : �
 -- L8.2–L8.3: Deep PDE theorems (axiomatized)
 -- ═══════════════════════════════════════════════════════════════════════════
 
-/-- Smooth solution: C^∞ in space and time. Axiomatized pending a formal
-    regularity theory for NS on 𝕋³. -/
+/-- Discrete-smoothness witness for an NS trajectory: a uniform L∞ bound
+    along the trajectory.
+
+    Prior to this revision `IsSmooth` was defined as `True`, recording the
+    *shape* of the BKM conclusion without any content. The placeholder made
+    every theorem of the form `... → IsSmooth traj` vacuous. The current
+    definition extracts the strongest fact we can state without importing a
+    continuum PDE library: the trajectory's `lInfGrid` is uniformly bounded
+    above by a non-negative constant. This is the discrete L^∞-in-time bound
+    that BKM elevates to C^∞ regularity in the continuum; here we keep the
+    discrete witness so every downstream theorem actually carries the bound.
+
+    The full continuum smoothness statement
+      `∀ k : ℕ, traj ∈ C^k([0,T] × 𝕋³)`
+    still requires Mathlib's analysis layer and is out of scope for the
+    discrete substrate. -/
 def IsSmooth (traj : Continuum.DiscreteSequence) : Prop :=
-  -- Real definition: ∀ k : ℕ, traj ∈ C^k([0,T] × 𝕋³)
-  -- Requires Mathlib.Analysis.InnerProductSpace.Calculus or similar.
-  -- Placeholder records the claim shape only.
-  True
+  ∃ M : ℤ, 0 ≤ M ∧ ∀ n : ℕ, lInfGrid (traj n) ≤ M
 
-/-- **L8.2** — BKM regularity criterion (Beale-Kato-Majda 1984).
+/-- **L8.2 (discrete-form)** — uniform L∞ implies the discrete smoothness
+    witness.
 
-    Axiomatized: if a Leray-Hopf weak solution has finite BKM integral,
-    then the solution is smooth. This is Theorem 1 of [BKM84]. -/
-axiom bkm_regularity_criterion
-    (traj : Continuum.DiscreteSequence) (T : ℕ) :
-    (∃ C : ℤ, bkmIntegral traj T ≤ C) → IsSmooth traj
+    The continuum BKM theorem (Beale-Kato-Majda 1984) requires a deep PDE
+    library that is out of scope here. On the discrete side, however, the
+    smoothness witness `IsSmooth` is exactly the uniform L∞ bound, so the
+    "BKM criterion" specialises to a trivially provable implication.
 
-/-- **M8 — Global smooth regularity.**
+    The strengthened `IsSmooth` definition makes this implication direct
+    rather than axiomatic. The original `(∃ C, bkmIntegral ≤ C) → IsSmooth`
+    axiom shape was inhabited only because `IsSmooth = True`; the actual
+    content lives in the construction of the uniform L∞ bound at the call
+    site (e.g. `ns_lInfGrid_uniform` for diffusion, `generic_ns_lInfGrid_uniform`
+    for any L∞-preserving step). -/
+theorem bkm_regularity_criterion
+    (traj : Continuum.DiscreteSequence) (M : ℤ)
+    (hM : 0 ≤ M) (hbdd : ∀ n, lInfGrid (traj n) ≤ M) :
+    IsSmooth traj :=
+  ⟨M, hM, hbdd⟩
 
-    Compose M6 (uniform L∞ bound) with L8.1 (finite BKM integral) and
-    L8.2 (BKM criterion) to obtain smoothness. -/
+/-- **M8 — Global smooth regularity (discrete witness).**
+
+    Direct construction of the smoothness witness from a uniform L∞ bound.
+    Replaces the original three-step composition (uniform L∞ → finite BKM
+    integral → axiomatic BKM criterion) by a single tautological refinement
+    — the strengthened `IsSmooth` *is* the uniform L∞ bound. -/
 theorem global_regularity (traj : Continuum.DiscreteSequence) (C : ℤ) (T : ℕ)
     (hC : 0 ≤ C) (hbdd : ∀ n, lInfGrid (traj n) ≤ C) :
-    IsSmooth traj := by
-  apply bkm_regularity_criterion traj T
-  exact ⟨T * C, bkm_integral_finite traj C T hC hbdd⟩
+    IsSmooth traj :=
+  bkm_regularity_criterion traj C hC hbdd
 
 end NSRegularity.BKM

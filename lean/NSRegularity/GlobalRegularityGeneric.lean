@@ -72,14 +72,11 @@ theorem generic_global_regularity
     (hStep : ∀ w, lInf (step w) ≤ lInf w)
     (w₀ : VField)
     (hLInf : 0 ≤ lInf w₀)
-    (T : ℕ) :
-    NSRegularity.BKM.IsSmooth (generic_trajectory step w₀) := by
-  apply NSRegularity.BKM.bkm_regularity_criterion (generic_trajectory step w₀) T
-  refine ⟨T * (3 * (N : Int) ^ 3 * lInf w₀), ?_⟩
-  exact NSRegularity.BKM.bkm_integral_finite
+    (_T : ℕ) :
+    NSRegularity.BKM.IsSmooth (generic_trajectory step w₀) :=
+  NSRegularity.BKM.bkm_regularity_criterion
     (generic_trajectory step w₀)
     (3 * (N : Int) ^ 3 * lInf w₀)
-    T
     (by positivity)
     (generic_ns_lInfGrid_uniform step hStep w₀)
 
@@ -98,11 +95,8 @@ theorem generic_global_regularity_uniform
     (w₀ : VField)
     (M : Int) (hM : 0 ≤ M)
     (h_uniform : ∀ n, lInf (generic_trajectory step w₀ n) ≤ M)
-    (T : ℕ) :
+    (_T : ℕ) :
     NSRegularity.BKM.IsSmooth (generic_trajectory step w₀) := by
-  apply NSRegularity.BKM.bkm_regularity_criterion (generic_trajectory step w₀) T
-  refine ⟨T * (3 * (N : Int) ^ 3 * M), ?_⟩
-  -- Σ lInfGrid(traj n) ≤ T · (3 N³ M) using lInfGrid_le_proxy + h_uniform
   have hLInfGrid_bound : ∀ n, lInfGrid (generic_trajectory step w₀ n) ≤
                               3 * (N : Int) ^ 3 * M := by
     intro n
@@ -110,10 +104,9 @@ theorem generic_global_regularity_uniform
       (by
         have hN3 : 0 ≤ 3 * (N : Int) ^ 3 := by positivity
         exact mul_le_mul_of_nonneg_left (h_uniform n) hN3)
-  exact NSRegularity.BKM.bkm_integral_finite
+  exact NSRegularity.BKM.bkm_regularity_criterion
     (generic_trajectory step w₀)
     (3 * (N : Int) ^ 3 * M)
-    T
     (by positivity)
     hLInfGrid_bound
 

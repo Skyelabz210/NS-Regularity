@@ -538,6 +538,42 @@ mod tests {
             .join()
             .expect("thread join");
     }
+
+    /// D-030 winding-energy bound verification at N=32.
+    ///
+    /// Completes the N ∈ {8, 16, 32} uniform-in-N witness for the
+    /// algebraic bound `‖ω(t)‖_∞ ≤ (p−1) + ⌈√E(0)⌉` (D-030 child owner
+    /// of the super-threshold stretching seam, docs/OPEN_SEAMS.md).
+    /// Run on a large stack since N³ = 32_768 grid points exceed the
+    /// default thread stack.
+    #[test]
+    fn d030_bound_holds_n32() {
+        use crate::ns3d_d030::{winding_energy_bound, D030_PRIMES};
+        std::thread::Builder::new()
+            .stack_size(128 * 1024 * 1024)
+            .spawn(|| {
+                let params = NsParams::cfl_max(NS_SCALE * NS_SCALE / 6);
+                for &p in &D030_PRIMES {
+                    let w0 = Vort3D::taylor_green(NS_SCALE / 100);
+                    let e0 = l2_sq(&w0);
+                    let bound = winding_energy_bound(e0, p);
+                    let mut w = w0;
+                    for step in 0..5 {
+                        let linf = l_inf(&w);
+                        let e = l2_sq(&w);
+                        if e == i128::MAX { break; }
+                        assert!(
+                            linf <= bound,
+                            "D-030 N=32 step {step} p={p}: ‖ω‖_∞={linf} > bound={bound} (E={e})"
+                        );
+                        w = ns_step(&w, &params);
+                    }
+                }
+            })
+            .expect("thread spawn")
+            .join()
+            .expect("thread join");
+    }
 }
 
 #[cfg(test)]

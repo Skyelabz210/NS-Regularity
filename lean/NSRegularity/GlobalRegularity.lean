@@ -137,14 +137,11 @@ theorem ns_lInfGrid_uniform (w₀ : VField) (p : NsParams) (h : cfl_ok p)
     BKM axiom. -/
 theorem global_regularity (w₀ : VField) (p : NsParams) (h : cfl_ok p)
     (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
-    (hLInf : 0 ≤ lInf w₀) (T : ℕ) :
-    NSRegularity.BKM.IsSmooth (diffusion_trajectory w₀ p) := by
-  apply NSRegularity.BKM.bkm_regularity_criterion (diffusion_trajectory w₀ p) T
-  refine ⟨T * (3 * (N : Int) ^ 3 * lInf w₀), ?_⟩
-  exact NSRegularity.BKM.bkm_integral_finite
+    (hLInf : 0 ≤ lInf w₀) (_T : ℕ) :
+    NSRegularity.BKM.IsSmooth (diffusion_trajectory w₀ p) :=
+  NSRegularity.BKM.bkm_regularity_criterion
     (diffusion_trajectory w₀ p)
     (3 * (N : Int) ^ 3 * lInf w₀)
-    T
     (by positivity)
     (ns_lInfGrid_uniform w₀ p h hν hdt)
 
@@ -239,14 +236,11 @@ theorem global_regularity_exact
     (hns : 0 < p.ns_scale)
     (hLInf : 0 ≤ lInf w₀)
     (hExactAll : diffusion_exactness_hyp w₀ p)
-    (T : ℕ) :
-    NSRegularity.BKM.IsSmooth (diffusion_trajectory w₀ p) := by
-  apply NSRegularity.BKM.bkm_regularity_criterion (diffusion_trajectory w₀ p) T
-  refine ⟨T * (3 * (N : Int) ^ 3 * lInf w₀), ?_⟩
-  exact NSRegularity.BKM.bkm_integral_finite
+    (_T : ℕ) :
+    NSRegularity.BKM.IsSmooth (diffusion_trajectory w₀ p) :=
+  NSRegularity.BKM.bkm_regularity_criterion
     (diffusion_trajectory w₀ p)
     (3 * (N : Int) ^ 3 * lInf w₀)
-    T
     (by positivity)
     (ns_lInfGrid_uniform_exact w₀ p h hν hdt hns hExactAll)
 
