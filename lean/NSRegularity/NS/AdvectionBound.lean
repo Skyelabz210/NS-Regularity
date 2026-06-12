@@ -1,5 +1,6 @@
 import NSRegularity.NS.FullStep
 import NSRegularity.AubinLions
+import NSRegularity.GlobalRegularityGeneric
 
 /-!
 # NS/AdvectionBound — pointwise Lipschitz bound for discrete advection
@@ -252,6 +253,73 @@ theorem ns_step_component_perturbation_le
   have hstr : |stretching_step uc_grad a p i j k - a i j k|
       ≤ |p.dt_latt| * |uc_grad i j k| :=
     stretching_step_perturbation_le uc_grad a p i j k
+  linarith
+
+/-- **Refined full-step component perturbation (in terms of the *original*
+    `gridLInf f`, under Resolution A).**
+
+    Strengthens `ns_step_component_perturbation_le` by folding in the
+    Resolution-A diffusion `gridLInf` non-increase from
+    `gridLInf_diffusion_step_le_exact`. The bound's right-hand side is
+    now expressed in `gridLInf f` rather than `gridLInf (diffusion_step f p)`,
+    which is exactly the form the contraction-vs-growth argument needs
+    to compare against `gridLInf f` directly.
+
+    The bound is
+
+      `|ns_step_component u uc_grad f p (i,j,k) − diffusion_step f p (i,j,k)|
+          ≤ |Δt| · 2·gridLInf f · (|u_x| + |u_y| + |u_z|)(i,j,k)
+            + |Δt| · |uc_grad (i,j,k)|`.
+
+    Closure of the full-step L∞ gate still requires the contraction
+    argument under CFL — showing the diffusion contraction on the base
+    term dominates the advection + stretching growth. This commit
+    eliminates one degree of freedom (`gridLInf (diffusion_step f p)`
+    vs `gridLInf f`) by absorbing the diffusion contraction directly. -/
+theorem ns_step_component_perturbation_le_exact
+    (u : VField) (uc_grad : Grid) (f : Grid) (p : NsParams)
+    (h : cfl_ok p) (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns_pos : 0 < p.ns_scale)
+    (hExact : ∀ i' j' k' : Fin N,
+      ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+        (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian f i' j' k'))
+    (i j k : Fin N) :
+    |ns_step_component u uc_grad f p i j k - diffusion_step f p i j k| ≤
+      |p.dt_latt| * (2 * gridLInf f
+                      * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      + |p.dt_latt| * |uc_grad i j k| := by
+  refine le_trans (ns_step_component_perturbation_le u uc_grad f p i j k) ?_
+  -- Replace `gridLInf (diffusion_step f p)` by `gridLInf f` using Resolution A.
+  have hgrid : gridLInf (diffusion_step f p) ≤ gridLInf f :=
+    NSRegularity.GlobalRegularity.gridLInf_diffusion_step_le_exact
+      f p h hν hdt hns_pos hExact
+  -- Σ |u_c| ≥ 0; |Δt| ≥ 0; 2 ≥ 0; gridLInf_nonneg already proved.
+  have hu_nn : (0 : Int) ≤ |u.x i j k| + |u.y i j k| + |u.z i j k| := by
+    have hx : (0 : Int) ≤ |u.x i j k| := abs_nonneg _
+    have hy : (0 : Int) ≤ |u.y i j k| := abs_nonneg _
+    have hz : (0 : Int) ≤ |u.z i j k| := abs_nonneg _
+    linarith
+  have hdt_nn : (0 : Int) ≤ |p.dt_latt| := abs_nonneg _
+  have htwo_nn : (0 : Int) ≤ (2 : Int) := by decide
+  have hfactor_nn :
+      (0 : Int) ≤ |p.dt_latt| * (2 * (|u.x i j k| + |u.y i j k| + |u.z i j k|)) := by
+    have h2u : (0 : Int) ≤ 2 * (|u.x i j k| + |u.y i j k| + |u.z i j k|) :=
+      mul_nonneg htwo_nn hu_nn
+    exact mul_nonneg hdt_nn h2u
+  -- Monotone in the grid factor on the right.
+  have key :
+      |p.dt_latt| * (2 * gridLInf (diffusion_step f p)
+                      * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      ≤ |p.dt_latt| * (2 * gridLInf f
+                       * (|u.x i j k| + |u.y i j k| + |u.z i j k|)) := by
+    -- factor: |Δt| · 2 · (|u_x|+|u_y|+|u_z|) ≥ 0, and grid factor on the right.
+    have expand_le :
+        2 * gridLInf (diffusion_step f p) * (|u.x i j k| + |u.y i j k| + |u.z i j k|)
+        ≤ 2 * gridLInf f * (|u.x i j k| + |u.y i j k| + |u.z i j k|) := by
+      have h2g : 2 * gridLInf (diffusion_step f p) ≤ 2 * gridLInf f :=
+        mul_le_mul_of_nonneg_left hgrid htwo_nn
+      exact mul_le_mul_of_nonneg_right h2g hu_nn
+    exact mul_le_mul_of_nonneg_left expand_le hdt_nn
   linarith
 
 end NSRegularity.NS.AdvectionBound
