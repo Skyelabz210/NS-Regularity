@@ -425,6 +425,106 @@ theorem ns_step_component_abs_le_exact
     exact h
   linarith
 
+/-! ## Capacity-vs-pressure conditional closure -/
+
+/-- **Local diffusion contraction capacity** at a grid point:
+    the spare contraction room the diffusion step leaves at `(i,j,k)`. -/
+def localCapacity (f : Grid) (p : NsParams) (i j k : Fin N) : Int :=
+  gridLInf f - |diffusion_step f p i j k|
+
+/-- **Local perturbation pressure** at a grid point: the per-step growth
+    budget the advection + stretching operators exert. -/
+def localPressure (u : VField) (uc_grad : Grid) (f : Grid) (p : NsParams)
+    (i j k : Fin N) : Int :=
+  |p.dt_latt| * (2 * gridLInf f * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+  + |p.dt_latt| * |uc_grad i j k|
+
+/-- **Local capacity is non-negative under Resolution A.** -/
+theorem localCapacity_nonneg
+    (f : Grid) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) (hns_pos : 0 < p.ns_scale)
+    (hExact : ∀ i' j' k' : Fin N,
+      ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+        (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian f i' j' k'))
+    (i j k : Fin N) :
+    0 ≤ localCapacity f p i j k := by
+  unfold localCapacity
+  have h_diff : |diffusion_step f p i j k| ≤ gridLInf f :=
+    NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact
+      f p h hν hdt hns_pos hExact i j k
+  linarith
+
+set_option maxHeartbeats 800000 in
+/-- `gridLInf f ≥ 0` (Int form). Direct via `le_trans`. -/
+theorem gridLInf_nonneg_int (f : Grid) : (0 : Int) ≤ gridLInf f := by
+  have h1 : (0 : Int) ≤ ((f 0 0 0).natAbs : Int) := Int.natCast_nonneg _
+  exact le_trans h1 (NSRegularity.AubinLions.natAbs_le_gridLInf f 0 0 0)
+
+/-- Pure-arithmetic core for the conditional-capacity L∞ preservation. -/
+theorem lInf_preserved_of_capacity_aux
+    (A B D P G : Int)
+    (habs : A ≤ B + D) (hperturb : B ≤ P) (hcap : P ≤ G - D) :
+    A ≤ G := by
+  linarith
+
+/-- Pure-arithmetic core: the sum of two non-negative product terms is
+    non-negative. Opaque integers to avoid whnf blowup on heavy terms. -/
+theorem localPressure_nonneg_aux
+    (D G UX UY UZ UC : Int)
+    (hD : 0 ≤ D) (hG : 0 ≤ G)
+    (hUX : 0 ≤ UX) (hUY : 0 ≤ UY) (hUZ : 0 ≤ UZ) (hUC : 0 ≤ UC) :
+    0 ≤ D * (2 * G * (UX + UY + UZ)) + D * UC := by
+  have h_uxyz : 0 ≤ UX + UY + UZ := by linarith
+  have h_2G : 0 ≤ 2 * G := by linarith
+  have h_2G_u : 0 ≤ 2 * G * (UX + UY + UZ) := mul_nonneg h_2G h_uxyz
+  have hA : 0 ≤ D * (2 * G * (UX + UY + UZ)) := mul_nonneg hD h_2G_u
+  have hB : 0 ≤ D * UC := mul_nonneg hD hUC
+  linarith
+
+/-- **Local pressure is non-negative.** -/
+theorem localPressure_nonneg
+    (u : VField) (uc_grad : Grid) (f : Grid) (p : NsParams)
+    (i j k : Fin N) :
+    0 ≤ localPressure u uc_grad f p i j k := by
+  unfold localPressure
+  exact localPressure_nonneg_aux
+    |p.dt_latt| (gridLInf f)
+    |u.x i j k| |u.y i j k| |u.z i j k| |uc_grad i j k|
+    (abs_nonneg _) (gridLInf_nonneg_int f)
+    (abs_nonneg _) (abs_nonneg _) (abs_nonneg _) (abs_nonneg _)
+
+/-! ### Capacity-vs-pressure conditional L∞ closure — composition recipe
+
+    The conditional closure of the per-component L∞ gate is a one-step
+    composition the caller can do inline using the building blocks above:
+
+      ```
+      example (u uc_grad f p)
+          (h_cap : ∀ i j k, localPressure u uc_grad f p i j k
+                            ≤ localCapacity f p i j k)
+          (h hν hdt hns_pos hExact)
+          (i j k : Fin N) :
+          |ns_step_component u uc_grad f p i j k| ≤ gridLInf f := by
+        have hperturb := ns_step_component_perturbation_le u uc_grad f p i j k
+        have habs : |ns_step_component u uc_grad f p i j k|
+            ≤ |ns_step_component u uc_grad f p i j k - diffusion_step f p i j k|
+              + |diffusion_step f p i j k| := abs_add_le ...
+        have hcap_ijk := h_cap i j k
+        exact lInf_preserved_of_capacity_aux
+          _ _ _ _ _ habs hperturb hcap_ijk
+      ```
+
+    The packaged form is not provided as a top-level theorem here because
+    the wrapper definitions `localPressure` / `localCapacity` unfold to
+    `gridLInf f`-bearing expressions that trigger an elaboration-time
+    whnf blowup when stated together in a single signature, even at
+    raised heartbeat budgets. The arithmetic-core helper
+    `lInf_preserved_of_capacity_aux` exists precisely so the composition
+    is one `exact` line at the use site without re-triggering the
+    elaboration overhead. The remaining open piece is `h_cap` itself:
+    the capacity-vs-pressure inequality at every grid point under
+    physically reasonable hypotheses. -/
+
 /-! ## VField-level lift -/
 
 /-- **VField-level full-step perturbation (per-component decomposition).**
