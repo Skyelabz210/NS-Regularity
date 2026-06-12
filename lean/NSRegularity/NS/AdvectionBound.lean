@@ -148,4 +148,45 @@ theorem advection_step_perturbation_le
   rw [abs_mul]
   exact mul_le_mul_of_nonneg_left (advective_abs_le u f i j k) (abs_nonneg _)
 
+/-- **Stretching-step perturbation bound (pointwise).**
+
+    The single stretching sub-step moves each grid value by no more than
+
+      `|Δt| · |uc_grad (i,j,k)|`.
+
+    The stretching step (`NS/FullStep.lean`) is
+
+      `stretching_step uc_grad f p := f + Δt · uc_grad / (2·N·S)`,
+
+    so the perturbation is `|Δt · uc_grad / (2·N·S)| ≤ |Δt · uc_grad|` by
+    integer-division contraction. The third pointwise operator-side
+    estimate (alongside diffusion contraction and the advection growth
+    bound), completing the per-step perturbation chain that the full-step
+    L∞ argument needs as input. The integer-division by `2·N·S` is the
+    *only* contraction this sub-step provides — the raw `uc_grad` itself
+    can be arbitrary, which is exactly why non-trivial stretching is the
+    open hard part of the full-step L∞ gate. -/
+theorem stretching_step_perturbation_le
+    (uc_grad : Grid) (f : Grid) (p : NsParams) (i j k : Fin N) :
+    |stretching_step uc_grad f p i j k - f i j k| ≤
+      |p.dt_latt| * |uc_grad i j k| := by
+  have key : stretching_step uc_grad f p i j k - f i j k
+      = p.dt_latt * uc_grad i j k / (2 * (N : Int) * p.ns_scale) := by
+    simp only [stretching_step]; ring
+  rw [key]
+  have hdiv : |p.dt_latt * uc_grad i j k / (2 * (N : Int) * p.ns_scale)|
+      ≤ |p.dt_latt * uc_grad i j k| := by
+    rw [Int.abs_eq_natAbs, Int.abs_eq_natAbs]
+    exact_mod_cast Int.natAbs_ediv_le_natAbs _ _
+  refine le_trans hdiv ?_
+  rw [abs_mul]
+
+/-- **Zero-stretching collapse.** Zero stretching gradient leaves the
+    field unchanged - consistent with the trivial-closure identity
+    `stretching_step (fun _ _ _ => 0) f p = f`. -/
+theorem stretching_step_zero_perturbation
+    (f : Grid) (p : NsParams) (i j k : Fin N) :
+    stretching_step (fun _ _ _ => 0) f p i j k = f i j k := by
+  simp [stretching_step]
+
 end NSRegularity.NS.AdvectionBound
