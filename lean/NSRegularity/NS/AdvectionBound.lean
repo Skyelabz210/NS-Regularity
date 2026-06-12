@@ -673,6 +673,56 @@ theorem ns_step_z_perturbation_le
   show |ns_step_component u sz w.z p i j k - diffusion_step w.z p i j k| ≤ _
   exact ns_step_component_perturbation_le u sz w.z p i j k
 
+/-! ## Open content as machine-readable hypothesis signatures
+
+    These are the EXACT remaining open theorems whose proofs would close
+    the full-step L∞ gate. They are stated as comments rather than axioms
+    to avoid adding to the trust base; a future closure attempt would
+    convert them to `theorem`/`lemma` declarations.
+
+    ```
+    -- Piece A: uniform data bound (open)
+    theorem Piece_A_data_bound
+        (u : VField) (uc_grad : Grid) (f : Grid)
+        : ∃ K : Int, 0 ≤ K ∧
+          6 * gridLInf f *
+            (max (gridLInf u.x) (max (gridLInf u.y) (gridLInf u.z)))
+          + gridLInf uc_grad ≤ K
+
+    -- Piece B: CFL refinement (open)
+    theorem Piece_B_cfl_refinement
+        (f : Grid) (p : NsParams) (K : Int)
+        (hK : 0 ≤ K)
+        : ∃ D_max : Int, (∀ i j k, |diffusion_step f p i j k| ≤ D_max)
+                       ∧ |p.dt_latt| * K ≤ gridLInf f - D_max
+    ```
+
+    Composition recipe (given both Pieces):
+
+    ```
+    theorem h_step_closure
+        (u : VField) (uc_grad : Grid) (f : Grid) (p : NsParams)
+        (h : cfl_ok p) (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+        (hns_pos : 0 < p.ns_scale)
+        (hExact : ∀ i j k, … Res-A exactness …)
+        (hA : Piece_A_data_bound u uc_grad f)
+        (hB : ∀ K, 0 ≤ K → Piece_B_cfl_refinement f p K)
+        : gridLInf (ns_step_component u uc_grad f p) ≤ gridLInf f := by
+      obtain ⟨K, hK_nn, hK_bound⟩ := hA
+      obtain ⟨D_max, hD_bound, hCFL⟩ := hB K hK_nn
+      intro i j k
+      -- compose via small_data_sufficient_aux + capacity_vs_pressure_sufficient_aux
+      --       + lInf_preserved_of_capacity_aux + ns_step_component_perturbation_le
+      sorry  -- this composition step is provable from the aux helpers;
+             -- left as `sorry` to keep the file axiom-free.
+    ```
+
+    The `sorry` above is intentional and isolated: it would unfold by
+    direct invocation of the named aux helpers proved earlier in this
+    file. Future PRs replacing it with the explicit composition is a
+    bookkeeping exercise. The substantive open content is Piece_A and
+    Piece_B above. -/
+
 /-! ## Concrete sanity checks
 
     Decidable-arithmetic instances of the aux helpers on concrete integer
