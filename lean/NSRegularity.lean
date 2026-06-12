@@ -25,4 +25,5 @@ import NSRegularity.NS.TrivialClosure  -- fully discharged IsSmooth instances (z
 import NSRegularity.NS.AdvectionBound  -- pointwise Lipschitz bound for discrete advection
 import NSRegularity.NS.HStepSmallData  -- small-data h_step closure (Pieces A+B → lInf preserved)
 import NSRegularity.HSquared.DiscreteH2  -- discrete H² identity + Kill #129 (eigen-Beltrami)
+import NSRegularity.HSquared.BasisCFL  -- centered-residue sign recoverability (Kill #130/#131)
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
