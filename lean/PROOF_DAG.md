@@ -223,6 +223,54 @@ Piece B₂ depends on:
 
 ---
 
+## Beltrami / H² Route (HSquared/DiscreteH2.lean)
+
+Parallel route to the L∞ h_step gate, ported from the workspace file
+`QmnfNS_DiscreteH2.lean` (NS_LEAN_FORMALIZED) onto repo operators. All
+nodes below are **proved, sorry-free** unless marked open.
+
+```
+component_residual_zero (Kill113 ✅, unconditional — no div-free needed)
+     │
+     ↓
+kill_113_sobolev ✅  ⟨g, A_skew g⟩ = 0 for ANY field g (incl. g = Δω)
+     │
+     ├──→ signedIp_eq_cross ✅   commutator collapses to ⟨Δω, Δ(Aω)⟩
+     │         │
+sbp_self_adjoint_bilinear (HSquared/SBP ✅)
+     │         ↓
+     └──→ signedIp_eigen_zero ✅   KILL #129 for Δ_h-eigenfields:
+               │                    ⟨Δf,Δ(Af)⟩ = μ²⟨f,Af⟩ = 0
+               ↓
+          kill_129_beltrami_eigen ✅   ω = λu over eigenfield velocity
+               │                        (the ABC class with exact zeros)
+               ↓
+h2_update_identity ✅ + h2_cross_decomposition ✅
+               │
+               ↓
+discrete_h2_identity_exact ✅   full discrete H² energy budget:
+   ‖Δ(ω+δ)‖² − ‖Δω‖² = 2(ca·(−‖∇⁺Δω‖²) − cb·signedIp + cs·⟨Δω,ΔS⟩) + ‖Δδ‖²
+               │
+               ↓
+discrete_h2_identity_beltrami_eigen ✅   T2: no advection leakage
+               │
+               ↓
+h2_step_monotone_iff ✅   NS-13 as equivalence; the inequality itself is:
+   🟠 2·ca·‖∇⁺Δω‖² ≥ 2·cs·⟨Δω,ΔS⟩ + ‖Δδ‖²   (diffusion vs stretching)
+               │
+               ↓ (open: combine with sobolev_embedding L3.3 🟠)
+   H²-bounded trajectory → ‖ω‖_∞ bounded → IsSmooth (Beltrami class)
+```
+
+Open kernels on this route:
+- 🟠 NS-13 inequality at reachable states (Beltrami eigen class: signedIp
+  term already gone, pure diffusion-vs-stretching balance).
+- 🟠 General-Beltrami (non-eigen) Kill #129: reduces to `signedIp u u_c = 0`.
+- 🟠 L3.3 `sobolev_embedding` (HSquared.lean, sorry): needed to convert the
+  H² bound into the L∞ bound BKM consumes.
+
+---
+
 ## Token Budget Allocation (Recommended Order)
 
 | Priority | Attack | Estimated tokens | Blocks |

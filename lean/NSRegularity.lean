@@ -24,4 +24,5 @@ import NSRegularity.NS.Trajectory  -- NS trajectory generator + global regularit
 import NSRegularity.NS.TrivialClosure  -- fully discharged IsSmooth instances (zero/const w₀)
 import NSRegularity.NS.AdvectionBound  -- pointwise Lipschitz bound for discrete advection
 import NSRegularity.NS.HStepSmallData  -- small-data h_step closure (Pieces A+B → lInf preserved)
+import NSRegularity.HSquared.DiscreteH2  -- discrete H² identity + Kill #129 (eigen-Beltrami)
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
