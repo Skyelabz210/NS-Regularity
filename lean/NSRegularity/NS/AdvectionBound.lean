@@ -559,6 +559,39 @@ theorem capacity_vs_pressure_sufficient_aux
     (h_ineq : pressure_uniform ≤ capacity_uniform) :
     pressure_local ≤ capacity_local := by linarith
 
+/-- **Explicit small-data sufficient condition — pure-integer arithmetic core.**
+
+    The CFL-style inequality `pressure_uniform ≤ capacity_uniform` factors
+    through an explicit small-data threshold: if there exists a scalar `K`
+    bounding the velocity / stretching contribution
+
+      `6·G·M_u + M_uc ≤ K`
+
+    and the time-step is small enough relative to the spare capacity
+
+      `|Δt|·K ≤ G − D_max`
+
+    then the full uniform inequality
+
+      `|Δt|·(6·G·M_u + M_uc) ≤ G − D_max`
+
+    holds. This is the explicit form a small-data closure of the L∞ gate
+    takes: bound the velocity and stretching budget by a scalar `K`, then
+    pick the time-step small enough that `|Δt|·K` fits inside the
+    diffusion's spare contraction capacity. The two pieces decouple
+    cleanly: one is a bound on the operator data, the other a CFL-style
+    refinement on `|Δt|`. -/
+theorem small_data_sufficient_aux
+    (Δt G M_u M_uc D_max K : Int)
+    (hΔt : 0 ≤ Δt) (h_K_bound : 6 * G * M_u + M_uc ≤ K)
+    (h_data_pos : 0 ≤ 6 * G * M_u + M_uc)
+    (h_K_nn : 0 ≤ K)
+    (h_cfl : Δt * K ≤ G - D_max) :
+    Δt * (6 * G * M_u + M_uc) ≤ G - D_max := by
+  have h_data_le_K : Δt * (6 * G * M_u + M_uc) ≤ Δt * K :=
+    mul_le_mul_of_nonneg_left h_K_bound hΔt
+  linarith
+
 /-! ### Capacity-vs-pressure conditional L∞ closure — composition recipe
 
     The conditional closure of the per-component L∞ gate is a one-step
