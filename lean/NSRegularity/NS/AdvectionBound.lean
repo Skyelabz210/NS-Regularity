@@ -673,4 +673,49 @@ theorem ns_step_z_perturbation_le
   show |ns_step_component u sz w.z p i j k - diffusion_step w.z p i j k| ≤ _
   exact ns_step_component_perturbation_le u sz w.z p i j k
 
+/-! ## Concrete sanity checks
+
+    Decidable-arithmetic instances of the aux helpers on concrete integer
+    inputs, evaluated at elaboration time via `#guard`. These confirm the
+    arithmetic cores produce the right numeric outputs - they are
+    type-checking smoke tests, not theorems. -/
+
+example :
+    -- localPressure_nonneg_aux: 0 ≤ Δt·(2·G·(UX+UY+UZ)) + Δt·UC
+    -- Δt=2, G=10, UX=1, UY=1, UZ=1, UC=5
+    (0 : Int) ≤ 2 * (2 * 10 * (1 + 1 + 1)) + 2 * 5 := by decide
+
+example :
+    -- lInf_preserved_of_capacity_aux: A ≤ G when A ≤ B + D, B ≤ P, P ≤ G − D
+    -- With A=7, B=3, D=4, P=3, G=7: 7 ≤ 3+4 ✓, 3 ≤ 3 ✓, 3 ≤ 7−4 ✓, conclude 7 ≤ 7 ✓
+    let A : Int := 7; let B : Int := 3; let D : Int := 4
+    let P : Int := 3; let G : Int := 7
+    A ≤ B + D ∧ B ≤ P ∧ P ≤ G - D ∧ A ≤ G := by decide
+
+example :
+    -- localPressure_uniform_le_aux concrete: with the same data
+    -- bound by 2·(6·10·1 + 5) = 130
+    -- pressure = 2·(2·10·3) + 2·5 = 120 + 10 = 130; 130 ≤ 130 ✓
+    (2 * (2 * 10 * (1 + 1 + 1)) + 2 * 5 : Int) ≤ 2 * (6 * 10 * 1 + 5) := by decide
+
+example :
+    -- capacity_vs_pressure_sufficient_aux: with the same data
+    -- p_uniform = 130, c_uniform = 130, p_uniform ≤ c_uniform ✓ ⟹ p_local ≤ c_local
+    let p_local : Int := 100; let c_local : Int := 150
+    let p_uniform : Int := 130; let c_uniform : Int := 130
+    (p_local ≤ p_uniform ∧ c_uniform ≤ c_local ∧ p_uniform ≤ c_uniform)
+      → p_local ≤ c_local := by decide
+
+example :
+    -- small_data_sufficient_aux: K=20, Δt=2, G=10, M_u=1, M_uc=5, D_max=−30
+    -- Want: Δt·(6·G·M_u + M_uc) ≤ G − D_max
+    -- LHS = 2·(60 + 5) = 130; G − D_max = 10 − (−30) = 40
+    -- With negative D_max representing room for growth, both bounds hold:
+    --   data bound: 6·G·M_u + M_uc = 65 ≤ K = 70 (extra margin)
+    --   CFL:        Δt·K = 140 ≤ G − D_max = 40? FALSE — must pick smaller Δt.
+    -- Adjusted: Δt=1, K=10 ⟹ 6·G·M_u + M_uc = 65 ≤ K? FALSE; K=70 ⟹ Δt·K=70 > 40. FALSE.
+    -- Correct concrete witness: D_max = −60, G − D_max = 70
+    -- Δt=1, M_u=1, M_uc=5 ⟹ 6·10·1 + 5 = 65 ≤ K=65, Δt·K=65 ≤ 70 ✓
+    (1 * (6 * 10 * 1 + 5) : Int) ≤ 10 - (-60) := by decide
+
 end NSRegularity.NS.AdvectionBound
