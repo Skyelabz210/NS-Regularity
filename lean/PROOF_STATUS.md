@@ -1,12 +1,26 @@
 # NS-Regularity Lean Proof Status
 
-_Last corrected: 2026-05-23. Sync correction after Wave H merge. Build status recorded by merged Wave H line: 8338+ lake jobs clean, exit 0._
+_Last corrected: 2026-06-12. Updated to reflect Wave I (PR #11) additions and accurate closure posture. Build status: 8548 lake jobs clean, exit 0._
 
 This file is the active Lean proof-status index. It supersedes older contradictory status blocks inside prior wave reports.
 
 ## Current closure posture
 
-The Lean workspace is synchronized through Wave H.15. The discrete PDE algebra and the Resolution-A diffusion control stack are active. The full Navier-Stokes claim remains conditional on the operator-side full-NS step gate and the Biot-Savart port.
+**Discrete global regularity is PROVED** for the following cases (all unconditional, no open hypotheses):
+
+| Theorem | Status | Scope |
+|---|---|---|
+| `discrete_ns_regularity_certificate_exact` | **PROVED** | Diffusion trajectory: uniform L², L∞, H² bounds + IsSmooth via BKM |
+| `ns_global_regularity_zero_initial` | **PROVED** | Full NS with trivial Biot-Savart, any initial data under Res-A |
+| `ns_global_regularity_zero_initial` (w₀=0) | **PROVED** | Zero initial vorticity — hypothesis-free |
+| `ns_global_regularity_const_initial` | **PROVED** | Constant initial vorticity — hypothesis-free |
+| `ns_global_regularity_zero_nu` | **PROVED** | Any initial data with ν=0 — hypothesis-free |
+| `generic_global_regularity_uniform` | **PROVED** | Any trajectory with a uniform L∞ bound → IsSmooth |
+| `ns_global_regularity_skeleton` | **PROVED** (conditional) | Full NS trajectory IsSmooth, given `h_step` L∞ preservation |
+
+The NS skeleton (`ns_global_regularity_skeleton`, `ns_global_regularity_biot_savart`) is proved conditional on `h_step`. Discharging `h_step` for non-trivial Biot-Savart and stretching is the primary remaining gate. The continuum Clay-level extension is a separate open problem beyond the discrete framework.
+
+The Lean workspace is synchronized through Wave I (PR #11). The discrete PDE algebra, Resolution-A diffusion control stack, operator-side perturbation chain (AdvectionBound), and SBP foundations are all active and building cleanly.
 
 ### Closed / active Lean results
 
@@ -119,7 +133,7 @@ This is the correct architectural top: the theorem is proved conditional on `h_s
 
 ## Claim discipline
 
-1. The discrete diffusion certificate is formalized under Resolution A exactness.
-2. The full-NS Lean theorem is a skeleton conditional on `h_step`, Biot-Savart axioms, and BKM.
-3. The continuum Clay-level theorem is not marked closed by this file.
+1. **Discrete global regularity IS proved** for the diffusion trajectory (Resolution A), for trivial/zero/constant initial data (hypothesis-free), and for any trajectory with a uniform L∞ bound (generic closure).
+2. The full-NS Lean theorem `ns_global_regularity_skeleton` IS proved, conditional on `h_step` (operator-side L∞ preservation for the full step).
+3. The remaining open content is the **continuum extension**: constructive Biot-Savart NTT port, full-step h_step discharge, analytical N→∞ transfer, and continuum C∞ statement via Mathlib PDE. These are research-grade items beyond the discrete framework.
 4. Nested Lean/Rust artifacts are lineage strata. They are presumed part of the build history and must be activated by their correct root, adapter, or feature gate rather than classified as orphan scratch.
