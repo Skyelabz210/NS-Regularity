@@ -29,4 +29,5 @@ import NSRegularity.HSquared.BasisCFL  -- centered-residue sign recoverability (
 import NSRegularity.NS.StretchingBound  -- Attack 2: stretching gradient bound (Piece A half)
 import NSRegularity.NS.DiffusionCeiling  -- Attack 3: local diffusion ceiling + max principle (Piece B₁)
 import NSRegularity.NS.BiotSavartBound  -- Attack 1: BS reverse bound, underdetermination, interface axiom
+import NSRegularity.NS.SmallDataCapstone  -- assembled small-data theorem (Piece A derived, Piece B explicit)
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check

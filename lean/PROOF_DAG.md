@@ -237,6 +237,19 @@ Piece B₂ depends on:
   use the sign structure of advection/stretching at extrema — the discrete
   maximum-principle route, whose first bricks are in this file.
 
+**Capstone assembly — ✅ BUILT (`NS/SmallDataCapstone.lean`)**
+- `ns_global_regularity_canonical`: IsSmooth for the NS trajectory with
+  *canonical* stretching `(w·∇)(biot_savart w)_c`, from explicit hypotheses:
+  `{C_BS bound} + {Resolution-A exactness per state} + {Piece B per state}`.
+  Piece A is **derived inside the proof** (Attack 2 + interface bound), with
+  the explicit constant `K_c(w) = 6·gridLInf w.c·M_u + 6·M_u·lInf w`,
+  `M_u = C_BS·lInf w`. Axiom footprint: BS characteristic axioms + BKM only
+  (the interface bound enters as hypothesis `hBS`, not as the axiom).
+- **The whole small-data route now bottlenecks on two items:**
+  1. 🔵 constructive NTT port discharging `hBS` with a concrete `C_BS`;
+  2. 🟠 Piece B at every reachable state (the genuine small-data condition;
+     quantified by `diffusion_gap`, open at max points).
+
 **Attack 4: Transfinite R2 Campaign (empirical certificate)**
 - DynCRT: activation level ℓ(t) at N=8→32, horizons 10³-10⁴
 - Expected: Δ=0 (ℓ* ≤ γ₀-1) across longer evolution
