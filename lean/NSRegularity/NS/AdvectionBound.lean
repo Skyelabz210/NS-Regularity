@@ -189,4 +189,69 @@ theorem stretching_step_zero_perturbation
     stretching_step (fun _ _ _ => 0) f p i j k = f i j k := by
   simp [stretching_step]
 
+/-! ## Unified full-step perturbation bound -/
+
+/-- **Full-step perturbation bound (pointwise, per component).**
+
+    Wraps the three sub-step estimates as a single statement: the
+    composed `ns_step_component` moves any single grid value `f i j k`
+    by no more than the sum of the advection and stretching pointwise
+    perturbations, *measured from the post-diffusion field*. Specifically
+
+      `|ns_step_component u uc_grad f p (i,j,k) − (diffusion_step f p) (i,j,k)|
+          ≤ |Δt| · 2·gridLInf (diffusion_step f p)
+                 · (|u_x| + |u_y| + |u_z|)(i,j,k)
+            + |Δt| · |uc_grad (i,j,k)|`
+
+    Triangle-inequality composition of `advection_step_perturbation_le`
+    (applied to the post-diffusion field) and `stretching_step_perturbation_le`
+    (applied to the post-advection field). The base point is the
+    post-diffusion field rather than the original `f` because the
+    operator-splitting order is `stretching ∘ advection ∘ diffusion`
+    (see `NS/FullStep.lean`); composing further with the diffusion L∞-
+    non-increase bound (Resolution A) requires the diffusion contraction
+    argument to be folded in, which stays open here.
+
+    What this is: the *clean per-step perturbation budget* for the full
+    NS sub-step composition — exactly the form a contraction-vs-growth
+    argument needs to compare against the diffusion contraction. -/
+theorem ns_step_component_perturbation_le
+    (u : VField) (uc_grad : Grid) (f : Grid) (p : NsParams)
+    (i j k : Fin N) :
+    |ns_step_component u uc_grad f p i j k - diffusion_step f p i j k| ≤
+      |p.dt_latt| * (2 * gridLInf (diffusion_step f p)
+                      * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      + |p.dt_latt| * |uc_grad i j k| := by
+  -- Let g := diffusion_step f p; a := advection_step u g p
+  set g := diffusion_step f p with hg
+  set a := advection_step u g p with ha
+  -- ns_step_component = stretching_step uc_grad a p
+  have hns : ns_step_component u uc_grad f p i j k =
+             stretching_step uc_grad a p i j k := by
+    simp [ns_step_component, ha, hg]
+  rw [hns]
+  -- |stretching - g| ≤ |stretching - a| + |a - g|
+  have htri : |stretching_step uc_grad a p i j k - g i j k|
+      ≤ |stretching_step uc_grad a p i j k - a i j k|
+        + |a i j k - g i j k| := by
+    have := abs_add_le
+      (stretching_step uc_grad a p i j k - a i j k)
+      (a i j k - g i j k)
+    have heq : (stretching_step uc_grad a p i j k - a i j k)
+                + (a i j k - g i j k)
+              = stretching_step uc_grad a p i j k - g i j k := by ring
+    rw [heq] at this
+    exact this
+  refine le_trans htri ?_
+  -- bound each term
+  have hadv : |a i j k - g i j k|
+      ≤ |p.dt_latt| * (2 * gridLInf g
+            * (|u.x i j k| + |u.y i j k| + |u.z i j k|)) := by
+    have := advection_step_perturbation_le u g p i j k
+    exact this
+  have hstr : |stretching_step uc_grad a p i j k - a i j k|
+      ≤ |p.dt_latt| * |uc_grad i j k| :=
+    stretching_step_perturbation_le uc_grad a p i j k
+  linarith
+
 end NSRegularity.NS.AdvectionBound
