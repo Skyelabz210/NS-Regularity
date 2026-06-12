@@ -13,6 +13,8 @@
 //!
 //! All capacity and ratio computations are exact integer/rational.
 
+pub mod dyncrt;
+
 use std::fmt;
 use std::ops::{Add, Sub, Mul, Neg};
 
