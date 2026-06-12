@@ -322,6 +322,49 @@ theorem ns_step_component_perturbation_le_exact
     exact mul_le_mul_of_nonneg_left expand_le hdt_nn
   linarith
 
+/-! ## From difference bounds to direct upper bounds -/
+
+/-- **Direct upper bound on `|ns_step_component|`.**
+
+    Triangle inequality applied to the perturbation bound: the absolute
+    value of the composed step output is bounded by the absolute value of
+    the post-diffusion base plus the perturbation budget:
+
+      `|ns_step_component u uc_grad f p (i,j,k)|
+          ≤ |diffusion_step f p (i,j,k)|
+            + |Δt| · 2·gridLInf (diffusion_step f p)·(|u_x|+|u_y|+|u_z|)
+            + |Δt| · |uc_grad (i,j,k)|`.
+
+    This is the cleanest form a contraction-vs-growth argument can
+    consume: the right-hand side has the post-diffusion *contraction*
+    (which Resolution A bounds by `gridLInf f`) plus an explicit
+    *growth* term. For L∞ preservation we need the entire RHS ≤
+    `gridLInf f` pointwise — which reduces to the (open) inequality
+    `Π_pert ≤ gridLInf f − |diffusion_step f p (i,j,k)|`. -/
+theorem ns_step_component_abs_le
+    (u : VField) (uc_grad : Grid) (f : Grid) (p : NsParams)
+    (i j k : Fin N) :
+    |ns_step_component u uc_grad f p i j k| ≤
+      |diffusion_step f p i j k|
+      + |p.dt_latt| * (2 * gridLInf (diffusion_step f p)
+                       * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      + |p.dt_latt| * |uc_grad i j k| := by
+  -- |x| = |(x − y) + y| ≤ |x − y| + |y|
+  have htri : |ns_step_component u uc_grad f p i j k|
+      ≤ |ns_step_component u uc_grad f p i j k - diffusion_step f p i j k|
+        + |diffusion_step f p i j k| := by
+    have habs := abs_add_le
+      (ns_step_component u uc_grad f p i j k - diffusion_step f p i j k)
+      (diffusion_step f p i j k)
+    have heq : (ns_step_component u uc_grad f p i j k - diffusion_step f p i j k)
+                + diffusion_step f p i j k
+              = ns_step_component u uc_grad f p i j k := by ring
+    rw [heq] at habs
+    exact habs
+  refine le_trans htri ?_
+  have hpert := ns_step_component_perturbation_le u uc_grad f p i j k
+  linarith
+
 /-! ## VField-level lift -/
 
 /-- **VField-level full-step perturbation (per-component decomposition).**
