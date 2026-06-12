@@ -129,6 +129,30 @@ theorem diffusion_trajectory_eq_generic (w₀ : VField) (p : NsParams) :
             generic_trajectory (diffusion_vstep p) w₀ (n + 1)
       simp only [diffusion_trajectory, generic_trajectory, diffusion_vstep, ih]
 
+/-- **Per-component scalar `gridLInf` non-increase under one diffusion step
+    (Resolution A).**
+
+    Lift of `DKAM.Diffusion.diffusion_max_preserving_exact_natAbs` (pointwise)
+    to the grid-level `gridLInf` via the three nested `Finset.sup'_le`. The
+    inline copies of this argument inside `diffusion_vstep_preserves_lInf_exact`
+    and `diffusion_max_preserving_exact_natAbs` (in `DKAM.lean`) are replaced
+    by a call to this named lemma. Useful as an externally-reusable building
+    block for any operator-splitting argument that needs to bound the
+    `gridLInf` of `diffusion_step f p` (e.g. the full-step L∞ gate). -/
+theorem gridLInf_diffusion_step_le_exact
+    (f : Grid) (p : NsParams) (h : cfl_ok p)
+    (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) (hns_pos : 0 < p.ns_scale)
+    (hExact : ∀ i j k : Fin N,
+      ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+        (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian f i j k)) :
+    gridLInf (NSRegularity.NS.diffusion_step f p) ≤ gridLInf f := by
+  unfold gridLInf
+  apply Finset.sup'_le; intro i _
+  apply Finset.sup'_le; intro j _
+  apply Finset.sup'_le; intro k _
+  exact NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact_natAbs
+    f p h hν hdt hns_pos hExact i j k
+
 /-- **Diffusion-step L∞ preservation** (Resolution A formulation).
     Needs the exactness hypothesis on the input field. Returns the
     L∞-preservation property in form usable by `generic_global_regularity`. -/
@@ -148,28 +172,10 @@ theorem diffusion_vstep_preserves_lInf_exact
             (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian w.z i j k))) :
     lInf (diffusion_vstep p w) ≤ lInf w := by
   unfold diffusion_vstep
-  -- per-component bounds via diffusion_max_preserving_exact_natAbs + sup'_le
-  have hx : gridLInf (diffusion_step w.x p) ≤ gridLInf w.x := by
-    unfold gridLInf
-    apply Finset.sup'_le; intro i _
-    apply Finset.sup'_le; intro j _
-    apply Finset.sup'_le; intro k _
-    exact NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact_natAbs
-      w.x p h hν hdt hns_pos hExact.1 i j k
-  have hy : gridLInf (diffusion_step w.y p) ≤ gridLInf w.y := by
-    unfold gridLInf
-    apply Finset.sup'_le; intro i _
-    apply Finset.sup'_le; intro j _
-    apply Finset.sup'_le; intro k _
-    exact NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact_natAbs
-      w.y p h hν hdt hns_pos hExact.2.1 i j k
-  have hz : gridLInf (diffusion_step w.z p) ≤ gridLInf w.z := by
-    unfold gridLInf
-    apply Finset.sup'_le; intro i _
-    apply Finset.sup'_le; intro j _
-    apply Finset.sup'_le; intro k _
-    exact NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact_natAbs
-      w.z p h hν hdt hns_pos hExact.2.2 i j k
+  -- per-component bounds via the extracted named helper.
+  have hx := gridLInf_diffusion_step_le_exact w.x p h hν hdt hns_pos hExact.1
+  have hy := gridLInf_diffusion_step_le_exact w.y p h hν hdt hns_pos hExact.2.1
+  have hz := gridLInf_diffusion_step_le_exact w.z p h hν hdt hns_pos hExact.2.2
   unfold lInf
   exact max_le_max hx (max_le_max hy hz)
 
