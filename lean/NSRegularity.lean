@@ -28,4 +28,5 @@ import NSRegularity.HSquared.DiscreteH2  -- discrete H² identity + Kill #129 (e
 import NSRegularity.HSquared.BasisCFL  -- centered-residue sign recoverability (Kill #130/#131)
 import NSRegularity.NS.StretchingBound  -- Attack 2: stretching gradient bound (Piece A half)
 import NSRegularity.NS.DiffusionCeiling  -- Attack 3: local diffusion ceiling + max principle (Piece B₁)
+import NSRegularity.NS.BiotSavartBound  -- Attack 1: BS reverse bound, underdetermination, interface axiom
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check

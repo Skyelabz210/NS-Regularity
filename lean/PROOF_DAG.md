@@ -197,10 +197,24 @@ Piece B₂ depends on:
 
 ### Next Attack Sequence
 
-**Attack 1 (highest leverage): Biot-Savart L∞ bound (NTT port)**
-- File: `NS/BiotSavart.lean`
-- Replace axiom `biot_savart_bounded` with theorem using NTT operator norm
-- Prerequisite: NTT prime factorization lemma + n-independent bound
+**Attack 1: Biot-Savart L∞ bound — 🔵 REDUCED TO INTERFACE AXIOM
+(`NS/BiotSavartBound.lean`)**
+- `lInf_curl_le`: `lInf (curl w) ≤ 4·lInf w` ✅ (proved)
+- `lInf_le_four_lInf_biot_savart`: consistency floor `lInf ω ≤ 4·lInf(BS ω)`
+  for div-free ω — forces `C_BS ≥ 1/4` ✅ (proved from curl axiom)
+- `velocity_not_determined_by_curl_div`: **underdetermination witness** ✅
+  (proved) — the checkerboard field has zero centered differences, so
+  curl+div axioms provably cannot pin an L∞ bound. The forward bound is a
+  property of the NTT-canonical representative, not of the axioms.
+- `biot_savart_linf_bound` 🔵 interface axiom: `∃ C_BS > 0, ∀ ω,
+  lInf (BS ω) ≤ C_BS·lInf ω` — constructively true for the Rust kernel
+  convolution (`lInf u ≤ ‖K‖₁·lInf ω`); discharge = constructive NTT port.
+- `piece_A_discharged` ✅: ALL Piece A inputs of
+  `h_step_component_pointwise_small_data` produced from the interface axiom
+  (velocity bounds + data bound, `M_u = C_BS·lInf ω`,
+  `K = 6·G·M_u + 6·M_u·lInf ω`).
+- **Remaining open after this file: Piece B only (D_max + CFL at max
+  points), plus the constructive discharge of the interface axiom.**
 
 **Attack 2: Stretching gradient bound — ✅ CLOSED (`NS/StretchingBound.lean`)**
 - `gridLInf_stretching_le`: `gridLInf (advective ω u_c) ≤ 6·gridLInf(u_c)·lInf ω` ✅
