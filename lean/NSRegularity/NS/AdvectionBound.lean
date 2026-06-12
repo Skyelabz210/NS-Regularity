@@ -493,6 +493,39 @@ theorem localPressure_nonneg
     (abs_nonneg _) (gridLInf_nonneg_int f)
     (abs_nonneg _) (abs_nonneg _) (abs_nonneg _) (abs_nonneg _)
 
+/-- **Uniform upper bound on local pressure.**
+
+    The local pressure at any grid point is bounded by
+
+      `|Δt| · (6·gridLInf f·M_u + M_uc)`
+
+    where `M_u = max(gridLInf u.x, gridLInf u.y, gridLInf u.z)` and
+    `M_uc = gridLInf uc_grad`. The factor 6 = 2 × 3 comes from the
+    advection stencil constant 2 times the three components of u. -/
+theorem localPressure_uniform_le_aux
+    (Δt G M_u M_uc UX UY UZ UC : Int)
+    (hΔt : 0 ≤ Δt) (hG : 0 ≤ G) (hM_u : 0 ≤ M_u)
+    (hUX_le : UX ≤ M_u) (hUY_le : UY ≤ M_u) (hUZ_le : UZ ≤ M_u)
+    (hUC_le : UC ≤ M_uc)
+    (hUX_nn : 0 ≤ UX) (hUY_nn : 0 ≤ UY) (hUZ_nn : 0 ≤ UZ) (hUC_nn : 0 ≤ UC) :
+    Δt * (2 * G * (UX + UY + UZ)) + Δt * UC ≤ Δt * (6 * G * M_u + M_uc) := by
+  -- UX + UY + UZ ≤ 3 · M_u
+  have h_uxyz_le : UX + UY + UZ ≤ 3 * M_u := by linarith
+  have h_uxyz_nn : 0 ≤ UX + UY + UZ := by linarith
+  -- 2 · G · (UX + UY + UZ) ≤ 2 · G · (3 · M_u) = 6 · G · M_u
+  have h2G_nn : 0 ≤ 2 * G := by linarith
+  have hadv : 2 * G * (UX + UY + UZ) ≤ 2 * G * (3 * M_u) :=
+    mul_le_mul_of_nonneg_left h_uxyz_le h2G_nn
+  have hadv' : 2 * G * (3 * M_u) = 6 * G * M_u := by ring
+  -- Δt · (2 G ·(UX+UY+UZ)) + Δt · UC ≤ Δt · (6·G·M_u) + Δt · M_uc
+  have hA : Δt * (2 * G * (UX + UY + UZ)) ≤ Δt * (6 * G * M_u) := by
+    have : Δt * (2 * G * (UX + UY + UZ)) ≤ Δt * (2 * G * (3 * M_u)) :=
+      mul_le_mul_of_nonneg_left hadv hΔt
+    rw [hadv'] at this; exact this
+  have hB : Δt * UC ≤ Δt * M_uc := mul_le_mul_of_nonneg_left hUC_le hΔt
+  have hsum : Δt * (6 * G * M_u + M_uc) = Δt * (6 * G * M_u) + Δt * M_uc := by ring
+  linarith
+
 /-! ### Capacity-vs-pressure conditional L∞ closure — composition recipe
 
     The conditional closure of the per-component L∞ gate is a one-step
