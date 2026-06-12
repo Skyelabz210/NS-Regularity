@@ -526,6 +526,39 @@ theorem localPressure_uniform_le_aux
   have hsum : Δt * (6 * G * M_u + M_uc) = Δt * (6 * G * M_u) + Δt * M_uc := by ring
   linarith
 
+/-- **Local-capacity uniform lower bound — pure-integer arithmetic core.**
+
+    If the diffusion-step output's absolute value at every grid point is
+    uniformly bounded above by some `D_max` (the "post-diffusion ceiling"),
+    then the local capacity is uniformly bounded below by
+    `gridLInf f − D_max`. In particular if `D_max ≤ gridLInf f` (which
+    Resolution A guarantees with `D_max = gridLInf f` as the trivial
+    upper bound), the lower bound is non-negative. -/
+theorem localCapacity_uniform_ge_aux
+    (G D D_max : Int) (hD_le : D ≤ D_max) :
+    G - D_max ≤ G - D := by linarith
+
+/-- **CFL-style sufficient condition — pure-integer arithmetic core.**
+
+    If the uniform pressure upper bound is dominated by a uniform lower
+    bound on the capacity, then the per-grid-point capacity-vs-pressure
+    inequality holds at every grid point:
+
+      pressure_uniform ≤ capacity_uniform
+      ∧ pressure_local ≤ pressure_uniform
+      ∧ capacity_uniform ≤ capacity_local
+      ⟹ pressure_local ≤ capacity_local.
+
+    This is the reduction the next attack on the full-step L∞ gate must
+    target: a single scalar inequality on uniform L∞-norms of (u, uc_grad,
+    f, p) rather than a per-grid-point pointwise hypothesis. -/
+theorem capacity_vs_pressure_sufficient_aux
+    (pressure_local capacity_local pressure_uniform capacity_uniform : Int)
+    (h_p_le : pressure_local ≤ pressure_uniform)
+    (h_c_ge : capacity_uniform ≤ capacity_local)
+    (h_ineq : pressure_uniform ≤ capacity_uniform) :
+    pressure_local ≤ capacity_local := by linarith
+
 /-! ### Capacity-vs-pressure conditional L∞ closure — composition recipe
 
     The conditional closure of the per-component L∞ gate is a one-step
