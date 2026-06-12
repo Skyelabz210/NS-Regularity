@@ -322,4 +322,53 @@ theorem ns_step_component_perturbation_le_exact
     exact mul_le_mul_of_nonneg_left expand_le hdt_nn
   linarith
 
+/-! ## VField-level lift -/
+
+/-- **VField-level full-step perturbation (per-component decomposition).**
+
+    The composed `ns_step` differs from the (vector) `diffusion_vstep p w`
+    by at most the sum of three per-component perturbations, each one a
+    `ns_step_component_perturbation_le` instance.
+
+    For each component `c ∈ {x, y, z}` and grid point `(i,j,k)`:
+
+      `|(ns_step u sx sy sz w p).c (i,j,k) − (diffusion_vstep p w).c (i,j,k)|
+          ≤ |Δt| · 2 · gridLInf ((diffusion_vstep p w).c)
+                  · (|u_x| + |u_y| + |u_z|)(i,j,k)
+            + |Δt| · |sc (i,j,k)|`
+
+    where `sc ∈ {sx, sy, sz}` is the matching stretching gradient. This
+    lifts `ns_step_component_perturbation_le` to the VField level cleanly,
+    so any future contraction argument can address the three components
+    independently. -/
+theorem ns_step_x_perturbation_le
+    (u : VField) (sx sy sz : Grid) (w : VField) (p : NsParams)
+    (i j k : Fin N) :
+    |(ns_step u sx sy sz w p).x i j k - diffusion_step w.x p i j k| ≤
+      |p.dt_latt| * (2 * gridLInf (diffusion_step w.x p)
+                      * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      + |p.dt_latt| * |sx i j k| := by
+  show |ns_step_component u sx w.x p i j k - diffusion_step w.x p i j k| ≤ _
+  exact ns_step_component_perturbation_le u sx w.x p i j k
+
+theorem ns_step_y_perturbation_le
+    (u : VField) (sx sy sz : Grid) (w : VField) (p : NsParams)
+    (i j k : Fin N) :
+    |(ns_step u sx sy sz w p).y i j k - diffusion_step w.y p i j k| ≤
+      |p.dt_latt| * (2 * gridLInf (diffusion_step w.y p)
+                      * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      + |p.dt_latt| * |sy i j k| := by
+  show |ns_step_component u sy w.y p i j k - diffusion_step w.y p i j k| ≤ _
+  exact ns_step_component_perturbation_le u sy w.y p i j k
+
+theorem ns_step_z_perturbation_le
+    (u : VField) (sx sy sz : Grid) (w : VField) (p : NsParams)
+    (i j k : Fin N) :
+    |(ns_step u sx sy sz w p).z i j k - diffusion_step w.z p i j k| ≤
+      |p.dt_latt| * (2 * gridLInf (diffusion_step w.z p)
+                      * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      + |p.dt_latt| * |sz i j k| := by
+  show |ns_step_component u sz w.z p i j k - diffusion_step w.z p i j k| ≤ _
+  exact ns_step_component_perturbation_le u sz w.z p i j k
+
 end NSRegularity.NS.AdvectionBound
