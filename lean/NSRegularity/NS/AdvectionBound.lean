@@ -1,6 +1,7 @@
 import NSRegularity.NS.FullStep
 import NSRegularity.AubinLions
 import NSRegularity.GlobalRegularityGeneric
+import NSRegularity.DKAM.DiffusionMaxPreserving
 
 /-!
 # NS/AdvectionBound — pointwise Lipschitz bound for discrete advection
@@ -363,6 +364,65 @@ theorem ns_step_component_abs_le
     exact habs
   refine le_trans htri ?_
   have hpert := ns_step_component_perturbation_le u uc_grad f p i j k
+  linarith
+
+/-- **Full operator-side `|ns_step_component|` upper bound under Resolution A.**
+
+    Chains `ns_step_component_abs_le` with the Resolution-A diffusion
+    pointwise contraction `diffusion_max_preserving_exact` to express the
+    upper bound purely in terms of `gridLInf f`:
+
+      `|ns_step_component u uc_grad f p (i,j,k)|
+          ≤ gridLInf f
+            + |Δt| · 2·gridLInf f·(|u_x|+|u_y|+|u_z|)(i,j,k)
+            + |Δt| · |uc_grad (i,j,k)|`.
+
+    First two terms `gridLInf f + |Δt|·2·gridLInf f·(|u_x|+|u_y|+|u_z|)` arise
+    from the diffusion contraction's pointwise output and the advection
+    growth. The third is the raw stretching budget. For L∞ preservation we
+    need the entire RHS ≤ `gridLInf f` pointwise, which reduces to
+
+      `|Δt| · 2·gridLInf f·(|u_x|+|u_y|+|u_z|) + |Δt|·|uc_grad (i,j,k)| ≤ 0`.
+
+    Since each summand is non-negative, this collapses to the trivial
+    case (`u = 0` AND `uc_grad = 0`). That is exactly the trivial-closure
+    family `NS/TrivialClosure.lean` discharges. Non-trivial L∞ preservation
+    requires a tighter analysis that does NOT bound the diffusion term by
+    its sup but instead uses its *spare* contraction capacity at each grid
+    point relative to the local advection + stretching pressure. This
+    capacity-vs-pressure inequality is the genuinely-open hard piece. -/
+theorem ns_step_component_abs_le_exact
+    (u : VField) (uc_grad : Grid) (f : Grid) (p : NsParams)
+    (h : cfl_ok p) (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt)
+    (hns_pos : 0 < p.ns_scale)
+    (hExact : ∀ i' j' k' : Fin N,
+      ((N : Int) ^ 2 * p.ns_scale ^ 2) ∣
+        (p.nu_scaled * p.dt_latt * NSRegularity.NS.laplacian f i' j' k'))
+    (i j k : Fin N) :
+    |ns_step_component u uc_grad f p i j k| ≤
+      gridLInf f
+      + |p.dt_latt| * (2 * gridLInf f
+                       * (|u.x i j k| + |u.y i j k| + |u.z i j k|))
+      + |p.dt_latt| * |uc_grad i j k| := by
+  -- Chain the refined perturbation bound (under Res-A) with the pointwise
+  -- |diffusion_step ...| ≤ gridLInf f from diffusion_max_preserving_exact.
+  have hpert := ns_step_component_perturbation_le_exact
+    u uc_grad f p h hν hdt hns_pos hExact i j k
+  have hdiff : |diffusion_step f p i j k| ≤ gridLInf f :=
+    NSRegularity.DKAM.Diffusion.diffusion_max_preserving_exact
+      f p h hν hdt hns_pos hExact i j k
+  -- |ns_step_component| ≤ |diffusion_step| + Π (refined) ≤ gridLInf f + Π.
+  have habs : |ns_step_component u uc_grad f p i j k|
+      ≤ |ns_step_component u uc_grad f p i j k - diffusion_step f p i j k|
+        + |diffusion_step f p i j k| := by
+    have h := abs_add_le
+      (ns_step_component u uc_grad f p i j k - diffusion_step f p i j k)
+      (diffusion_step f p i j k)
+    have heq : (ns_step_component u uc_grad f p i j k - diffusion_step f p i j k)
+                + diffusion_step f p i j k
+              = ns_step_component u uc_grad f p i j k := by ring
+    rw [heq] at h
+    exact h
   linarith
 
 /-! ## VField-level lift -/
