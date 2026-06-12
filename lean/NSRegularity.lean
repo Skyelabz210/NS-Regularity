@@ -23,4 +23,5 @@ import NSRegularity.NS.BiotSavart  -- discrete curl + Biot-Savart skeleton (axio
 import NSRegularity.NS.Trajectory  -- NS trajectory generator + global regularity skeleton
 import NSRegularity.NS.TrivialClosure  -- fully discharged IsSmooth instances (zero/const w₀)
 import NSRegularity.NS.AdvectionBound  -- pointwise Lipschitz bound for discrete advection
+import NSRegularity.NS.HStepSmallData  -- small-data h_step closure (Pieces A+B → lInf preserved)
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
