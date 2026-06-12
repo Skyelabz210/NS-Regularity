@@ -27,4 +27,5 @@ import NSRegularity.NS.HStepSmallData  -- small-data h_step closure (Pieces A+B 
 import NSRegularity.HSquared.DiscreteH2  -- discrete H² identity + Kill #129 (eigen-Beltrami)
 import NSRegularity.HSquared.BasisCFL  -- centered-residue sign recoverability (Kill #130/#131)
 import NSRegularity.NS.StretchingBound  -- Attack 2: stretching gradient bound (Piece A half)
+import NSRegularity.NS.DiffusionCeiling  -- Attack 3: local diffusion ceiling + max principle (Piece B₁)
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check

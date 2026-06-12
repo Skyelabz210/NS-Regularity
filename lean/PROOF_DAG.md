@@ -211,12 +211,17 @@ Piece B₂ depends on:
   `|Δt|·12·C_BS·(lInf w)² ≤ gridLInf w.c − D_max` ✅
 - **Piece A now has exactly one open input: the Biot-Savart L∞ bound.**
 
-**Attack 3: CFL quantitative analysis (Piece B)**
-- File: `NS/HStepSmallData.lean` or new `NS/CFL.lean`
-- For specific `NsParams` (nu_scaled = ν₀, dt_latt = Δt₀):
-  Show `|Δt₀| * K ≤ gridLInf w.c − D_max` from the diffusion formula
-- D_max comes from `diffusion_step f p i j k = f i j k + ν·Δt·Δf/(N²S²)`
-  At a local maximum, Δf ≤ 0, so `|diffusion_step| < |f i j k| ≤ gridLInf f`
+**Attack 3: Quantitative diffusion ceiling — ✅ CLOSED (`NS/DiffusionCeiling.lean`)**
+- `diffusion_step_stencil_exact`: `N²S²·D = (N²S²−6cv)·f(x) + cv·Σ_nbrs f` ✅
+- `diffusion_step_local_ceiling`: `N²S²·|D| ≤ (N²S²−6cv)·|f(x)| + 6cv·G` ✅
+- `diffusion_gap`: spare capacity `N²S²·(G−|D|) ≥ (N²S²−6cv)·(G−|f(x)|)` ✅
+- `diffusion_max_principle`: at a global max, `D(x) ≤ f(x)` ✅ (one-sided
+  lemmas for `Δf ≤ 0` / `Δf ≥ 0` and Laplacian sign at extrema)
+- **Structural finding (honest):** at max points the pure-diffusion gap is
+  zero (constant fields are tight), so a uniform strict `D_max < G` is
+  unprovable without data hypotheses. Piece B closure at max points must
+  use the sign structure of advection/stretching at extrema — the discrete
+  maximum-principle route, whose first bricks are in this file.
 
 **Attack 4: Transfinite R2 Campaign (empirical certificate)**
 - DynCRT: activation level ℓ(t) at N=8→32, horizons 10³-10⁴
