@@ -202,11 +202,14 @@ Piece B₂ depends on:
 - Replace axiom `biot_savart_bounded` with theorem using NTT operator norm
 - Prerequisite: NTT prime factorization lemma + n-independent bound
 
-**Attack 2: Stretching gradient bound (DKAM-subcritical)**
-- File: `NS/AdvectionBound.lean` or new `NS/StretchingBound.lean`
-- Prove: `gridLInf (advective ω u_c i j k) ≤ 2·gridLInf(u_c)·Σ|ω_c|`
-- This + Biot-Savart bound gives: `gridLInf(uc_grad) ≤ 2·C_BS·gridLInf(ω)²`
-- Closes Piece A once velocity bound is in place
+**Attack 2: Stretching gradient bound — ✅ CLOSED (`NS/StretchingBound.lean`)**
+- `gridLInf_stretching_le`: `gridLInf (advective ω u_c) ≤ 6·gridLInf(u_c)·lInf ω` ✅
+- `piece_A_data_bound`: Piece A holds with `K = 6·G·M_u + 6·M_u·lInf ω`,
+  conditioned ONLY on the Biot-Savart bound `gridLInf u_c ≤ M_u` ✅
+- `piece_A_K_twelve`: NS-step closed form `K = 12·M_u·lInf w`; with
+  `M_u = C_BS·lInf w` the CFL becomes the quadratic small-data threshold
+  `|Δt|·12·C_BS·(lInf w)² ≤ gridLInf w.c − D_max` ✅
+- **Piece A now has exactly one open input: the Biot-Savart L∞ bound.**
 
 **Attack 3: CFL quantitative analysis (Piece B)**
 - File: `NS/HStepSmallData.lean` or new `NS/CFL.lean`
