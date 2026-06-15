@@ -22,4 +22,13 @@ import NSRegularity.AubinLions.ResolutionA  -- L4.2 Resolution A L² monotonicit
 import NSRegularity.NS.BiotSavart  -- discrete curl + Biot-Savart skeleton (axiomatic)
 import NSRegularity.NS.Trajectory  -- NS trajectory generator + global regularity skeleton
 import NSRegularity.NS.TrivialClosure  -- fully discharged IsSmooth instances (zero/const w₀)
+import NSRegularity.NS.AdvectionBound  -- pointwise Lipschitz bound for discrete advection
+import NSRegularity.NS.HStepSmallData  -- small-data h_step closure (Pieces A+B → lInf preserved)
+import NSRegularity.HSquared.DiscreteH2  -- discrete H² identity + Kill #129 (eigen-Beltrami)
+import NSRegularity.HSquared.BasisCFL  -- centered-residue sign recoverability (Kill #130/#131)
+import NSRegularity.NS.StretchingBound  -- Attack 2: stretching gradient bound (Piece A half)
+import NSRegularity.NS.DiffusionCeiling  -- Attack 3: local diffusion ceiling + max principle (Piece B₁)
+import NSRegularity.NS.BiotSavartBound  -- Attack 1: BS reverse bound, underdetermination, interface axiom
+import NSRegularity.NS.SmallDataCapstone  -- assembled small-data theorem (Piece A derived, Piece B explicit)
+import NSRegularity.AxiomAudit  -- live-path axiom audit + reproducibility probe
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
