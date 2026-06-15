@@ -689,3 +689,4 @@ pub mod ns3d_n16;
 pub mod ns3d_n32;
 pub mod ns3d_aubin_lions;
 pub mod ns3d_d030;
+pub mod ns3d_structb;
