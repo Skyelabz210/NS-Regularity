@@ -83,3 +83,8 @@ The finite exact-integer substrate has strong closed components. The Lean diffus
 ## Author
 
 Anthony Diaz (Acid) — HackFate / Skyelabz210
+
+
+## Consolidated research intake (2026-10-14)
+
+The non-destructive source imports, variant register, reproducibility DAG and precise proof-status audit are indexed at [consolidated/README.md](consolidated/README.md). The original active workspaces remain intact.
