@@ -18,8 +18,8 @@ namespace NSRegularity.NS.SoundnessProbe
 
 open NSRegularity NSRegularity.NS
 
-/-- Post-fix consequence of the axioms. Now correctly requires `hdiv`
-    rather than asserting it for all `ω`. -/
+/-- Post-fix consequence of the axioms. Now requires `hsource`
+    rather than asserting curl inversion for arbitrary fields. -/
 theorem div_free_under_biot_savart (ω : VField)
     (hsource : ∃ u : VField,
       curl u = ω ∧ divV u = (fun (_ _ _ : Fin N) => (0 : Int))) :
