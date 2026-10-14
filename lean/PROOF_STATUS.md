@@ -100,7 +100,7 @@ This is the correct architectural top: the theorem is proved conditional on `h_s
 | Gate | Status | Required closure |
 |---|---|---|
 | `biot_savart` constructive port | OPEN | Port Rust NTT / CRT Biot-Savart into Lean and replace axioms |
-| `biot_savart_curl_eq` | OPEN axiom (consistent) | Prove `curl (biot_savart ω) = ω` for the exact discrete operator. Now correctly stated under the precondition `divV ω = 0`; without this hypothesis the axiom was inconsistent with the proved `curl_div_zero` theorem (see `NSRegularity/SoundnessProbe.lean`). |
+| `biot_savart_curl_eq` | OPEN axiom, now explicitly curl-range-restricted | Inversion guaranteed only for ω with an admissible divergence-free discrete preimage. Divergence-free alone is insufficient on the centered grid: constant and Nyquist modes are obstructions. Construct NTT operator and prove source trajectory invariance. |
 | `biot_savart_div_zero` | OPEN axiom | Prove `divV (biot_savart ω) = 0` |
 | `h_step` full-NS L∞ preservation | OPEN | Compose diffusion + advection + stretching control for `ns_step`. Operator-side infrastructure factored in `NSRegularity/NS/AdvectionBound.lean` (advection / stretching / unified per-step perturbation bounds, capacity-vs-pressure decomposition, small-data sufficient condition aux helpers). Routing document with the 8-step closure recipe: `NSRegularity/NS/AdvectionBound_CLOSURE_RECIPE.md`. Residual open content reduced to two structurally-independent pieces (Piece A: uniform data bound on `gridLInf u` and `gridLInf uc_grad`; Piece B: CFL refinement `|Δt|·K ≤ gridLInf f − D_max`). |
 | `bkm_regularity_criterion` | PROVED theorem (discrete witness) | Continuum-level BKM (deep PDE) is still out of scope; for the discrete `IsSmooth` witness (uniform L∞ bound) the criterion is now a tautological refinement. The full continuum C^∞ statement still requires a formal PDE library. |
@@ -137,3 +137,7 @@ This is the correct architectural top: the theorem is proved conditional on `h_s
 2. The full-NS Lean theorem `ns_global_regularity_skeleton` IS proved, conditional on `h_step` (operator-side L∞ preservation for the full step).
 3. The remaining open content is the **continuum extension**: constructive Biot-Savart NTT port, full-step h_step discharge, analytical N→∞ transfer, and continuum C∞ statement via Mathlib PDE. These are research-grade items beyond the discrete framework.
 4. Nested Lean/Rust artifacts are lineage strata. They are presumed part of the build history and must be activated by their correct root, adapter, or feature gate rather than classified as orphan scratch.
+
+## 2026-10-14 formal soundness audit
+
+`biot_savart_curl_eq` was corrected from a divergence-only hypothesis to an explicit divergence-free centered-curl preimage. The previous divergence-only condition was inconsistent due to constant and checkerboard modes on the N=8 periodic grid. The Lean tree's earlier June 'consistent' wording is superseded by this record. This is a domain restriction on an existing unproved axiom, not a completed constructive Biot–Savart theorem. CI compilation of the correction is required.

@@ -1,20 +1,17 @@
 import NSRegularity.NS.BiotSavart
 
 /-!
-# Soundness probe: BiotSavart axiom set is consistent under `hdiv` precondition
+# Soundness probe: Biot–Savart range/domain consistency
 
-Before the fix, `biot_savart_curl_eq` stated `∀ ω, curl (biot_savart ω) = ω`
-without a divergence hypothesis. Composing with the proved theorem
-`curl_div_zero` then gave `∀ ω, divV ω = 0`, which is false on the discrete
-torus.
+The previous divergence-only characteristic axiom was inconsistent even
+with `divV ω = 0`: the constant nonzero field has zero divergence yet
+nonzero spatial mean, while a centered periodic curl has zero mean.
+Zero-mean checkerboard modes are additional obstructions at even N.
 
-After the fix, the axiom requires `divV ω = 0` as a precondition. The
-contradiction no longer goes through: `all_fields_are_div_free` becomes a
-trivial restatement (`divV ω = 0 → divV ω = 0`), not a universal claim
-about arbitrary `ω`.
-
-This file *checks* the fix: it derives the post-fix theorem and exhibits
-the concrete counter-example that broke the pre-fix axiom set.
+The corrected axiom takes an explicit witness of an admissible
+zero-divergence velocity whose centered curl equals ω. This is a real
+representation requirement for the discrete operator. The construction
+of an actual NTT Biot–Savart map remains a separate proof obligation.
 -/
 
 namespace NSRegularity.NS.SoundnessProbe
@@ -24,11 +21,12 @@ open NSRegularity NSRegularity.NS
 /-- Post-fix consequence of the axioms. Now correctly requires `hdiv`
     rather than asserting it for all `ω`. -/
 theorem div_free_under_biot_savart (ω : VField)
-    (hdiv : divV ω = (fun (_ _ _ : Fin N) => (0 : Int))) :
+    (hsource : ∃ u : VField,
+      curl u = ω ∧ divV u = (fun (_ _ _ : Fin N) => (0 : Int))) :
     divV ω = (fun (_ _ _ : Fin N) => (0 : Int)) := by
   have h1 : divV (curl (biot_savart ω)) = (fun _ _ _ => (0 : Int)) :=
     curl_div_zero (biot_savart ω)
-  have h2 : curl (biot_savart ω) = ω := biot_savart_curl_eq ω hdiv
+  have h2 : curl (biot_savart ω) = ω := biot_savart_curl_eq ω hsource
   rw [h2] at h1
   exact h1
 
