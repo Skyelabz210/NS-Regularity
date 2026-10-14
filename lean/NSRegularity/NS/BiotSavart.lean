@@ -73,31 +73,34 @@ def divV (w : VField) : Grid :=
 /-- **Biot-Savart inversion (declared).**
 
     Maps a vorticity field to the unique divergence-free velocity field
-    whose curl equals the input vorticity (assuming the input has zero
-    spatial mean, which is automatically true on the torus when
-    `∇ · ω = 0` — vorticity is always divergence-free).
+    whose curl equals the input vorticity on the range of the centered
+    curl operator, with an admissible divergence-free preimage.
+    A divergence-free field alone need not be in this range: constant
+    fields and centered-difference checkerboard modes obstruct inversion.
 
     The concrete implementation uses a 4-prime NTT pipeline (constructive,
     no axioms), but the port to Lean is pending. For now we declare the
     signature and the characteristic property as axioms. -/
 axiom biot_savart : VField → VField
 
-/-- **Characteristic property: `curl (biot_savart ω) = ω` on divergence-free
-    vorticities.**
+/-- **Characteristic property: `curl (biot_savart ω) = ω` on representable
+    vorticities with a divergence-free preimage.**
 
-    The precondition `divV ω = 0` is essential. Without it the axiom is
-    unsound: composing with the proved theorem `curl_div_zero` would force
-    `divV ω = 0` for *every* `ω`, which is false on the discrete torus
-    (see `NSRegularity/SoundnessProbe.lean` for a concrete witness with
-    `divV ω 0 0 0 = −6`). On the NS trajectory the precondition holds
-    automatically: every vorticity field is itself a curl of a velocity,
-    so `divV ω = 0` by `curl_div_zero`.
+    The precondition is that ω admits a divergence-free discrete velocity
+    whose centered curl equals ω. Merely assuming `divV ω = 0` is
+    inconsistent here: constant nonzero ω is divergence-free but cannot
+    equal a periodic curl (each curl component has spatial sum zero).
+    Even adding zero mean does not eliminate Nyquist checkerboard modes.
+    For an NS trajectory generated from an actual discrete curl, range
+    membership and a divergence-free preimage must be maintained as
+    explicit invariants; they cannot be inferred from divergence alone.
 
     Once `biot_savart` is implemented constructively via NTT + Garner
     reconstruction, this property becomes a theorem provable by exact
     arithmetic (no axiom needed). Currently axiomatised. -/
 axiom biot_savart_curl_eq (ω : VField)
-    (hdiv : divV ω = (fun (_ _ _ : Fin N) => (0 : Int))) :
+    (hsource : ∃ u : VField,
+      curl u = ω ∧ divV u = (fun (_ _ _ : Fin N) => (0 : Int))) :
     curl (biot_savart ω) = ω
 
 /-- **Characteristic property: `div (biot_savart ω) = 0`.**

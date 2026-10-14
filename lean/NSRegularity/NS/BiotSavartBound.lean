@@ -98,12 +98,13 @@ theorem lInf_curl_le (w : VField) : lInf (curl w) ≤ 4 * lInf w := by
   exact max_le hx (max_le hy hz)
 
 /-- **Consistency lower bound on Biot-Savart (proved from the axiom):**
-    for divergence-free vorticity, `lInf ω ≤ 4 · lInf (biot_savart ω)`.
+    for curl-representable vorticity, `lInf ω ≤ 4 · lInf (biot_savart ω)`.
     Any forward L∞ constant must satisfy `C_BS ≥ 1/4`. -/
 theorem lInf_le_four_lInf_biot_savart (ω : VField)
-    (hdiv : divV ω = (fun (_ _ _ : Fin N) => (0 : Int))) :
+    (hsource : ∃ u : VField,
+      curl u = ω ∧ divV u = (fun (_ _ _ : Fin N) => (0 : Int))) :
     lInf ω ≤ 4 * lInf (biot_savart ω) := by
-  have hcurl := biot_savart_curl_eq ω hdiv
+  have hcurl := biot_savart_curl_eq ω hsource
   calc lInf ω = lInf (curl (biot_savart ω)) := by rw [hcurl]
     _ ≤ 4 * lInf (biot_savart ω) := lInf_curl_le (biot_savart ω)
 

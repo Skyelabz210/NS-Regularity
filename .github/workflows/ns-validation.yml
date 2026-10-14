@@ -24,6 +24,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify imported source blob hashes
         run: python3 scripts/verify_ns_source_blobs.py
+      - name: Verify Biot-Savart domain obstructions
+        run: python3 scripts/verify_biot_savart_domain.py
   rust-primary:
     name: Primary N8 N16 N32 Rust
     runs-on: ubuntu-latest

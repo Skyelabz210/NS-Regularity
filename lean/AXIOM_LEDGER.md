@@ -114,7 +114,8 @@ be unsound (concrete witness with `divV ω 0 0 0 = −6`).
 **Statement (Lean form):**
 ```
 axiom biot_savart_curl_eq (ω : VField)
-    (hdiv : divV ω = (fun (_ _ _ : Fin N) => (0 : Int))) :
+    (hsource : ∃ u : VField,
+      curl u = ω ∧ divV u = (fun (_ _ _ : Fin N) => (0 : Int))) :
     curl (biot_savart ω) = ω
 ```
 
@@ -297,3 +298,7 @@ Any divergence from the expected output triggers a ledger update.
 **Any new `axiom` declaration in the `NSRegularity/` namespace must add a
 row to §2 with all five mandatory fields before it can be merged to
 `main`.** No silent axioms; no axioms that bypass §3's discharge trajectory.
+
+## 2026-10-14 soundness correction: curl range (constant/Nyquist obstruction)
+
+The prior assertion that divergence-free alone makes `curl(BS ω)=ω` consistent was incorrect. On the periodic centered-difference grid, every curl component sums to zero, but the constant field `ω=(1,0,0)` is divergence-free and sums to `N³`. At even grid N, checkerboard modes are divergence-free and zero-mean yet remain orthogonal to every centered curl. The characteristic axiom now requires an explicit divergence-free preimage (curl representability). Its downstream lower-bound theorem and SoundnessProbe have the corresponding parameter. The source implementation still needs constructive NTT inversion and a proof that the numerical NS trajectory stays within the supported subspace. Exact integer regression: `scripts/verify_biot_savart_domain.py`.
