@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ns_regularity = { path = "../ns_v5" }
+ns_regularity = { path = "../../../NS_REGULARITY_COMPLETE (1)/crates/ns_v5" }

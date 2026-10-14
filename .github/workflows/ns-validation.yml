@@ -1,0 +1,66 @@
+name: NS consolidation validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'consolidated/**'
+      - 'NS_REGULARITY_COMPLETE (1)/crates/ns_v5/**'
+      - 'lean/**'
+      - '.github/workflows/ns-validation.yml'
+  pull_request:
+    paths:
+      - 'consolidated/**'
+      - 'NS_REGULARITY_COMPLETE (1)/crates/ns_v5/**'
+      - 'lean/**'
+      - '.github/workflows/ns-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  provenance:
+    name: Exact source provenance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify imported source blob hashes
+        run: python3 scripts/verify_ns_source_blobs.py
+  rust-primary:
+    name: Primary N8 N16 N32 Rust
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Run primary solver tests
+        run: cargo test --locked --manifest-path 'NS_REGULARITY_COMPLETE (1)/crates/ns_v5/Cargo.toml'
+  rust-qcid:
+    name: Imported QCID bridge against primary
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Run independent QCID tests using adapted local dependency
+        run: cargo test --manifest-path consolidated/bridges/qcid_satellite/Cargo.toml
+  lean-primary:
+    name: Active Lean finite-grid project
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: lean
+          use-mathlib-cache: true
+  lean-independent:
+    name: Imported NS torus Lean project
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: consolidated/formal/ns_lean
+          use-mathlib-cache: true
