@@ -27,3 +27,7 @@ The active Lean proof status and axiom census are in `lean/PROOF_STATUS.md` and 
 ## Upload handling
 
 Ten local `.tar.gz` session uploads and loose source/paper files were unpacked and SHA-256-indexed in the companion local consolidation bundle. A local upload is not claimed to be pushed to GitHub unless its content is actually present in this repository. The complete bundle is delivered separately in the conversation.
+
+## Explicit build-adapter exception
+
+The QCID `Cargo.toml` was deliberately updated after the initial SHA-exact import because its former `../ns_v5` path was invalid in the new directory structure. The upstream unchanged file is `consolidated/bridges/qcid_satellite/Cargo.upstream.toml`. This is a manifest adapter; all imported `.rs` and `.lean` sources remain source-SHA identical. The individual source fingerprints are enforced by `consolidated/PROVENANCE_BLOBS.tsv` and `.github/workflows/ns-validation.yml`.

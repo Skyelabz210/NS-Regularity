@@ -16,7 +16,7 @@ The default primary workspace may use nested relative paths and historical works
 
 ```bash
 cd consolidated/bridges/qcid_satellite
-cargo test --locked
+cargo test
 ```
 
 ## Lean formal projects
@@ -44,3 +44,7 @@ lake build
 - Keep unconditional, conditional and counterexample tests in distinct reporting categories.
 
 **Environment status (2026-10-14):** local session extraction and Python AST syntax validation completed, 23/23 pass. `cargo`, `rustc`, `lean`, and `lake` were unavailable on that sandbox. These commands are verification requirements, not asserted test runs.
+
+## GitHub Actions test groups
+
+Workflow `.github/workflows/ns-validation.yml` exercises provenance hashing, primary Rust, imported QCID Rust, active Lean, and independent Lean. Separate jobs preserve precise failure classification. The imported QCID manifest has an explicit canonical path adapter; its historical Cargo.lock is preserved, and the unlocked run resolves the workspace dependency graph.
