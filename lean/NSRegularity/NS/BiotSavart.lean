@@ -72,7 +72,7 @@ def divV (w : VField) : Grid :=
 
 /-- **Biot-Savart inversion (declared).**
 
-    Maps a vorticity field to the unique divergence-free velocity field
+    Maps a supported vorticity field to a chosen divergence-free velocity field
     whose curl equals the input vorticity on the range of the centered
     curl operator, with an admissible divergence-free preimage.
     A divergence-free field alone need not be in this range: constant
@@ -105,7 +105,7 @@ axiom biot_savart_curl_eq (ω : VField)
 
 /-- **Characteristic property: `div (biot_savart ω) = 0`.**
 
-    The Biot-Savart inverse always produces divergence-free velocity.
+    A supported Biot-Savart realization produces a divergence-free velocity.
     Constructively this follows from the NTT pipeline; currently axiom.
     No precondition is required: any candidate Biot-Savart inverse must
     map into the divergence-free subspace by construction. -/
