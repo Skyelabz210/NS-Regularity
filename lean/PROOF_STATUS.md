@@ -6,11 +6,11 @@ This file is the active Lean proof-status index. It supersedes older contradicto
 
 ## Current closure posture
 
-**Discrete global regularity is PROVED** for the following cases (all unconditional, no open hypotheses):
+The table records finite-grid statements with their stated operator, parameter and exactness hypotheses. The component maximum for rounded pure diffusion requires CFL and nonnegative coefficients. The bundled energy and higher-norm certificate retains its exactness hypotheses. `RoundedStep.trajectory_bound` gives the full split-step estimate in terms of accumulated nonlinear increments on the reached trajectory. The [refinement analysis](../consolidated/NS_REFINEMENT.md) gives the positive-viscosity fixtures and the continuum scope.
 
 | Theorem | Status | Scope |
 |---|---|---|
-| `discrete_ns_regularity_certificate_exact` | **PROVED** | Diffusion trajectory: uniform L², L∞, H² bounds + IsSmooth via BKM |
+| `discrete_ns_regularity_certificate_exact` | **PROVED** | Pure diffusion under exactness and CFL, uniform L², L∞ and H² bounds and a bounded grid trajectory |
 | `ns_global_regularity_zero_initial` | **PROVED** | Full NS with trivial Biot-Savart, any initial data under Res-A |
 | `ns_global_regularity_zero_initial` (w₀=0) | **PROVED** | Zero initial vorticity — hypothesis-free |
 | `ns_global_regularity_const_initial` | **PROVED** | Constant initial vorticity — hypothesis-free |
@@ -18,7 +18,7 @@ This file is the active Lean proof-status index. It supersedes older contradicto
 | `generic_global_regularity_uniform` | **PROVED** | Any trajectory with a uniform L∞ bound → IsSmooth |
 | `ns_global_regularity_skeleton` | **PROVED** (conditional) | Full NS trajectory IsSmooth, given `h_step` L∞ preservation |
 
-The NS skeleton (`ns_global_regularity_skeleton`, `ns_global_regularity_biot_savart`) is proved conditional on `h_step`. Discharging `h_step` for non-trivial Biot-Savart and stretching is the primary remaining gate. The continuum Clay-level extension is a separate open problem beyond the discrete framework.
+The NS skeleton (`ns_global_regularity_skeleton`, `ns_global_regularity_biot_savart`) is proved conditional on `h_step`. The supplied-velocity counterexample in `RoundedStep.layered_step_grows` shows why a budget allowing stretching growth is needed for general data. The continuum Clay-level extension is a separate open problem beyond the discrete framework.
 
 The Lean workspace is synchronized through Wave I (PR #11). The discrete PDE algebra, Resolution-A diffusion control stack, operator-side perturbation chain (AdvectionBound), and SBP foundations are all active and building cleanly.
 
@@ -135,7 +135,7 @@ This is the correct architectural top: the theorem is proved conditional on `h_s
 
 1. **Discrete global regularity IS proved** for the diffusion trajectory (Resolution A), for trivial/zero/constant initial data (hypothesis-free), and for any trajectory with a uniform L∞ bound (generic closure).
 2. The full-NS Lean theorem `ns_global_regularity_skeleton` IS proved, conditional on `h_step` (operator-side L∞ preservation for the full step).
-3. The remaining open content is the **continuum extension**: constructive Biot-Savart NTT port, full-step h_step discharge, analytical N→∞ transfer, and continuum C∞ statement via Mathlib PDE. These are research-grade items beyond the discrete framework.
+3. The remaining open content is the **continuum extension**: constructive Biot-Savart NTT port, physically scaled control of nonlinear growth, analytical N→∞ transfer, and continuum C∞ statement via Mathlib PDE. These are research-grade items beyond the discrete framework.
 4. Nested Lean/Rust artifacts are lineage strata. They are presumed part of the build history and must be activated by their correct root, adapter, or feature gate rather than classified as orphan scratch.
 
 ## 2026-10-14 formal soundness audit

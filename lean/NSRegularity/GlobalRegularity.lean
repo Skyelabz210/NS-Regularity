@@ -6,41 +6,20 @@ import NSRegularity.HSquared.ResolutionA
 import NSRegularity.AubinLions.ResolutionA
 
 /-!
-# Global Regularity — top-level composition (Millennium claim)
+# Bounds along finite-grid diffusion trajectories
 
-This file ties together M2 (DKAM L∞ non-increasing), M6 (continuum
-embedding), M8 (BKM regularity criterion) into the architecturally
-explicit global regularity claim for the discrete NS trajectory.
-
-## Closure chain
-
-```
-L1.9 kill_113                    [PROVED]    energy identity (advection)
-L2.3 diffusion_max_preserving    [open]      L2.3 integer-Helmholtz piece
-   ↓ (via M2 composition: closed)
-M2  l_inf_non_increasing         [closed mod L2.3]
-   ↓ (per-step lift to trajectory)
-ns_lInf_uniform                  [proved here]
-   ↓ (proxy bound: lInfGrid ≤ 3·N³·lInf)
-ns_lInfGrid_uniform              [proved here]
-   ↓ (L8.1 finite BKM integral)
-bkm_integral_finite              [PROVED in BKM.lean]
-   ↓ (BKM 1984 axiom)
-global_regularity                [closed mod axiom]
-```
-
-The integration here is "free" given M2 and the L8 composition.
-The remaining mathematical content is L2.3 + the BKM 1984 axiom.
+The repeated operator in this file is pure diffusion. Its component maximum
+satisfies the rounded-stencil maximum principle under nonnegative
+coefficients and CFL. The joint certificate below also controls quadratic
+quantities under trajectory-wise divisibility. The predicate in its conclusion
+records uniform boundedness of the fixed-grid sum of absolute values.
 -/
 
 namespace NSRegularity.GlobalRegularity
 
 open NSRegularity NSRegularity.NS NSRegularity.Continuum
 
-/-- A pure diffusion trajectory: repeated application of `diffusion_step`
-    to each component. Models the (linearised) heat-flow piece of NS.
-    The full NS trajectory adds advection (energy-neutral by Kill113) and
-    stretching (DKAM-subcritical by L2.6). -/
+/-- Repeated scalar diffusion, applied independently to the three components. -/
 def diffusion_trajectory (w₀ : VField) (p : NsParams) : ℕ → VField
   | 0     => w₀
   | n + 1 =>
@@ -49,8 +28,7 @@ def diffusion_trajectory (w₀ : VField) (p : NsParams) : ℕ → VField
 
 /-- **Per-step L∞ non-increase, induced from M2.**
 
-    The full DKAM theorem (M2) gives one-step monotonicity. By induction
-    we get uniform L∞ along the trajectory. Closed modulo L2.3. -/
+    The rounded diffusion maximum principle gives the induction step. -/
 theorem ns_lInf_uniform (w₀ : VField) (p : NsParams) (h : cfl_ok p)
     (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) :
     ∀ n, lInf (diffusion_trajectory w₀ p n) ≤ lInf w₀ := by

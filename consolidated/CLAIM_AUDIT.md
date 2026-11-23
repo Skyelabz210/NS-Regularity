@@ -2,6 +2,8 @@
 
 Date: 2026-10-14. This is an evidence classification, not a deletion or rewriting of historical theorem manuscripts.
 
+The [rounded-step and refinement analysis](NS_REFINEMENT.md) gives the stronger diffusion maximum principle, positive-viscosity counterexamples, a matched N32 comparison and the scope of the continuum shear limit.
+
 ## Established algebraic facts or well-supported finite-discrete identities
 
 - CRT/K-Elimination: quotient/winding recovery is exact under its modulus/coprimality/range assumptions. This establishes representation correctness, not a PDE bound.

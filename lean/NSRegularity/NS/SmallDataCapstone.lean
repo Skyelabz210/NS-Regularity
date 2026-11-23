@@ -4,16 +4,10 @@ import NSRegularity.NS.BiotSavartBound
 /-!
 # NS/SmallDataCapstone — the assembled small-data global regularity theorem
 
-Composes the whole small-data arc into one theorem with *explicit*
-hypotheses and no buried existentials:
-
-```
-ns_global_regularity_canonical :
-    {Biot-Savart L∞ constant C_BS}            (interface; NTT port discharges)
-  + {Resolution-A exactness at every state}    (CRAM arithmetic provides)
-  + {Piece B: diffusion ceiling + CFL at every state}   (small-data condition)
-  → IsSmooth (NS trajectory with canonical stretching)
-```
+Historical conditional assembly for bounded grid trajectories. Its universal
+exactness premise, under the stated CFL and positivity hypotheses, implies
+`p.nu_scaled * p.dt_latt = 0`. See `RoundedStep.universal_exactness_forces_zero`
+and the positive-diffusion estimate `RoundedStep.trajectory_bound`.
 
 The stretching functions are here *fixed to the canonical NS form*
 `(w·∇)(biot_savart w)_c` — not abstract parameters. Piece A is fully
@@ -24,10 +18,7 @@ constant is the explicit
 K_c(w) = 6·gridLInf w.c · M_u(w) + 6·M_u(w)·lInf w,   M_u(w) = C_BS·lInf w
 ```
 
-The theorem is **axiom-honest**: it takes the Biot-Savart bound as an
-explicit hypothesis `hBS` rather than invoking `biot_savart_linf_bound`,
-so its `#print axioms` footprint is exactly that of the trajectory
-skeleton (the three BS characteristic axioms + BKM).
+The declaration accepts the velocity bound as an explicit hypothesis.
 -/
 
 namespace NSRegularity.NS.Capstone
