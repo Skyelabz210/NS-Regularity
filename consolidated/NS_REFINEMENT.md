@@ -33,6 +33,8 @@ $$
 
 **Degenerate quantifier.** At the origin take a field with value one at the positive x-neighbour and zero elsewhere. Its Laplacian at the origin is one. The historical capstone's x-component premise therefore implies $D\mid c$. With $D>0$ and $0\le6c\le D$, this forces $c=0$. The new maximum principle and reached-trajectory estimate admit positive $c$ without this premise. As a positive-control orbit, take $N=8,S=3,c=96,dt=1$, and $u=(0,0,b_j(-1)^k)$ with $b=(0,1,0,-1)$ periodic. Its centered curl has maximum two, the scalar Laplacian on that mode is $-6w$, and both nonlinear terms vanish. The supplied inverse pair evolves to zero in one step and stays there with zero velocity.
 
+There is a second obstruction even if universal exactness is removed. On any nonzero field with identically zero y-component, its y diffusion is zero, so the old ceiling requires $D_y\ge0$. Yet its y-budget requires $6|dt|C_{BS}\|w\|_\infty^2\le-D_y$. This excludes positive time steps when $C_{BS}>0$, including the representable shear just exhibited. The signed-increment estimate uses the actual y-increment, which vanishes on that shear.
+
 **Failure of curl-range invariance.** Put $r_x=(c Lf_x)\bmod D$. Summing the local division identity and using periodicity gives the exact equation
 $$
  D\left(\sum_x G_x-\sum_x f_x\right)=-\sum_x r_x .
@@ -78,9 +80,11 @@ The main Lean `Continuum.l_inf_passage` concludes `∃ C', C' ≤ C`. `Nonlinear
 | Signed division | Euclidean floor for positive denominator | Extract sign, divide magnitude, restore sign (toward zero) |
 | Advection | Centered advective term on the diffused field | Skew average of advective and conservative terms on the input |
 | Time increment | Each split term carries its quotient | Separately scaled right-hand-side terms, then a final signed time quotient |
-| Inversion | Unscaled centered curl and an opaque inverse on the representable domain | Six-prime NTT with signed integer wave numbers and an explicit normalization |
+| Inversion | Unscaled centered curl and an opaque inverse on the representable domain | Four NTT primes with signed integer wave numbers, extended integer lanes and an explicit normalization |
 
 A matched N32 shear test uses $S=10000$, $c=dt=1$ and a centered curl with x-component +1 at row 31 and −1 at row 1. Lean's generalized stencil gives zero at the positive unit peak. Across the full mesh it gives total x-vorticity −2048. The canonical Rust and CRT v4 production steps preserve the input at every site. Both nonlinear terms vanish on this shear. This supplies an explicit same-resolution discrepancy with positive viscosity. [Rust shear fixture](https://github.com/Skyelabz210/NS-3D-solver_n32-ntt6/blob/d9792c74dd1c40586303a1bdfbf17493ad7ee8c5/arena/crates/ns_v5/tests/rounded_shear.rs)
+
+The separately implemented six-prime transform in `ns3d_n32_ntt6.rs` extends the available spectral representation. The active v4 step loops over four transform primes and uses two extra arithmetic lanes.
 
 The existing N32 within-Rust comparisons exercise canonical integer and CRT implementations of the same Rust step. A cross-resolution consistency proof must identify both paths with a common physical evolution, including the velocity gauge, the normalization of time and fields, and the error from each division. Literal same-step equivalence would already fail on negative nonmultiples under the two division conventions. [Lean update](../lean/NSRegularity/NS/FullStep.lean) · [Rust update](https://github.com/Skyelabz210/NS-3D-solver_n32-ntt6/blob/83887a22e8c5aedbb2aad32172cf4bffdc3e62c2/arena/crates/ns_v5/src/ns3d_n32_crt_v4.rs)
 

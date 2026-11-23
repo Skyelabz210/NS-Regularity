@@ -8,10 +8,11 @@ open NSRegularity NSRegularity.NS
 
 abbrev Field (n : ℕ) := Fin n → Fin n → Fin n → Int
 
+private def prev {n : ℕ} [NeZero n] (i : Fin n) : Fin n := i + Fin.ofNat n (n-1)
+
 def neighbours {n : ℕ} [NeZero n] (f : Field n) (i j k : Fin n) : Int :=
-  let back : Fin n := Fin.ofNat n (n-1)
-  f (i+1) j k + f (i+back) j k + f i (j+1) k + f i (j+back) k +
-    f i j (k+1) + f i j (k+back)
+  f (i+1) j k + f (prev i) j k + f i (j+1) k + f i (prev j) k +
+    f i j (k+1) + f i j (prev k)
 
 def update {n : ℕ} [NeZero n] (f : Field n) (c d : Int) : Field n :=
   fun i j k => f i j k + c*(neighbours f i j k - 6*f i j k)/d
@@ -27,11 +28,11 @@ theorem preserves_interval {n : ℕ} [NeZero n] (f : Field n) (c d lo hi : Int)
   apply DKAM.Diffusion.rounded_stencil_interval _ _ _ _ _ _ hd hc hcfl (hb i j k)
   unfold neighbours
   have := hb (i+1) j k
-  have := hb (i+Fin.ofNat n (n-1)) j k
+  have := hb (prev i) j k
   have := hb i (j+1) k
-  have := hb i (j+Fin.ofNat n (n-1)) k
+  have := hb i (prev j) k
   have := hb i j (k+1)
-  have := hb i j (k+Fin.ofNat n (n-1))
+  have := hb i j (prev k)
   constructor <;> omega
 
 /-- Comparison with a constant offset, uniform in the period. Offsets here
@@ -46,11 +47,11 @@ theorem comparison {n : ℕ} [NeZero n] (f g : Field n) (c d e : Int)
   have hn : neighbours f i j k ≤ neighbours g i j k + 6*e := by
     unfold neighbours
     have := hb (i+1) j k
-    have := hb (i+Fin.ofNat n (n-1)) j k
+    have := hb (prev i) j k
     have := hb i (j+1) k
-    have := hb i (j+Fin.ofNat n (n-1)) k
+    have := hb i (prev j) k
     have := hb i j (k+1)
-    have := hb i j (k+Fin.ofNat n (n-1))
+    have := hb i j (prev k)
     omega
   have hnum : num f ≤ e*d + num g := by
     dsimp [num]

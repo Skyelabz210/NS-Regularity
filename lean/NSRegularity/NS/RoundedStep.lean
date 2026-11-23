@@ -66,7 +66,9 @@ theorem trajectory_bound (velocity : VField → VField) (sx sy sz : VField → G
   | zero => simp [w, ns_trajectory_generator]
   | succ n ih =>
     rw [Finset.sum_range_succ, ← add_assoc]
-    exact (step_bound _ _ _ _ (w n) p h hν ht).trans (add_le_add_right ih _)
+    have hnext : lInf (w (n+1)) ≤ lInf (w n) + b n :=
+      step_bound (velocity (w n)) (sx (w n)) (sy (w n)) (sz (w n)) (w n) p h hν ht
+    exact hnext.trans (add_le_add ih (le_refl (b n)))
 
 /-- Q times the change in total scalar mass is exactly minus the sum
     of the Euclidean remainders. Each summand is observable at its own site. -/
@@ -82,7 +84,7 @@ theorem diffusion_mass_defect (f : Grid) (p : NsParams) :
     funext i j k
     change d * (f i j k + (c * laplacian f i j k) / d) - d * f i j k + _ = _
     rw [mul_add]
-    linarith only [Int.emod_add_ediv (c * laplacian f i j k) d]
+    linarith only [Int.emod_add_mul_ediv (c * laplacian f i j k) d]
   have hs := congrArg sumGrid local_id
   have hz := sumGrid_laplacian_eq_zero f
   simp only [sumGrid, Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum] at hs
@@ -95,7 +97,7 @@ theorem diffusion_mass_defect (f : Grid) (p : NsParams) :
 /-- The universal x-component exactness in the historical capstone forces
     zero diffusion under its CFL and positivity assumptions. -/
 theorem universal_exactness_forces_zero (p : NsParams) (hcfl : cfl_ok p)
-    (hν : 0 ≤ p.nu_scaled) (ht : 0 ≤ p.dt_latt) (hscale : 0 < p.ns_scale)
+    (hν : 0 ≤ p.nu_scaled) (ht : 0 ≤ p.dt_latt)
     (hx : ∀ w : VField, ∀ i j k : Fin N, ((N : Int)^2 * p.ns_scale^2) ∣
       (p.nu_scaled * p.dt_latt * laplacian w.x i j k)) :
     p.nu_scaled * p.dt_latt = 0 := by
@@ -125,7 +127,7 @@ theorem layered_solenoidal : divV layeredVelocity = fun _ _ _ => 0 := by
   funext i j k
   simp [divV, layeredVelocity, Kill113.diffX, Kill113.diffY, Kill113.diffZ]
 
-private theorem wave_difference_bound (j : Fin N) : |wave (sp j) - wave (sn j)| ≤ 64 := by
+private theorem wave_difference_bound (j : Fin N) : |wave (sn j) - wave (sp j)| ≤ 64 := by
   fin_cases j <;> decide
 
 theorem layered_initial_bound : lInf (curl layeredVelocity) ≤ 64 := by
@@ -157,6 +159,8 @@ theorem layered_step_grows :
   have sample : w'.y 0 0 0 = -256 := by decide
   have h := abs_y_le_lInf w' 0 0 0
   rw [sample] at h
-  exact ⟨by decide, lt_of_le_of_lt layered_initial_bound (by change (64 : Int) < lInf w'; omega)⟩
+  norm_num at h
+  exact ⟨by unfold cfl_ok layeredParams; decide,
+    lt_of_le_of_lt layered_initial_bound (lt_of_lt_of_le (by decide : (64 : Int) < 256) h)⟩
 
 end NSRegularity.NS.RoundedStep
