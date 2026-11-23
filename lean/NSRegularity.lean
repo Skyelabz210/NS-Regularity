@@ -37,3 +37,7 @@ import NSRegularity.NS.RefinedDiffusion
 import NSRegularity.NS.CurlPreimage
 import NSRegularity.NS.CenteredKernel8
 import NSRegularity.NS.ExactTransport
+import NSRegularity.NS.BoundedTransport
+import NSRegularity.NS.LegacySplit
+import NSRegularity.NS.MockThetaDiffusion
+import NSRegularity.NS.MockThetaCurl

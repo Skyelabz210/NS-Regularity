@@ -2,6 +2,19 @@
 
 The legacy Lean split step, the N32 production solvers, and the rational velocity scheme have different update rules. This audit follows each claim back to its own scheme. The nonlinear limit and estimates below concern unforced incompressible flow on the unit periodic three-torus.
 
+
+## Latest results
+
+| Work | Verified result and scope |
+|---|---|
+| CRAM and mock theta transfer | The positive coefficients of third-order $\omega(q)$ define an exact two-jump viscosity stencil. Its symbol bounds, consistency, and energy inequality support a written nonlinear continuum limit with CRAM-style signed numerator certificates. [Mock theta transfer](CRAM_MOCK_THETA_TRANSFER.md) |
+| Bounded-scale arithmetic | Rounding an integer vector potential and compatible orbit means retains exact centered divergence and momentum. A run on one mesh holds the stored scale fixed, and accumulated encoding error vanishes when $1/(A\tau)\to0$. [Bounded transport](BOUNDED_TRANSPORT.md) |
+| Continuation with no assumed smooth reference | A rational Fourier residual test certifies existence on each accepted continuum slab. The exact cyclic three-dimensional fixture starts above the direct small-data threshold. A mock theta rational grid step with fixed-scale CRAM residue evidence supplies the candidate, and four continuum residual slabs certify the terminal threshold. [Continuation certificate](NS_CONTINUATION_CERTIFICATE.md) |
+| Legacy Lean refinement | An exact-division example exits the curl image with divergence 16. A separate curl-range-projected split converges at order $h^2$ on known smooth intervals under its strict diffusive CFL. [Legacy split analysis](LEGACY_SPLIT_REFINEMENT.md) |
+| N32 production arithmetic | A checked corridor certifies step-body roundoff on admissible data. A period-four shear exposes the production Biot–Savart normalization gap. An opt-in six-lane centered inverse returns a checked integer witness on its certified domain. [N32 draft](https://github.com/Skyelabz210/NS-3D-solver_n32-ntt6/pull/1) |
+
+## Remaining criteria
+
 | Gap | Evidence and consequence | Criterion that closes the gap |
 |---|---|---|
 | Fixed-grid results alone cannot establish a continuum PDE | The rational velocity scheme has a written Leray–Hopf subsequence limit for general divergence-free finite-energy data. Below, the same scheme gains a quantitative full-sequence comparison on every interval with a smooth reference solution. [Weak limit](EXACT_VELOCITY_LIMIT.md) | For either legacy solver, specify a refining family with physical scale, mesh, viscosity and time step. Prove estimates and identify the weak nonlinear equation for that family. |

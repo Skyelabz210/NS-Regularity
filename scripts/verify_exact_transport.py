@@ -91,7 +91,23 @@ def exact_solve(rows):
     return x
 
 
-def velocity_step(g, a, nu, tau, advect=True):
+def diffusion_faces(g, weights):
+    """Weighted forward edges, with periodic shifts measured in cells."""
+    for jump, weight in weights:
+        for plus in g.plus:
+            destinations = range(g.cells)
+            for _ in range(jump % g.n):
+                destinations = [plus[i] for i in destinations]
+            for i, j in enumerate(destinations):
+                yield i, j, weight
+
+
+def velocity_step(g, a, nu, tau, advect=True, *, viscous_weights=((1, Q(1)),)):
+    for jump, weight in viscous_weights:
+        if not isinstance(jump, int) or jump < 1 or not isinstance(weight, (int, Q)) or weight < 0:
+            raise ValueError("viscosity requires positive integer jumps and nonnegative rational weights")
+    if sum(jump**2 * weight for jump, weight in viscous_weights) != 1:
+        raise ValueError("viscosity requires unit second moment")
     cells = g.cells
     # Remove one redundant pressure row for each centered-divergence null mode.
     step = gcd(2, g.n)
@@ -104,16 +120,25 @@ def velocity_step(g, a, nu, tau, advect=True):
             idx = d*cells+i
             rows[idx][idx] = 1
             rows[idx][-1] = a[d][i]
-    for k in range(3):
-        for i,j in enumerate(g.plus[k]):
-            alpha = tau*g.n*(a[k][i]+a[k][j])/Q(4) if advect else 0
-            beta = tau*nu*g.n**2
-            for d in range(3):
-                left, right = d*cells+i, d*cells+j
-                rows[left][left] += alpha+beta
-                rows[left][right] += alpha-beta
-                rows[right][left] -= alpha+beta
-                rows[right][right] += beta-alpha
+    if advect:
+        for k, plus in enumerate(g.plus):
+            for i, j in enumerate(plus):
+                alpha = tau*g.n*(a[k][i]+a[k][j])/Q(4)
+                for d in range(3):
+                    left, right = d*cells+i, d*cells+j
+                    rows[left][left] += alpha
+                    rows[left][right] += alpha
+                    rows[right][left] -= alpha
+                    rows[right][right] -= alpha
+    faces = list(diffusion_faces(g, viscous_weights))
+    for i, j, weight in faces:
+        beta = tau*nu*g.n**2*weight
+        for d in range(3):
+            left, right = d*cells+i, d*cells+j
+            rows[left][left] += beta
+            rows[left][right] -= beta
+            rows[right][left] -= beta
+            rows[right][right] += beta
     for offset,i in enumerate(independent):
         row = 3*cells+offset
         for d in range(3):
@@ -127,7 +152,7 @@ def velocity_step(g, a, nu, tau, advect=True):
     assert not any(g.div(b))
     energy = lambda u: sum(v*v for f in u for v in f)
     jump = sum((v-w)**2 for f,h in zip(b,a) for v,w in zip(f,h))
-    diss = g.n**2*sum((f[j]-f[i])**2 for f in b for plus in g.plus for i,j in enumerate(plus))
+    diss = g.n**2*sum(weight*(f[j]-f[i])**2 for f in b for i,j,weight in faces)
     assert energy(a) == energy(b) + jump + 2*tau*nu*diss
     assert all(sum(b[d])==sum(a[d]) for d in range(3))
     den = lcm(*(v.denominator for f in b for v in f))

@@ -2,7 +2,7 @@
 """Exact rational centered-curl kernel and integer range check on even tori."""
 from fractions import Fraction
 from itertools import product
-from math import lcm
+from math import gcd, lcm
 
 from verify_rounded_ns_step import check, shift
 
@@ -25,11 +25,11 @@ def solve(matrix):
 def green_kernel(n):
     """Green function of minus the unscaled centered derivative squared.
 
-    Its nonzero offsets are on the even parity subgrid. Fix the value at
-    the origin; the additive constant disappears in every derivative.
+    Coordinates count steps of two on a connected subgrid. Fix the value
+    at the origin; the additive constant disappears in every derivative.
     """
-    check(n >= 4 and n % 2 == 0, "even grid")
-    m = n // 2
+    check(n >= 3, "period at least three")
+    m = n // gcd(2, n)
     sites = list(product(range(m), repeat=3))
 
     def orbit(x):
@@ -71,19 +71,24 @@ def solenoidal(v, n):
                    for a in range(3)) == 0 for x in v)
 
 
-def integer_inverse(w, n, g):
-    """Integer-valued, divergence-free right inverse on the exact range."""
+def raw_curl_green(field, n, g):
+    """Apply raw curl times the parity-grid Green inverse, over Q."""
     den = lcm(*(v.denominator for v in g.values()))
     kernel = [(tuple(2*j for j in y), int(v*den)) for y, v in g.items() if v]
     potential = {}
-    for x in w:
+    for x in field:
         total = [0, 0, 0]
         for y, weight in kernel:
-            source = w[tuple((i-j)%n for i, j in zip(x, y))]
+            source = field[tuple((i-j)%n for i, j in zip(x, y))]
             for a in range(3):
                 total[a] += weight*source[a]
         potential[x] = tuple(total)
-    numerator = curl(potential, n)
+    return curl(potential, n), den
+
+
+def integer_inverse(w, n, g):
+    """Integer-valued, divergence-free right inverse on the exact range."""
+    numerator, den = raw_curl_green(w, n, g)
     out = {}
     for parity in product(range(2), repeat=3):
         coords = list(product(*(range(p, n, 2) for p in parity)))
