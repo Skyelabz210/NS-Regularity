@@ -4,6 +4,8 @@ Date: 2026-10-14. This is an evidence classification, not a deletion or rewritin
 
 The [rounded-step and refinement analysis](NS_REFINEMENT.md) gives the stronger diffusion maximum principle, positive-viscosity counterexamples, a matched N32 comparison and the scope of the continuum shear limit.
 
+The [shared-scale heat and nonlinear velocity limit](EXACT_VELOCITY_LIMIT.md) adds a Lean curl-image invariant and finite energy lemmas, an exact rational nonlinear solver, and a written convergence proof to a Leray–Hopf weak solution for that distinct velocity scheme. Its explicit small-data enstrophy threshold gives global smoothness for that class. General global smoothness remains open.
+
 ## Established algebraic facts or well-supported finite-discrete identities
 
 - CRT/K-Elimination: quotient/winding recovery is exact under its modulus/coprimality/range assumptions. This establishes representation correctness, not a PDE bound.

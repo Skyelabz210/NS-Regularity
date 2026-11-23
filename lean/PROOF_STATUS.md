@@ -1,5 +1,8 @@
 # NS-Regularity Lean Proof Status
 
+The [exact velocity refinement](../consolidated/EXACT_VELOCITY_LIMIT.md) records the new integer curl-preserving heat family, finite conservative energy lemmas and the written nonlinear limit. Its small-data condition uses a mesh-independent velocity gradient bound. The statement concerns the rational velocity scheme defined in that note.
+
+
 _Last corrected: 2026-06-12. Updated to reflect Wave I (PR #11) additions and accurate closure posture. Build status: 8548 lake jobs clean, exit 0._
 
 This file is the active Lean proof-status index. It supersedes older contradictory status blocks inside prior wave reports.

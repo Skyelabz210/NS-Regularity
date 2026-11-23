@@ -36,3 +36,4 @@ import NSRegularity.NS.RoundedStep
 import NSRegularity.NS.RefinedDiffusion
 import NSRegularity.NS.CurlPreimage
 import NSRegularity.NS.CenteredKernel8
+import NSRegularity.NS.ExactTransport
