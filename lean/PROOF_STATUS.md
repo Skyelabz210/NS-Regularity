@@ -6,7 +6,7 @@ This file is the active Lean proof-status index. It supersedes older contradicto
 
 ## Current closure posture
 
-The table records finite-grid statements with their stated operator, parameter and exactness hypotheses. The component maximum for rounded pure diffusion requires CFL and nonnegative coefficients. The bundled energy and higher-norm certificate retains its exactness hypotheses. `RoundedStep.trajectory_bound` gives the full split-step estimate in terms of accumulated nonlinear increments on the reached trajectory. The [refinement analysis](../consolidated/NS_REFINEMENT.md) gives the positive-viscosity fixtures and the continuum scope.
+The table records finite-grid statements with their stated operator, parameter and exactness hypotheses. The component maximum for rounded pure diffusion requires CFL and nonnegative coefficients. The bundled energy and higher-norm certificate retains its exactness hypotheses. `RoundedStep.trajectory_bound` gives the full split-step estimate in terms of accumulated nonlinear increments on the reached trajectory. The [refinement analysis](../consolidated/NS_REFINEMENT.md) gives the positive-viscosity fixtures and the continuum scope. The [centered inverse](../consolidated/CENTERED_BIOT_SAVART_BOUND.md) has a written uniform velocity estimate and a Lean N8 kernel certificate. Identification with the production NTT remains separate.
 
 | Theorem | Status | Scope |
 |---|---|---|

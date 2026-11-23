@@ -35,3 +35,4 @@ import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
 import NSRegularity.NS.RoundedStep
 import NSRegularity.NS.RefinedDiffusion
 import NSRegularity.NS.CurlPreimage
+import NSRegularity.NS.CenteredKernel8
