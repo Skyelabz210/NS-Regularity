@@ -116,6 +116,15 @@ def main():
     check(recovered is not None and curl(recovered, n) == w, "integer right inverse")
     norm = lambda field: max(abs(a) for v in field.values() for a in v)
     check(norm(recovered) <= 2*norm(w), "raw N8 infinity estimate")
+    # The norm-2 constant is attained on integer curl-image data.
+    tent = (0, 0, 1, 0, 2, 0, 1, 0)
+    velocity = {x: (tent[x[1]]+tent[x[2]], 0, 0) for x in sites}
+    vorticity = curl(velocity, n)
+    optimal = integer_inverse(vorticity, n, g8)
+    check(solenoidal(velocity, n) and norm(vorticity) == 1, "extremizing source")
+    check(velocity[(0, 4, 4)][0] - velocity[(0, 0, 0)][0] == 4,
+          "diameter four on one parity class")
+    check(optimal is not None and norm(optimal) == 2, "sharp raw constant")
     for bad in ({x: (1, 0, 0) for x in sites},
                 {x: ((-1)**x[1], 0, 0) for x in sites}):
         check(integer_inverse(bad, n, g8) is None, "blind-mode rejection")
@@ -129,7 +138,7 @@ def main():
     check((u[(0, 1, 0)][0]-u[(2, 1, 0)][0])%2 == 1, "fractional relative velocity")
     half = {x: tuple(a//2 for a in v) for x, v in w.items()}
     check(integer_inverse(half, n, g8) is None, "integer range stricter than real range")
-    print("N=8: integer right inverse, norm bound, blind modes and fractional obstruction verified")
+    print("N=8: integer right inverse, sharp norm bound, blind modes and fractional obstruction verified")
 
 
 if __name__ == "__main__":

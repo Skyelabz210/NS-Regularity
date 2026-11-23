@@ -73,4 +73,10 @@ theorem curl_row_bound (a b : Fin 3) (f g : Site → Int) (m : Nat)
   rw [Int.natAbs_neg] at h
   omega
 
+/-- Translate an integer parity class into the signed window of radius m
+    whenever its measured diameter is at most 2m. -/
+theorem center_integer_class (lo hi z m : Int) (hl : lo ≤ z) (hh : z ≤ hi)
+    (hd : hi-lo ≤ 2*m) :
+    -m ≤ z-(lo+hi)/2 ∧ z-(lo+hi)/2 ≤ m := by omega
+
 end NSRegularity.NS.CenteredKernel8
