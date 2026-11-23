@@ -1,5 +1,7 @@
 # A curl-preserving diffusion step and a nonlinear weak limit
 
+The [refinement audit](NS_GAP_ANALYSIS.md) improves the sufficient small-data threshold from $\nu/108$ to $2\nu/9$. It also proves a quantitative comparison on smooth intervals and gives a residual bound for inexact solenoidal steps.
+
 The original split vorticity step can leave the integer centered-curl image after one positive-viscosity update. This note gives two repairs at different levels. The first retains a common denominator during linear heat evolution. The second evolves a divergence-free rational velocity, with conservative advection and backward Euler viscosity. For the second scheme a written subsequence argument reaches a periodic Leray–Hopf weak solution for general divergence-free finite-energy initial data. An explicit small-data threshold yields a global smooth limit, and the same argument gives eventual regularity for general finite-energy data. Global smoothness from the initial time for arbitrary smooth three-dimensional data is a further question.
 
 | Result | Verification and scope |

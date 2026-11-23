@@ -246,4 +246,48 @@ theorem absorb_enstrophy (oldE newE jump Y work X nu tau : ℝ)
     nlinarith only [hw, mul_le_mul_of_nonneg_right hsmall hY]
   nlinarith only [balance, mul_le_mul_of_nonneg_left absorbed ht]
 
+/-- Testing a perturbed implicit step against its error gives a one-step
+    stability estimate. All norms in this lemma are nonnegative scalars. -/
+theorem error_from_tested_balance (previous current tau forcing : ℝ)
+    (hprev : 0 ≤ previous) (hcur : 0 ≤ current) (ht : 0 ≤ tau) (hf : 0 ≤ forcing)
+    (tested : current^2 - previous*current ≤ tau*forcing*current) :
+    current ≤ previous + tau*forcing := by
+  rcases eq_or_lt_of_le hcur with hzero | hpos
+  · rw [← hzero]
+    positivity
+  · have h : (current-(previous+tau*forcing))*current ≤ 0 := by nlinarith only [tested]
+    linarith only [(nonpos_of_mul_nonpos_left h hpos)]
+
+/-- Accumulating forcing or residuals over a finite time interval. -/
+theorem residual_growth (err residual : ℕ → ℝ) (factor tau : ℝ) (hf : 0 ≤ factor)
+    (step : ∀ n, err (n+1) ≤ factor*err n + tau*residual n) (n : ℕ) :
+    err n ≤ factor^n*err 0 + ∑ j ∈ Finset.range n, factor^(n-1-j)*(tau*residual j) := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    have hs : factor * (∑ j ∈ Finset.range n, factor^(n-1-j)*(tau*residual j)) =
+        ∑ j ∈ Finset.range n, factor^(n-j)*(tau*residual j) := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro j hj
+      have hex : n-j = n-1-j+1 := by have := Finset.mem_range.mp hj; omega
+      rw [hex, pow_succ']
+      ring
+    refine (step n).trans ((add_le_add (mul_le_mul_of_nonneg_left ih hf) le_rfl).trans_eq ?_)
+    simp only [Finset.sum_range_succ, Nat.add_sub_cancel, Nat.sub_self,
+      pow_zero, one_mul]
+    rw [mul_add, hs, pow_succ']
+    ring
+
+/-- Improved small-data absorption after estimating the work by 9/4 of
+    the product of the advector gradient and the squared Laplacian norm. -/
+theorem absorb_enstrophy_refined (oldE newE jump Y work X nu tau : ℝ)
+    (ht : 0 ≤ tau) (hY : 0 ≤ Y) (hsmall : 9*X ≤ 2*nu)
+    (hw : -work ≤ (9/4)*X*Y)
+    (balance : newE - oldE + jump + 2*tau*nu*Y = -2*tau*work) :
+    newE + jump + tau*nu*Y ≤ oldE := by
+  have absorbed : -2*work ≤ nu*Y := by
+    nlinarith only [hw, mul_le_mul_of_nonneg_right hsmall hY]
+  nlinarith only [balance, mul_le_mul_of_nonneg_left absorbed ht]
+
 end NSRegularity.NS.ExactTransport

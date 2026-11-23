@@ -1,90 +1,37 @@
 # NS Regularity
 
-A computational framework for 3D incompressible Navier-Stokes exact-integer analysis using CRT arithmetic, WASSAN persistence, Recumbent tiering, and Lean formalization.
+Exact-integer and exact-rational research on incompressible Navier–Stokes flow on the periodic three-torus. The project connects finite-grid computation, CRT arithmetic, and Lean 4 verification. The fixed-grid Rust solvers, the original Lean model, and the newer rational velocity scheme have separate update rules.
 
-Every numerical path is intended to stay in integer or exact-rational form: vorticity, velocity, Sobolev norms, Biot-Savart kernels, residue lanes, and proof witnesses.
+## Research status
 
-## Status
+| Component | What it establishes |
+|---|---|
+| Fixed-grid Lean model | The original development proves finite periodic identities and conditional diffusion bounds. The proof ledger records assumptions and admitted declarations. [Lean proof status](lean/PROOF_STATUS.md) |
+| Rounded diffusion and centered curl | The research draft proves a maximum principle for the rounded diffusion step at every grid size under CFL, and an exact shared-denominator heat update that keeps vorticity in the integer centered-curl image. [Research PR](https://github.com/Skyelabz210/NS-Regularity/pull/20) |
+| Nonlinear refinement | The same draft specifies a separate rational velocity scheme with exact kinetic-energy dissipation. A written proof gives a subsequential limit to a periodic Leray–Hopf weak solution and global smoothness under an explicit small-data bound. [Research PR](https://github.com/Skyelabz210/NS-Regularity/pull/20) |
+| General three-dimensional regularity | Smoothness for arbitrary smooth initial data remains open. The legacy split Lean and Rust solvers each need a consistency and stability argument for their own updates. [Claim audit](consolidated/CLAIM_AUDIT.md) |
 
-| Layer | Status | Evidence / child owner |
-|---|---|---|
-| Executor substrate: CRTBigInt, WASSAN, Recumbent | ACTIVE | 212/212 tests in `NS_REGULARITY_COMPLETE (1)/crates/ns_v5` |
-| Discrete regularity at N8 | ACTIVE | Kill #113, Kill #121, DKAM 90/1001, sharp Sobolev |
-| Discrete regularity at N16 and N32 | ROUTED | N16 table in `crates/ns_v5/STATUS.md`; N32 satellite `Skyelabz210/ns3d-n32-ntt6` |
-| D-030 winding-energy bound | ROUTED / ACTIVE | `crates/ns_v5/src/ns3d_d030.rs`, 9 tests |
-| Prime-hunt / Hydra sieve | ACTIVE | 103/103 tests in `crates/prime_hunt` |
-| Lean 4 formalization | ACTIVE | `lean/PROOF_STATUS.md`, Wave H.15 route map |
-| Continuum bridge work | ROUTED | `fall_of_regularity/`, `fp2_nttns/`, `qtc_continuum/`, D-024 probe lineage |
-| Child-owner routing | ACTIVE | `ROUTING_MAP.md`, `SYNC_STATUS.md` |
+## Verify the current checkout
 
-## Quickstart
+Use Python 3, Rust with Cargo, and the Lean toolchain pinned in [lean/lean-toolchain](lean/lean-toolchain). With `elan` installed, run these commands from the repository root.
 
-```bash
-cd "NS_REGULARITY_COMPLETE (1)/crates/ns_v5"
-cargo test
-cd ../prime_hunt && cargo test
+```sh
+(cd lean && lake exe cache get && lake build)
+python3 scripts/verify_ns_source_blobs.py
+python3 scripts/verify_biot_savart_domain.py
+RUST_MIN_STACK=67108864 cargo test --locked --manifest-path 'NS_REGULARITY_COMPLETE (1)/crates/ns_v5/Cargo.toml'
 ```
 
-For Lean:
-```bash
-cd lean && lake build
-```
+The research PR adds exact Python checks of the rounded stencil, the centered inverse, and the rational nonlinear velocity step. Its reproducibility instructions identify the Lean and Theory of the One revisions.
 
-## Directory layout
+## Repository map
 
-```
-├─ NS_REGULARITY_COMPLETE (1)/   Main workspace: Rust crates, proof docs
-│   ├─ crates/ns_v5/             Core 3D NS solver and theorem harness
-│   ├─ crates/prime_hunt/        Multi-head Hydra sieve
-│   ├─ crates/qmnf_crtbigint/    CRTBigInt v3.1 arithmetic substrate
-│   └─ *.md                      Proof manuscripts, status docs, route maps
-├─ lean/                         Lean 4 formalization line
-├─ recumbant_crt/                Recombinant CRT lineage
-├─ fp2_nttns/                    FP2 NTT snapshots and CRAM papers
-├─ subcriticality/               DKAM subcriticality lineage
-├─ fall_of_regularity/           NS paper workspaces and bridge docs
-├─ dresden_prime_hunt/           Dresden prime-hunt papers and plans
-├─ gambit_cram/                  CRAM slot predictor and harnesses
-├─ qtc_continuum/                Quantum topological continuum lineage
-├─ session_workspaces/           Sieve-oracle and T-run workspaces
-├─ skills/                       prime-family-spacetime skill package
-├─ ROUTING_MAP.md                Old label to child-owner route map
-├─ SYNC_STATUS.md                Repository sync map
-├─ CLAUDE.md                     AI-agent guidance
-└─ WORKSPACE_MANIFEST.md         Detailed inventory
-```
+- [lean/](lean/) contains the primary Lean formalization and axiom ledger.
+- [consolidated/](consolidated/) indexes the claim audit, imported source provenance, independent Lean project, and bridge experiments.
+- [Primary Rust workspace](NS_REGULARITY_COMPLETE%20%281%29/) contains the integer solver, CRT arithmetic, and finite-grid experiments.
+- [Routing map](ROUTING_MAP.md) and [workspace inventory](WORKSPACE_MANIFEST.md) locate earlier research variants.
+- [N32 solver repository](https://github.com/Skyelabz210/NS-3D-solver_n32-ntt6) contains the companion CRT v4 and six-prime NTT implementations.
 
-See `WORKSPACE_MANIFEST.md`, `SYNC_STATUS.md`, and `ROUTING_MAP.md` for the active route layer.
+## License
 
-## Proven / active finite-substrate results
-
-- Kill #113: skew-symmetric advection energy neutrality, exact integer zero.
-- Kill #121: per-prime-lane energy residual zero.
-- DKAM 90/1001 contraction bound.
-- Sharp Sobolev embedding at N8 with exact rational constant.
-- D-030 winding-energy bound in `ns3d_d030.rs`.
-- p-adic lane non-expansion and CRT lane stability.
-- Aubin-Lions discrete conditions at the finite-substrate layer.
-- Recumbent and WASSAN persistence checks.
-
-## Routed bridge labels
-
-The old top-level blocker list has been replaced by child-owner routing. Use:
-
-- `ROUTING_MAP.md` for old label to child owner.
-- `SYNC_STATUS.md` for repository-level activation roots.
-- `NS_REGULARITY_COMPLETE (1)/crates/ns_v5/docs/OPEN_SEAMS.md` for routed seam ownership.
-- `lean/PROOF_STATUS.md` for Lean route status.
-
-## Claim discipline
-
-The finite exact-integer substrate has strong closed components. The Lean diffusion certificate is formalized under Resolution A exactness. The full-NS Lean theorem is routed through the listed child owners. The continuum bridge route lives in the bridge workspace family and D-024 probe lineage.
-
-## Author
-
-Anthony Diaz (Acid) — HackFate / Skyelabz210
-
-
-## Consolidated research intake (2026-10-14)
-
-The non-destructive source imports, variant register, reproducibility DAG and precise proof-status audit are indexed at [consolidated/README.md](consolidated/README.md). The original active workspaces remain intact.
+Anthony Diaz’s original project code and documentation are available under the [MIT License](LICENSE). [Scope and upstream notices](THIRD_PARTY.md)

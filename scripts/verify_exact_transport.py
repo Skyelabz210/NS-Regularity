@@ -157,7 +157,8 @@ def check_enstrophy(g, a, b, nu, tau, small=False):
     old_e,new_e,jump_e = grad2(a),grad2(b),grad2(jump)
     assert new_e-old_e+jump_e+2*tau*nu*y == -2*tau*work
     if small:
-        assert old_e > 0 and 108**2*old_e <= nu**2
+        assert 108**2*old_e > nu**2
+        assert 9**2*old_e < 4*nu**2
         assert new_e+jump_e+tau*nu*y <= old_e
 
 
@@ -175,12 +176,12 @@ def check_velocity():
         assert b != heat
         print(f'N={n}: nonlinear rational solve, all momentum rows, mean, energy, enstrophy and curl checked; denominator bits {den.bit_length()}')
         if n == 3:
-            small = [[(v-sum(f)/g.cells)/2**18 for v in f] for f in a]
+            small = [[(v-sum(f)/g.cells)/2**8 for v in f] for f in a]
             z,_ = velocity_step(g,small,nu,tau)
-            heat_small = [[(value-sum(f)/g.cells)/2**18 for value in hf] for f,hf in zip(a,heat)]
+            heat_small = [[(value-sum(f)/g.cells)/2**8 for value in hf] for f,hf in zip(a,heat)]
             assert z != heat_small
             check_enstrophy(g,small,z,nu,tau,small=True)
-            print('N=3: nonzero rational input below the viscosity/108 threshold; enstrophy absorption verified')
+            print('N=3: nonzero rational input between the earlier and refined thresholds; enstrophy absorption verified')
 
 
 if __name__ == '__main__':

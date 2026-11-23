@@ -6,6 +6,8 @@ The [rounded-step and refinement analysis](NS_REFINEMENT.md) gives the stronger 
 
 The [shared-scale heat and nonlinear velocity limit](EXACT_VELOCITY_LIMIT.md) adds a Lean curl-image invariant and finite energy lemmas, an exact rational nonlinear solver, and a written convergence proof to a Leray–Hopf weak solution for that distinct velocity scheme. Its explicit small-data enstrophy threshold gives global smoothness for that class. General global smoothness remains open.
 
+The [refinement and gap analysis](NS_GAP_ANALYSIS.md) gives a quantitative comparison with smooth solutions and the improved small-data threshold $9\|\nabla u_0\|_2<2\nu$ for the rational velocity scheme.
+
 ## Established algebraic facts or well-supported finite-discrete identities
 
 - CRT/K-Elimination: quotient/winding recovery is exact under its modulus/coprimality/range assumptions. This establishes representation correctness, not a PDE bound.
