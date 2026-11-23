@@ -36,4 +36,23 @@ theorem minimumVelocity_spec (w : VField) (h : ∃ u, Admissible w u) :
   rw [spec.2]
   exact Nat.find_min' e ⟨u, hu, rfl⟩
 
+/-- A total gauge choice for the existing trajectory generator. Outside the
+    integer range its value is zero, so its divergence vanishes everywhere. -/
+noncomputable def velocity (w : VField) : VField := by
+  classical
+  exact if h : ∃ u, Admissible w u then minimumVelocity w h
+    else ⟨fun _ _ _ => 0, fun _ _ _ => 0, fun _ _ _ => 0⟩
+
+theorem velocity_admissible (w : VField) (h : ∃ u, Admissible w u) :
+    Admissible w (velocity w) := by
+  classical
+  simpa only [velocity, dif_pos h] using (minimumVelocity_spec w h).1
+
+theorem velocity_div_zero (w : VField) : divV (velocity w) = fun _ _ _ => 0 := by
+  classical
+  by_cases h : ∃ u, Admissible w u
+  · exact (velocity_admissible w h).2
+  · rw [velocity, dif_neg h]
+    rfl
+
 end NSRegularity.NS.CurlPreimage
