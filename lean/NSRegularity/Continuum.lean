@@ -37,10 +37,8 @@ open NSRegularity
 -- L6.1: Concrete integer L∞ norm
 -- ═══════════════════════════════════════════════════════════════════════════
 
-/-- The integer L∞ norm: max of absolute values over all grid points and
-    all three components. Defined as a triple Finset.sum of indicators
-    (conceptually a max; operationally, the max of a finite set of
-    non-negative integers). -/
+/-- Sum of the componentwise absolute values on the fixed grid. This
+    unnormalized proxy bounds the component maximum from above. -/
 def lInfGrid (ω : VField) : ℤ :=
   -- For a concrete computable max over Fin 8 × Fin 8 × Fin 8 × 3 components,
   -- we use the triple-sum-of-abs as an upper bound proxy.

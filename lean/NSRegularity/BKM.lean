@@ -75,8 +75,11 @@ theorem bkm_integral_finite (traj : Continuum.DiscreteSequence) (C : ℤ) (T : �
       `∀ k : ℕ, traj ∈ C^k([0,T] × 𝕋³)`
     still requires Mathlib's analysis layer and is out of scope for the
     discrete substrate. -/
-def IsSmooth (traj : Continuum.DiscreteSequence) : Prop :=
+def UniformlyBoundedGridTrajectory (traj : Continuum.DiscreteSequence) : Prop :=
   ∃ M : ℤ, 0 ≤ M ∧ ∀ n : ℕ, lInfGrid (traj n) ≤ M
+
+/-- Historical name for boundedness of the discrete sum-of-absolute-values proxy. -/
+abbrev IsSmooth := UniformlyBoundedGridTrajectory
 
 /-- **L8.2 (discrete-form)** — uniform L∞ implies the discrete smoothness
     witness.

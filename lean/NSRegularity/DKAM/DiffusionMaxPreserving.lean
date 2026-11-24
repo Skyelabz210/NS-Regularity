@@ -4,7 +4,7 @@ import NSRegularity.NS.Defs
 # M2.a — Diffusion is max-preserving under CFL (leaves L2.1–L2.3)
 
 The 7-point Laplacian stencil with CFL `6νΔt ≤ N²S²` produces non-negative
-weights summing to 1. The diffusion step is therefore a convex combination:
+weights summing to 1. The diffusion step floors the convex combination and preserves its integer bounds:
   `diffusion_step f p (i,j,k) ≤ gridLInf f` for all grid points.
 -/
 
@@ -34,9 +34,7 @@ theorem stencil_neighbor_nonneg (p : NsParams) (hν : 0 ≤ p.nu_scaled)
     `N²S²` of seven values each bounded by `M := gridLInf f`. Hence
     `|N²S² · (...)| ≤ N²S² · M`, so `|...| ≤ M`.
 
-    This is the algebraic content of L2.3. The unconditional statement
-    requires handling `Int.ediv` rounding (the integer-Helmholtz obstruction),
-    which is the open piece below. -/
+    This is the algebraic content of L2.3. The final lemma handles positive remainders using integer interval endpoints. -/
 theorem diffusion_max_preserving_algebraic
     (f : Grid) (p : NsParams) (h : cfl_ok p) (hν : 0 ≤ p.nu_scaled)
     (hdt : 0 ≤ p.dt_latt) (i j k : Fin N) :
@@ -215,24 +213,59 @@ theorem diffusion_max_preserving_exact_natAbs
   rw [Int.abs_eq_natAbs] at habs
   exact_mod_cast habs
 
-/-- L2.3 — The diffusion step is max-preserving: the updated value at
-    any grid point is bounded by the original L∞ norm.
+/-- Integer interval preservation for a rounded seven-point stencil. The centre
+    and the neighbour sum may be signed. The denominator is positive. -/
+theorem rounded_stencil_interval (x neighbours d c lo hi : Int)
+    (hd : 0 < d) (hc : 0 ≤ c) (hself : 6*c ≤ d)
+    (hx : lo ≤ x ∧ x ≤ hi)
+    (hn : 6*lo ≤ neighbours ∧ neighbours ≤ 6*hi) :
+    lo ≤ x + c*(neighbours - 6*x) / d ∧
+      x + c*(neighbours - 6*x) / d ≤ hi := by
+  have hs : 0 ≤ d - 6*c := by omega
+  have lower : (lo-x)*d ≤ c*(neighbours-6*x) := by
+    nlinarith only [mul_nonneg hs (sub_nonneg.mpr hx.1),
+      mul_nonneg hc (sub_nonneg.mpr hn.1)]
+  have upper : c*(neighbours-6*x) ≤ (hi-x)*d := by
+    nlinarith only [mul_nonneg hs (sub_nonneg.mpr hx.2),
+      mul_nonneg hc (sub_nonneg.mpr hn.2)]
+  have h₁ := Int.le_ediv_of_mul_le hd lower
+  have h₂ : c*(neighbours-6*x) / d ≤ hi-x :=
+    (Int.ediv_le_iff_le_mul hd).2 (by omega)
+  omega
 
-    **Status (D-030 / integer-Helmholtz obstruction).** The algebraic
-    convex-combination argument is captured in `diffusion_max_preserving_algebraic`
-    above. Under the exact-division hypothesis (`Resolution A`), the bound
-    holds — see `diffusion_max_preserving_exact{_natAbs}`. The unconditional
-    statement below remains open; the three resolutions tracked are:
-      A. **exact-division hypothesis** `(N²S²) ∣ νΔt · Δf`  — proved (above)
-      B. relax the bound to `≤ gridLInf f + 1` (off-by-one rounding)
-      C. redefine `diffusion_step` via `ExactRational`/CRT (matches Rust)
-
-    Composition `M2 = l_inf_non_increasing` reduces cleanly to L2.3
-    (see DKAM.lean). -/
+/-- CFL alone suffices for the integer maximum principle when the two
+    coefficients are nonnegative. Lean's division by zero gives the
+    identity update. For positive denominator the floor stays in the
+    same integer interval as the exact convex combination. -/
 theorem diffusion_max_preserving (f : Grid) (p : NsParams)
     (h : cfl_ok p) (hν : 0 ≤ p.nu_scaled) (hdt : 0 ≤ p.dt_latt) :
     ∀ i j k : Fin N,
       (diffusion_step f p i j k).natAbs ≤ gridLInf f := by
-  sorry
+  intro i j k
+  let d := (N : Int)^2 * p.ns_scale^2
+  have hd₀ : 0 ≤ d := by dsimp [d]; positivity
+  by_cases hd : d = 0
+  · have he : diffusion_step f p i j k = f i j k := by
+      unfold diffusion_step
+      change f i j k + _ / d = f i j k
+      simp [hd]
+    rw [he]
+    simpa only [← Int.abs_eq_natAbs] using abs_le_gridLInf f i j k
+  · have hpoint (a b e : Fin N) := abs_le.mp (abs_le_gridLInf f a b e)
+    have hn := rounded_stencil_interval (f i j k)
+      (f (sp i) j k + f (sn i) j k + f i (sp j) k + f i (sn j) k +
+       f i j (sp k) + f i j (sn k))
+      d (p.nu_scaled * p.dt_latt) (-gridLInf f) (gridLInf f)
+      (by omega) (mul_nonneg hν hdt) (by simpa [d, cfl_ok, mul_assoc] using h)
+      (hpoint i j k) (by
+        have := hpoint (sp i) j k
+        have := hpoint (sn i) j k
+        have := hpoint i (sp j) k
+        have := hpoint i (sn j) k
+        have := hpoint i j (sp k)
+        have := hpoint i j (sn k)
+        constructor <;> omega)
+    have ha : |diffusion_step f p i j k| ≤ gridLInf f := abs_le.mpr hn
+    simpa only [Int.abs_eq_natAbs] using ha
 
 end NSRegularity.DKAM.Diffusion

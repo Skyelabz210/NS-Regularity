@@ -63,13 +63,9 @@ set_option maxHeartbeats 400000 in
     - non-negative initial L∞,
     - a time horizon `T`,
 
-    the NS trajectory is smooth (modulo the BKM axiom).
-
-    This is the architectural top of the Lean closure: once `biot_savart`,
-    `stretching_*`, and `h_step` are filled in by operator-side proofs
-    (task #12 for Biot-Savart NTT port; task #18 for full-NS L∞ via DKAM
-    + Kill #113 composition), this theorem becomes unconditionally true
-    modulo only the BKM 1984 axiom. -/
+    the fixed-grid sum-of-absolute-values proxy is uniformly bounded.
+    For the signed nonlinear growth bound on reached states, see
+    `NSRegularity.NS.RoundedStep.trajectory_bound`. -/
 theorem ns_global_regularity_skeleton
     (biot_savart : VField → VField)
     (stretching_x stretching_y stretching_z : VField → Grid)
@@ -90,11 +86,7 @@ theorem ns_global_regularity_skeleton
 /-- **Specialised NS global regularity using the axiomatic Biot-Savart.**
 
     Plugs `biot_savart` (axiomatised in `NS/BiotSavart.lean`) into the
-    skeleton. The remaining hypothesis is the L∞-preservation of `ns_step`
-    composed with `biot_savart`. Once that's filled in (task #18), this
-    is the unconditional Millennium-style claim for the discrete NS
-    trajectory modulo only the BKM axiom + `biot_savart_*` axioms (the
-    latter being pending NTT port). -/
+    skeleton. The supplied hypothesis controls the full step on the fixed grid. -/
 theorem ns_global_regularity_biot_savart
     (stretching_x stretching_y stretching_z : VField → Grid)
     (p : NsParams)

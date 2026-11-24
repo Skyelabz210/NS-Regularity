@@ -22,7 +22,7 @@ generic_ns_lInf_uniform : ∀ n, lInf (traj n) ≤ lInf w₀
    ↓
 generic_ns_lInfGrid_uniform : ∀ n, lInfGrid (traj n) ≤ 3·N³ · lInf w₀
    ↓
-generic_global_regularity : IsSmooth (traj)                  [mod BKM axiom]
+generic_global_regularity : UniformlyBoundedGridTrajectory (traj)
 ```
 -/
 
@@ -63,7 +63,7 @@ theorem generic_ns_lInfGrid_uniform
       exact mul_le_mul_of_nonneg_left this hN3)
 
 /-- **Generic global regularity.** Any L∞-preserving step generates a
-    trajectory whose continuum limit is smooth (mod BKM axiom).
+    trajectory with a uniform bound on the fixed grid.
 
     Pure composition — no sorries. Plug in your step function and L∞-
     preservation proof to get global regularity. -/

@@ -32,3 +32,12 @@ import NSRegularity.NS.BiotSavartBound  -- Attack 1: BS reverse bound, underdete
 import NSRegularity.NS.SmallDataCapstone  -- assembled small-data theorem (Piece A derived, Piece B explicit)
 import NSRegularity.AxiomAudit  -- live-path axiom audit + reproducibility probe
 import NSRegularity.SoundnessProbe  -- post-fix BiotSavart axiom soundness check
+import NSRegularity.NS.RoundedStep
+import NSRegularity.NS.RefinedDiffusion
+import NSRegularity.NS.CurlPreimage
+import NSRegularity.NS.CenteredKernel8
+import NSRegularity.NS.ExactTransport
+import NSRegularity.NS.BoundedTransport
+import NSRegularity.NS.LegacySplit
+import NSRegularity.NS.MockThetaDiffusion
+import NSRegularity.NS.MockThetaCurl

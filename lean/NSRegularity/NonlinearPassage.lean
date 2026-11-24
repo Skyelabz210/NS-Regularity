@@ -15,8 +15,10 @@ to the distributional limit uses:
 3. Sobolev embedding H¹ ↪ L⁶ (3D, standard)
 4. Hölder: L⁶ × L² → L^{3/2} → distributions (since 1/6 + 1/2 = 2/3 < 1)
 
-The product u_N ⊗ ∇ω_N converges distributionally because one factor
-converges strongly in L⁶ (from H¹) and the other converges strongly in L².
+In a velocity weak formulation, strong space-time L² convergence of u_N
+gives strong L¹ convergence of u_N ⊗ u_N. The weak derivative acts on the
+smooth test function. The consistency of the chosen discrete evolution
+and compactness in this topology each require a separate argument.
 
 ## Sub-lemmas
 
