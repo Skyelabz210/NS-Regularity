@@ -131,6 +131,29 @@ The coefficient convention for `--initial` is a JSON array whose entries have `d
 
 The default result describes exactly the finite Fourier datum. A positive `--initial-error E` instead certifies the neighborhood of real divergence-free smooth initial fields whose $A_3$ distance from the declared center is at most $E$. That error enters the first interval and is propagated throughout the chain. Both generation and replay require the same error budget. Terminal acceptance therefore proves global smoothness for every datum in the declared neighborhood. The search can return `horizon_certified`, which describes a finite accepted interval chain, or `slab_inconclusive` when its next chosen candidate fails an inequality. Its fixed cutoff, order and search budget provide no all-data termination theorem. The completeness statement above concerns the existence of some finite certificate under its smoothness premise.
 
+
+## Error at the interval endpoint
+
+The optional `--heat-decay` rule sharpens the error carried from one interval to the next. The original slab radius $\rho$ still bounds the error throughout the entire interval. At its right endpoint, let $\eta$ denote the incoming bound, $\mu$ an upper bound for the absolute mean-error coefficient, and let $q_-$ be the certified positive lower bound on $2\pi$. Set
+
+$$d=\frac{1}{1+\nu q_-^2\delta}.$$
+
+For every nonzero integer Fourier mode, the heat multiplier at time $\delta$ is at most $\mathrm e^{-\nu(2\pi)^2\delta}\le d$, by $\mathrm e^z\ge1+z$ for $z\ge0$. Its zero mode has multiplier one. Since the $A_3$ norm sums mode magnitudes with zero-mode weight one, the incoming error term satisfies
+
+$$\|S(\delta)w_0\|_{A_3}\le d\eta+(1-d)\mu.$$
+
+The mean of the true unforced velocity is its initial mean, because the zero Fourier coefficient of the projected convection and Laplacian vanishes. If the declared initial center is $f$, with error budget $E$, the program uses
+
+$$\mu=\min\!\left(\eta, E+|\widehat f(0)-\widehat v(0,0)|_{1,\mathbb C}\right),$$
+
+where $|\cdot|_{1,\mathbb C}$ is the sum of the absolute real and imaginary component coordinates and $v(0,0)$ denotes the candidate's zero Fourier coefficient at the start of the interval. The triangle inequality proves this mean bound for every true initial datum in the declared neighborhood. This also handles candidates whose mean varies with time. Their residual includes that time variation.
+
+At the endpoint, apply the same Duhamel estimate to the residual and nonlinear terms as in the slab theorem. The result is
+
+$$\rho_{\mathrm{end}}\le d\eta+(1-d)\mu+\delta R+a(2U\rho+\rho^2).$$
+
+The program rounds this upper bound upward to the dyadic lattice with denominator $2^{96}$ and takes the smaller of it and $\rho$. The next interval starts with this bound plus its independently computed candidate jump. A certificate records the endpoint policy, and replay computes the same estimate after accepting the original slab inequalities. Older certificates retain the original policy. Regression controls with a constant error show why dropping the mean term would make the estimate false.
+
 ## Reproduced search results
 
 The following runs used viscosity one and the cyclic center $a(\sin(2\pi z),\sin(2\pi x),\sin(2\pi y))$, except for the last row. The error norm is the stated $A_3$ norm and every residual includes the full candidate convolution. The interval counts are computational evidence for these inputs and parameters.
@@ -141,11 +164,19 @@ The following runs used viscosity one and the cyclic center $a(\sin(2\pi z),\sin
 | $a=1/12$ | $0$ | Degree 3, $|k|_1\le3$, step $1/1024$ | 28 | $7/256$ | $3119/(25\cdot10^6)$ |
 | $a=1/12$ | $10^{-8}$ | Degree 3, $|k|_1\le3$, step $1/1024$ | 28 | $7/256$ | $12487/10^8$ |
 | $a=1/8$ | $0$ | Degree 3, $|k|_1\le3$, step $1/1024$ | 39 | $39/1024$ | $134311/10^8$ |
+| $a=1/4$ | $0$ | Degree 4, $|k|_1\le3$, step $1/512$, heat endpoint policy | 31 | $31/512$ | $5020787/10^8$ |
 | $(\sin(2\pi z),\tfrac23\sin(2\pi x),\tfrac12\sin(2\pi y))/24$ | $0$ | Degree 3, $|k|_1\le3$, step $1/1024$ | 3 | $3/1024$ | $1/800000$ |
 
 Each row passes the strict terminal test. The initial gradient of each center exceeds $2/9$. For the neighborhood row the conclusion holds for every real divergence-free smooth datum in the declared ball. The certificate from that row has SHA-256 `c32885cfd9089ed5a7ca416a6816c93ddcbde45045d45f33e9c454a35150a629`. Reproduce it with the documented amplitude $1/12$ command plus `--initial-error 1/100000000` and the default predictor parameters. Replay with the same added flag.
 
-`verify_certificate_search.py` replays a saved chain and rejects a different initial datum, viscosity or initial error budget, a floating-point interval, a zero radius, insufficient smoothing, an unpaid endpoint jump, a boolean mode index and duplicate indices. An analytic affine-time fixture verifies that limiting predictor convolution retains every included coefficient while the default residual convolution retains the quadratic output degree. All explicit checks remain enabled with `python3 -O`.
+The amplitude $1/4$ certificate has SHA-256 `69d69ecbde818e95d222513d30b9a719f547756605099c36ab8a9da78e3d05a8`. Generate and replay it with the following commands.
+
+```sh
+python3 scripts/certify_fourier_flow.py --amplitude 1/4 --step 1/512 --degree 4 --cutoff 3 --max-steps 48 --heat-decay --output /tmp/ns-quarter.json
+python3 scripts/certify_fourier_flow.py --amplitude 1/4 --verify /tmp/ns-quarter.json
+```
+
+`verify_certificate_search.py` replays a saved chain and rejects a different initial datum, viscosity or initial error budget, a floating-point interval, a zero radius, insufficient smoothing, an unpaid endpoint jump, a boolean mode index and duplicate indices. An analytic affine-time fixture verifies that limiting predictor convolution retains every included coefficient while the default residual convolution retains the quadratic output degree. The checks also exercise finite-horizon and inconclusive outcomes, the serialized endpoint policy and constant mean errors. All explicit checks remain enabled with `python3 -O`.
 
 ## Families obtained from an accepted datum
 

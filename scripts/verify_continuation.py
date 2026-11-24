@@ -148,16 +148,21 @@ def residual_majorant(poly, viscosity, step):
     return majorant(residual) + eps*majorant(projected_convection) + viscosity*diff_square*majorant(lap)
 
 
-def check_slab(poly, viscosity, step, eta, a, radius):
+def slab_report(poly, viscosity, step, eta, a, radius):
+    """Return recomputed norm bounds only after all interval checks pass."""
     validate_poly(poly)
     if any(not isinstance(v, (int, Q)) for v in (viscosity, step, eta, a, radius)):
-        return False
+        return None
     if not (viscosity > 0 and step > 0 and a >= 0 and eta >= 0 and radius > 0 and a*a*viscosity >= step):
-        return False
+        return None
     u = majorant(poly)
     r = residual_majorant(poly, viscosity, step)
     image = eta + step*r + a*(2*u*radius + radius*radius)
-    return image <= radius and 2*a*(u+radius) < 1
+    return (u, r) if image <= radius and 2*a*(u+radius) < 1 else None
+
+
+def check_slab(poly, viscosity, step, eta, a, radius):
+    return slab_report(poly, viscosity, step, eta, a, radius) is not None
 
 
 def euler_candidate(initial, viscosity, step, q):

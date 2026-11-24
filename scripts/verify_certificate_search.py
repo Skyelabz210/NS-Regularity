@@ -11,6 +11,7 @@ from certify_fourier_flow import (
     decode_poly,
     encode_poly,
     field_distance,
+    endpoint_error,
     generate,
     initial_cyclic,
     load_certificate,
@@ -57,10 +58,47 @@ def main():
     require(
         status == "global" and len(intervals) >= 2, "Expected a nontrivial global chain"
     )
+    short, short_status, _, _ = generate(
+        initial, viscosity, Q(1, 1024), 1, degree=3, cutoff=3
+    )
+    require(
+        short_status == "horizon_certified"
+        and not verify_chain(initial, viscosity, short)["global"],
+        "A finite horizon was promoted to global continuation",
+    )
+    failed, failed_status, _, _ = generate(
+        initial, viscosity, Q(1), 1, degree=1, cutoff=1
+    )
+    require(
+        failed_status == "slab_inconclusive" and not failed,
+        "An inconclusive interval was accepted",
+    )
     verified = verify_chain(initial, viscosity, intervals, initial_error)
     require(
         verified == {"global": True, "elapsed": time, "radius": radius},
         "Chain replay mismatch",
+    )
+    refined = verify_chain(
+        initial, viscosity, intervals, initial_error, heat_decay=True
+    )
+    require(
+        refined["global"] and refined["radius"] < verified["radius"],
+        "The endpoint refinement failed to improve the mean-free error",
+    )
+    constant = {
+        (0, (0, 0, 0)): (GaussianRational(1), GaussianRational(), GaussianRational())
+    }
+    require(
+        endpoint_error(
+            {}, Q(1), Q(1, 256), Q(1), Q(1, 16), Q(8, 7), Q(0), constant, Q(0)
+        )
+        >= 1,
+        "The constant error mode was incorrectly damped",
+    )
+    require(
+        endpoint_error({}, Q(1), Q(1, 256), Q(1), Q(1, 16), Q(8, 7), Q(0), {}, Q(1))
+        >= 1,
+        "The unknown mean inside the initial neighborhood was incorrectly damped",
     )
     require(
         decode_poly(encode_poly(initial)) == initial, "Initial data did not round trip"
@@ -93,6 +131,14 @@ def main():
             load_certificate(path, initial, viscosity, initial_error) == verified,
             "Serialized certificate did not replay",
         )
+        save_certificate(
+            path, initial, viscosity, intervals, initial_error, heat_decay=True
+        )
+        require(
+            load_certificate(path, initial, viscosity, initial_error) == refined,
+            "The endpoint policy did not round trip",
+        )
+        save_certificate(path, initial, viscosity, intervals, initial_error)
         rejected(
             lambda: load_certificate(
                 path, initial_cyclic(Q(1, 32)), viscosity, initial_error

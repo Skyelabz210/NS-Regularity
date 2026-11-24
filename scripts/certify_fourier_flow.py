@@ -12,7 +12,6 @@ from verify_continuation import (
     ZERO,
     add_scaled,
     add_term,
-    check_slab,
     check_terminal,
     end_field,
     majorant,
@@ -22,6 +21,7 @@ from verify_continuation import (
     pressure_projection,
     residual_majorant,
     round_up,
+    slab_report,
     two_pi_bounds,
     validate_poly,
 )
@@ -150,8 +150,37 @@ def choose_radius(poly, viscosity, step, eta, bits):
     return smoothing, radius, residual
 
 
+def endpoint_error(
+    poly, viscosity, step, eta, smoothing, radius, residual, initial, initial_error
+):
+    """Use the heat spectral gap for nonconstant initial error modes."""
+    mean = initial.get((0, (0, 0, 0)), ZERO)
+    candidate_mean = poly.get((0, (0, 0, 0)), ZERO)
+    mean_difference = sum(
+        abs(a.re - b.re) + abs(a.im - b.im) for a, b in zip(mean, candidate_mean)
+    )
+    mean_bound = min(eta, initial_error + mean_difference)
+    q, eps = two_pi_bounds()
+    decay = 1 / (1 + viscosity * (q - eps) ** 2 * step)
+    bound = (
+        decay * eta
+        + (1 - decay) * mean_bound
+        + step * residual
+        + smoothing * (2 * majorant(poly) * radius + radius**2)
+    )
+    return min(radius, round_up(bound, 1 << 96))
+
+
 def generate(
-    initial, viscosity, step, max_steps, degree=3, cutoff=3, bits=96, initial_error=Q(0)
+    initial,
+    viscosity,
+    step,
+    max_steps,
+    degree=3,
+    cutoff=3,
+    bits=96,
+    initial_error=Q(0),
+    heat_decay=False,
 ):
     validate_poly(initial)
     require(
@@ -163,6 +192,7 @@ def generate(
         "Invalid integration parameters",
     )
     require(degree >= 1 and cutoff >= 1 and bits >= 8, "Invalid predictor parameters")
+    require(type(heat_decay) is bool, "Invalid endpoint policy")
     require(
         all(sum(map(abs, mode)) <= cutoff for _, mode in initial),
         "The cutoff must contain the prescribed initial support",
@@ -185,6 +215,18 @@ def generate(
         intervals.append(
             {"poly": candidate, "step": step, "smoothing": smoothing, "radius": radius}
         )
+        if heat_decay:
+            radius = endpoint_error(
+                candidate,
+                viscosity,
+                step,
+                eta,
+                smoothing,
+                radius,
+                residual,
+                initial,
+                initial_error,
+            )
         elapsed += step
         current = end_field(candidate)
         if index % 8 == 0:
@@ -198,7 +240,7 @@ def generate(
     return intervals, "horizon_certified", elapsed, radius
 
 
-def verify_chain(initial, viscosity, intervals, initial_error=Q(0)):
+def verify_chain(initial, viscosity, intervals, initial_error=Q(0), heat_decay=False):
     """Replay proof obligations, recomputing every jump and residual."""
     validate_poly(initial)
     require(
@@ -210,6 +252,7 @@ def verify_chain(initial, viscosity, intervals, initial_error=Q(0)):
         isinstance(initial_error, (int, Q)) and initial_error >= 0,
         "Invalid initial error",
     )
+    require(type(heat_decay) is bool, "Invalid endpoint policy")
     current = dict(initial)
     radius = initial_error
     elapsed = Q(0)
@@ -219,12 +262,22 @@ def verify_chain(initial, viscosity, intervals, initial_error=Q(0)):
             interval[key] for key in ("step", "smoothing", "radius")
         )
         eta = radius + field_distance(current, start_field(candidate))
-        require(
-            check_slab(candidate, viscosity, step, eta, smoothing, next_radius),
-            f"Unverified continuation interval {index+1}",
-        )
+        bounds = slab_report(candidate, viscosity, step, eta, smoothing, next_radius)
+        require(bounds is not None, f"Unverified continuation interval {index+1}")
         elapsed += step
         radius = next_radius
+        if heat_decay:
+            radius = endpoint_error(
+                candidate,
+                viscosity,
+                step,
+                eta,
+                smoothing,
+                radius,
+                bounds[1],
+                initial,
+                initial_error,
+            )
         current = end_field(candidate)
     return {
         "global": check_terminal(current, viscosity, radius),
@@ -270,7 +323,9 @@ def decode_poly(rows):
     return {key: value for key, value in out.items() if value != ZERO}
 
 
-def save_certificate(path, initial, viscosity, intervals, initial_error=Q(0)):
+def save_certificate(
+    path, initial, viscosity, intervals, initial_error=Q(0), heat_decay=False
+):
     document = {
         "format": "ns-fourier-continuation-v1",
         "viscosity": str(viscosity),
@@ -284,6 +339,8 @@ def save_certificate(path, initial, viscosity, intervals, initial_error=Q(0)):
             for slab in intervals
         ],
     }
+    if heat_decay:
+        document["endpoint_decay"] = True
     path.write_text(json.dumps(document, indent=2) + "\n")
 
 
@@ -322,7 +379,13 @@ def load_certificate(
                 **{key: Q(row[key]) for key in ("step", "smoothing", "radius")},
             }
         )
-    return verify_chain(initial, viscosity, intervals, initial_error)
+    return verify_chain(
+        initial,
+        viscosity,
+        intervals,
+        initial_error,
+        document.get("endpoint_decay", False),
+    )
 
 
 def main():
@@ -340,6 +403,11 @@ def main():
     parser.add_argument("--degree", type=int, default=3)
     parser.add_argument("--cutoff", type=int, default=3)
     parser.add_argument("--bits", type=int, default=96)
+    parser.add_argument(
+        "--heat-decay",
+        action="store_true",
+        help="Sharpen interval endpoint error with viscous decay",
+    )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--verify", type=Path)
     args = parser.parse_args()
@@ -362,8 +430,11 @@ def main():
         args.cutoff,
         args.bits,
         args.initial_error,
+        args.heat_decay,
     )
-    replay = verify_chain(initial, args.viscosity, intervals, args.initial_error)
+    replay = verify_chain(
+        initial, args.viscosity, intervals, args.initial_error, args.heat_decay
+    )
     require(
         replay["elapsed"] == elapsed
         and replay["radius"] == radius
@@ -372,7 +443,12 @@ def main():
     )
     if args.output:
         save_certificate(
-            args.output, initial, args.viscosity, intervals, args.initial_error
+            args.output,
+            initial,
+            args.viscosity,
+            intervals,
+            args.initial_error,
+            args.heat_decay,
         )
         require(
             load_certificate(args.output, initial, args.viscosity, args.initial_error)

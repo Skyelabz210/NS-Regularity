@@ -14,7 +14,7 @@ The legacy Lean split step, the N32 production solvers, and the rational velocit
 | Legacy Lean refinement | An exact-division example exits the curl image with divergence 16. A separate curl-range-projected split converges at order $h^2$ on known smooth intervals under its strict diffusive CFL. [Legacy split analysis](LEGACY_SPLIT_REFINEMENT.md) |
 | N32 production arithmetic | A checked corridor certifies step-body roundoff on admissible data. A period-four shear exposes the production Biot–Savart normalization gap. An opt-in six-lane centered inverse returns a checked integer witness on its certified domain. [N32 draft](https://github.com/Skyelabz210/NS-3D-solver_n32-ntt6/pull/1) |
 
-The automated search extends the reproduced global certificates to cyclic amplitudes $1/12$ and $1/8$ at viscosity one, and to a specified $A_3$ neighborhood of the $1/12$ center. An unequal-amplitude cyclic field also passes. These are data-specific certificates with independently recomputed residuals. The remaining universal obligation is to guarantee a finite accepted chain, or an equivalent a priori continuation bound, for every admitted smooth datum.
+The automated search extends the reproduced global certificates to cyclic amplitudes $1/12$, $1/8$ and $1/4$ at viscosity one, and to a specified $A_3$ neighborhood of the $1/12$ center. An unequal-amplitude cyclic field also passes. The $1/4$ certificate uses the viscous endpoint refinement, with an explicit undamped mean-error term. These are data-specific certificates with independently recomputed residuals. The remaining universal obligation is to guarantee a finite accepted chain, or an equivalent a priori continuation bound, for every admitted smooth datum.
 
 ### Reused dependencies for the search
 
