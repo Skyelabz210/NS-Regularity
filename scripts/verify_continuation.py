@@ -79,13 +79,17 @@ def pressure_projection(k, vector):
     return tuple(x + longitudinal.scale(-component) for component, x in zip(k, vector))
 
 
-def nonlinear(poly):
+def nonlinear(poly, *, max_degree=None):
     # Multiplier i k for spatial derivative, with the common 2π left out.
     coefficients = {}
     for (d, p), a in poly.items():
         for (e, q), b in poly.items():
+            if max_degree is not None and d + e > max_degree:
+                continue
             k = tuple(x + y for x, y in zip(p, q))
             factor = dot(k, a).times_i()
+            if factor == GaussianRational():
+                continue
             add_term(coefficients, d + e, k, tuple(x.mul(factor) for x in b))
     return {key: pressure_projection(key[1], v) for key, v in coefficients.items()}
 
