@@ -7,8 +7,9 @@ Exact-integer and exact-rational research on incompressible Navier–Stokes flow
 | Component | What it establishes |
 |---|---|
 | Fixed-grid Lean model | The original development proves finite periodic identities and conditional diffusion bounds. The proof ledger records assumptions and admitted declarations. [Lean proof status](lean/PROOF_STATUS.md) |
-| Rounded diffusion and centered curl | The research draft proves a maximum principle for the rounded diffusion step at every grid size under CFL, and an exact shared-denominator heat update that keeps vorticity in the integer centered-curl image. [Research PR](https://github.com/Skyelabz210/NS-Regularity/pull/20) |
-| Nonlinear refinement | The same draft specifies a separate rational velocity scheme with exact kinetic-energy dissipation. A written proof gives a subsequential limit to a periodic Leray–Hopf weak solution and global smoothness under an explicit small-data bound. [Research PR](https://github.com/Skyelabz210/NS-Regularity/pull/20) |
+| Rounded diffusion and centered curl | The merged development proves a maximum principle for the rounded diffusion step at every grid size under CFL, and an exact shared-denominator heat update that keeps vorticity in the integer centered-curl image. [Transfer analysis](consolidated/NS_GAP_ANALYSIS.md) |
+| Nonlinear refinement | The development specifies a separate rational velocity scheme with exact kinetic-energy dissipation. A written proof gives a subsequential limit to a periodic Leray–Hopf weak solution and global smoothness under an explicit small-data bound. [Transfer analysis](consolidated/NS_GAP_ANALYSIS.md) |
+| Constructed continuum certificates | An exact Fourier predictor generates interval chains and a separate replay recomputes every residual and source match. Reproduced global certificates cover cyclic amplitudes through $1/4$ at viscosity one, unequal component amplitudes and a declared initial neighborhood. [Certificate search](consolidated/NS_CONTINUATION_CERTIFICATE.md#automated-search-and-independent-replay) |
 | General three-dimensional regularity | Smoothness for arbitrary smooth initial data remains open. The legacy split Lean and Rust solvers each need a consistency and stability argument for their own updates. [Claim audit](consolidated/CLAIM_AUDIT.md) |
 
 ## Verify the current checkout
@@ -22,7 +23,15 @@ python3 scripts/verify_biot_savart_domain.py
 RUST_MIN_STACK=67108864 cargo test --locked --manifest-path 'NS_REGULARITY_COMPLETE (1)/crates/ns_v5/Cargo.toml'
 ```
 
-The research PR adds exact Python checks of the rounded stencil, the centered inverse, and the rational nonlinear velocity step. Its reproducibility instructions identify the Lean and Theory of the One revisions.
+The exact Python checks exercise the rounded stencil, centered inverse, rational nonlinear velocity step and continuum residual certificates. To generate and independently replay a continuum certificate for cyclic Fourier data, run the commands below.
+
+```sh
+python3 scripts/certify_fourier_flow.py --amplitude 1/12 --step 1/1024 --max-steps 48 --output /tmp/ns-certificate.json
+python3 scripts/certify_fourier_flow.py --amplitude 1/12 --verify /tmp/ns-certificate.json
+python3 -O scripts/verify_certificate_search.py
+```
+
+[Certificate inputs and mathematical scope](consolidated/NS_CONTINUATION_CERTIFICATE.md#automated-search-and-independent-replay)
 
 ## Repository map
 

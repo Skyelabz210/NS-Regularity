@@ -10,8 +10,23 @@ The legacy Lean split step, the N32 production solvers, and the rational velocit
 | CRAM and mock theta transfer | The positive coefficients of third-order $\omega(q)$ define an exact two-jump viscosity stencil. Its symbol bounds, consistency, and energy inequality support a written nonlinear continuum limit with CRAM-style signed numerator certificates. [Mock theta transfer](CRAM_MOCK_THETA_TRANSFER.md) |
 | Bounded-scale arithmetic | Rounding an integer vector potential and compatible orbit means retains exact centered divergence and momentum. A run on one mesh holds the stored scale fixed, and accumulated encoding error vanishes when $1/(A\tau)\to0$. [Bounded transport](BOUNDED_TRANSPORT.md) |
 | Continuation with no assumed smooth reference | A rational Fourier residual test certifies existence on each accepted continuum slab. The exact cyclic three-dimensional fixture starts above the direct small-data threshold. A mock theta rational grid step with fixed-scale CRAM residue evidence supplies the candidate, and four continuum residual slabs certify the terminal threshold. [Continuation certificate](NS_CONTINUATION_CERTIFICATE.md) |
+| Automated certificate construction | A Taylor predictor, bounded anchor rounding and exact radius search generate interval chains. Independent replay binds initial data, viscosity and error budget and recomputes the full residual. [Search and replay](NS_CONTINUATION_CERTIFICATE.md#automated-search-and-independent-replay) |
 | Legacy Lean refinement | An exact-division example exits the curl image with divergence 16. A separate curl-range-projected split converges at order $h^2$ on known smooth intervals under its strict diffusive CFL. [Legacy split analysis](LEGACY_SPLIT_REFINEMENT.md) |
 | N32 production arithmetic | A checked corridor certifies step-body roundoff on admissible data. A period-four shear exposes the production Biot–Savart normalization gap. An opt-in six-lane centered inverse returns a checked integer witness on its certified domain. [N32 draft](https://github.com/Skyelabz210/NS-3D-solver_n32-ntt6/pull/1) |
+
+The automated search extends the reproduced global certificates to cyclic amplitudes $1/12$, $1/8$ and $1/4$ at viscosity one, and to a specified $A_3$ neighborhood of the $1/12$ center. An unequal-amplitude cyclic field also passes. The $1/4$ certificate uses the viscous endpoint refinement, with an explicit undamped mean-error term. These are data-specific certificates with independently recomputed residuals. The remaining universal obligation is to guarantee a finite accepted chain, or an equivalent a priori continuation bound, for every admitted smooth datum.
+
+### Reused dependencies for the search
+
+| Consumer obligation | Existing source | Use in this change | Evidence |
+|---|---|---|---|
+| Correct finite Fourier residual | `scripts/verify_continuation.py`, `nonlinear`, `residual_majorant` | Full time and spatial product support for every replayed interval. A degree limit is used only during Taylor prediction. | Reproduced both existing continuation fixtures and a coefficient regression. |
+| Interval existence and error enclosure | [Slab theorem](NS_CONTINUATION_CERTIFICATE.md#slab-test), `check_slab` | Reuse the written contraction argument and the exact scalar check. | Source inspected and new saved chains replayed. |
+| Initial source and endpoint matching | [Chaining rule](NS_CONTINUATION_CERTIFICATE.md#slab-chaining-and-the-terminal-test) | New implementation computes every jump and binds initial data, viscosity and the initial error budget during replay. | Positive and rejected mutation fixtures. |
+| Global continuation from a terminal gradient | [Refined small-data condition](#refined-small-data-condition), `check_terminal` | Reused after the last accepted interval. | Exact terminal checks in each reported chain. |
+| Earlier finite Lean operators | `lean/NSRegularity/NS/` | Their source and dependency boundary are retained. The search reuses the written continuum certificate. | The previous pinned build is recorded separately from the new Python executions. |
+
+The inventory for this change covers the merged NS-Regularity and N32 repositories and the named Theory of the One adapter routes. It supplies no assertion about proof artifacts outside that inspected scope.
 
 ## Remaining criteria
 
